@@ -1,0 +1,97 @@
+﻿--- NORMAL MAPPING ---
+One application of normal maps is to fake the detail of a bumpy surface, such as a stone wall.
+You could model such a wall with geometry for actual bumps and recesses—and the more
+vertices you used, the greater detail you would achieve. This geometry would respond well to
+lights in the scene, showing dark areas where the stone faced away from the light. However,
+added geometry comes at a cost. Instead, it’s possible to create a low-poly object (even a flat
+plane) and use a normal map to simulate the lighting effects that would be present if the added
+geometry were there. This application is called normal mapping.
+
+When you sample the normal map, the results you find in the RGB channels
+are the x , y , and z components of the direction. You can use these normals in calculating, for
+example, the diffuse lighting term.
+
+The channels of an RGB texture store unsigned 8-bit values and, therefore, have a range of [0,
+255] . But the xyz components of a normalized direction vector have a range of [-1, 1] .
+Consequently, the normals must be shifted for storage in the texture and shifted back when the
+vector is sampled. You transform the floating-point vector from [-1, 1] to [0, 255] using
+the following function:
+
+f(x) = (0.5x + 0.5) ∗ 255
+
+And you transform it back with the function:
+
+f(x) = 2x / 255 - 1
+
+In practice, you use an image-manipulation tool such as Adobe Photoshop to encode a normal
+map in RGB texture format. But you’re responsible for shifting the value back into the range
+[-1, 1] when you sample the texture from within your shader. The floating-point division
+(by 255) is done for you during the sampling process so that the sampled values will exist in the
+range [0, 1] . Therefore, you only need to shift the sampled vector with this function:
+
+f(x) = 2x −1
+
+Alternately, you can use 16- or 32-bit floating-point texture formats for your normal maps,
+which yields better results at the expense of performance.
+
+You can use a per-pixel normal to compute the diffuse term, just as you would with a per-vertex
+normal. However, the normal must be in the same coordinate space as your light. For per-vertex
+normals, the data is provided in object space. But for normal maps, the data is provided in
+tangent space .
+Tangent space (or texture space) is a coordinate system with respect to the texture and is
+described by three orthogonal vectors: the surface normal, tangent, and binormal.
+
+The normal vector, N , is the regular surface normal of a vertex. The tangent vector, T , is orthogonal
+to the surface normal and is in the direction of the u-axis of the texture. The binormal, B ,
+runs along the texture’s v-axis.
+You can use these three vectors to construct a tangent , binormal , normal (TBN) transformation
+matrix, as follows:
+
+TBN = | T.x T.y T.z |
+      | B.x B.y B.z |
+	  | N.x N.y N.z |
+
+You can use this matrix to transform vectors from tangent space to object space. However,
+because the light vector is (commonly) in world space, you need to transform the sampled
+normal from tangent space to world space. You can do this by transforming the normal from
+tangent space to object space and then to world space. Alternatively, you can build the TBN
+matrix from vectors that are already in world space.
+
+You can encode normals directly in world space, which removes the need for
+transformation. However, then the objects that used those normals would need
+to remain static (no transformation). Furthermore, world space–encoded normals
+couldn’t be easily reused between objects (again, because they can’t be
+transformed).
+
+An interesting property of the TBN matrix is that it is made from orthonormal vectors (orthogonal
+unit vectors) and therefore forms a basis set (it defines a coordinate system). Moreover, the
+inverse of this matrix is its transpose. Thus, to transform a vector from object or world space
+back into tangent space ( inverse mapping ), you can just multiply the vector by the transpose
+of the TBN matrix. Additionally, the orthonormal property of the TBN matrix implies that, if you
+have two of the vectors, you can derive the third. The normal and tangent vectors are commonly
+stored alongside the geometry, with the binormal computed (within the vertex shader)
+as a cross product between these two vectors. Performing such computation is often a desirable
+tradeoff between added GPU computation and the high cost of data transfer between the
+CPU and GPU.
+
+
+
+--- DISPLACEMENT MAPPING ---
+Another application of normal maps is displacement mapping , in which detail is added not by
+faking lighting, but by actually perturbing the vertices of a model. With displacement mapping,
+a vertex is translated along its normal by an amount specified in a displacement map . A displacement
+map is just a height map, a single-channel texture that stores magnitudes.
+
+When displacing a vertex, you do so either inward or outward along its normal, with the magnitude
+sampled from the displacement map. For outward displacement, you use the following
+equation:
+
+Position' = Position + (Normal ∗ Scale ∗ DisplacementMagnitude) 
+
+Here, Scale is a shader constant that scales the magnitudes stored within the displacement
+map. For inward displacement, the equation is rewritten as:
+
+Position' = Position + (Normal ∗ Scale ∗ (DisplacementMagnitude − 1))
+
+A better iteration of this effect is to employ tessellation
+to add vertices and sample the normal from a normal map.

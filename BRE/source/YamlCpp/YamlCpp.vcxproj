@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{140B5A49-72A2-4D5F-9CA2-258D3BB0DE1E}</ProjectGuid>
+    <RootNamespace>YamlCpp</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(BOOST_ROOT);$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;_MBCS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)\lib\" mkdir "$(SolutionDir)\lib\"
+xcopy "$(TargetPath)" "$(SolutionDir)\lib" /D/S/H/V/C/F/K/Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(BOOST_ROOT);$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)\lib\" mkdir "$(SolutionDir)\lib\"
+xcopy "$(TargetPath)" "$(SolutionDir)\lib" /D/S/H/V/C/F/K/Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="binary.cpp" />
+    <ClCompile Include="contrib\graphbuilder.cpp" />
+    <ClCompile Include="contrib\graphbuilderadapter.cpp" />
+    <ClCompile Include="convert.cpp" />
+    <ClCompile Include="directives.cpp" />
+    <ClCompile Include="emit.cpp" />
+    <ClCompile Include="emitfromevents.cpp" />
+    <ClCompile Include="emitter.cpp" />
+    <ClCompile Include="emitterstate.cpp" />
+    <ClCompile Include="emitterutils.cpp" />
+    <ClCompile Include="exp.cpp" />
+    <ClCompile Include="memory.cpp" />
+    <ClCompile Include="node.cpp" />
+    <ClCompile Include="nodebuilder.cpp" />
+    <ClCompile Include="nodeevents.cpp" />
+    <ClCompile Include="node_data.cpp" />
+    <ClCompile Include="null.cpp" />
+    <ClCompile Include="ostream_wrapper.cpp" />
+    <ClCompile Include="parse.cpp" />
+    <ClCompile Include="parser.cpp" />
+    <ClCompile Include="regex.cpp" />
+    <ClCompile Include="scanner.cpp" />
+    <ClCompile Include="scanscalar.cpp" />
+    <ClCompile Include="scantag.cpp" />
+    <ClCompile Include="scantoken.cpp" />
+    <ClCompile Include="simplekey.cpp" />
+    <ClCompile Include="singledocparser.cpp" />
+    <ClCompile Include="stream.cpp" />
+    <ClCompile Include="tag.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="collectionstack.h" />
+    <ClInclude Include="contrib\graphbuilderadapter.h" />
+    <ClInclude Include="directives.h" />
+    <ClInclude Include="emitterstate.h" />
+    <ClInclude Include="emitterutils.h" />
+    <ClInclude Include="exp.h" />
+    <ClInclude Include="indentation.h" />
+    <ClInclude Include="nodebuilder.h" />
+    <ClInclude Include="nodeevents.h" />
+    <ClInclude Include="ptr_stack.h" />
+    <ClInclude Include="ptr_vector.h" />
+    <ClInclude Include="regex.h" />
+    <ClInclude Include="regeximpl.h" />
+    <ClInclude Include="scanner.h" />
+    <ClInclude Include="scanscalar.h" />
+    <ClInclude Include="scantag.h" />
+    <ClInclude Include="setting.h" />
+    <ClInclude Include="singledocparser.h" />
+    <ClInclude Include="stream.h" />
+    <ClInclude Include="streamcharsource.h" />
+    <ClInclude Include="stringsource.h" />
+    <ClInclude Include="tag.h" />
+    <ClInclude Include="token.h" />
+    <ClInclude Include="yaml-cpp\anchor.h" />
+    <ClInclude Include="yaml-cpp\binary.h" />
+    <ClInclude Include="yaml-cpp\contrib\anchordict.h" />
+    <ClInclude Include="yaml-cpp\contrib\graphbuilder.h" />
+    <ClInclude Include="yaml-cpp\dll.h" />
+    <ClInclude Include="yaml-cpp\emitfromevents.h" />
+    <ClInclude Include="yaml-cpp\emitter.h" />
+    <ClInclude Include="yaml-cpp\emitterdef.h" />
+    <ClInclude Include="yaml-cpp\emittermanip.h" />
+    <ClInclude Include="yaml-cpp\eventhandler.h" />
+    <ClInclude Include="yaml-cpp\exceptions.h" />
+    <ClInclude Include="yaml-cpp\mark.h" />
+    <ClInclude Include="yaml-cpp\node\convert.h" />
+    <ClInclude Include="yaml-cpp\node\detail\bool_type.h" />
+    <ClInclude Include="yaml-cpp\node\detail\impl.h" />
+    <ClInclude Include="yaml-cpp\node\detail\iterator.h" />
+    <ClInclude Include="yaml-cpp\node\detail\iterator_fwd.h" />
+    <ClInclude Include="yaml-cpp\node\detail\memory.h" />
+    <ClInclude Include="yaml-cpp\node\detail\node.h" />
+    <ClInclude Include="yaml-cpp\node\detail\node_data.h" />
+    <ClInclude Include="yaml-cpp\node\detail\node_iterator.h" />
+    <ClInclude Include="yaml-cpp\node\detail\node_ref.h" />
+    <ClInclude Include="yaml-cpp\node\emit.h" />
+    <ClInclude Include="yaml-cpp\node\impl.h" />
+    <ClInclude Include="yaml-cpp\node\iterator.h" />
+    <ClInclude Include="yaml-cpp\node\node.h" />
+    <ClInclude Include="yaml-cpp\node\parse.h" />
+    <ClInclude Include="yaml-cpp\node\ptr.h" />
+    <ClInclude Include="yaml-cpp\node\type.h" />
+    <ClInclude Include="yaml-cpp\noncopyable.h" />
+    <ClInclude Include="yaml-cpp\null.h" />
+    <ClInclude Include="yaml-cpp\ostream_wrapper.h" />
+    <ClInclude Include="yaml-cpp\parser.h" />
+    <ClInclude Include="yaml-cpp\stlemitter.h" />
+    <ClInclude Include="yaml-cpp\traits.h" />
+    <ClInclude Include="yaml-cpp\yaml.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,417 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="doc">
+      <UniqueIdentifier>{b4d72fc9-6bf0-4e18-9b29-22c96c9cb9c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input">
+      <UniqueIdentifier>{bb36e326-d350-4022-b2b9-e2351dec1e5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="managers">
+      <UniqueIdentifier>{a7dabced-d6e1-4c9d-a034-24c1564bb745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering">
+      <UniqueIdentifier>{d55744b3-1022-4f19-9fc0-c8e3ec4d193b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{6c3ced32-8883-444c-a268-90830731c949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils\updaters">
+      <UniqueIdentifier>{4abed524-80d8-4046-a8db-f28e1332b252}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\lights">
+      <UniqueIdentifier>{b0fdba59-28cb-4aca-bba4-4627492f3c4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\models">
+      <UniqueIdentifier>{001b33e5-1f27-425c-b286-5248ed545675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders">
+      <UniqueIdentifier>{8dbe093f-d2ac-422d-90ff-bb8c543aa1bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\filters">
+      <UniqueIdentifier>{690bea00-328a-4e65-8b60-6bf345794e0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\lightPasses">
+      <UniqueIdentifier>{bd9b416d-7396-43bd-bb9f-38941d80873a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalDisplacement">
+      <UniqueIdentifier>{114198e6-fe17-42f3-b88c-1bc54db27807}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalMapping">
+      <UniqueIdentifier>{c4ea5cc1-0ae2-41bc-a172-b37b312f2b55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\filters\gaussianBlur">
+      <UniqueIdentifier>{91dc6d01-38f5-4d91-9583-1fd4bb43986b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\filters\grayscale">
+      <UniqueIdentifier>{5b12b67a-12ef-4b19-9237-6c538cc5757d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\filters\inverseColor">
+      <UniqueIdentifier>{a26c3e93-26b4-45a7-9d61-bea2ac3d96b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\filters\sepia">
+      <UniqueIdentifier>{544c5649-5565-4b68-ae17-32e8883a2cbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\lightPasses\fullyDeferred">
+      <UniqueIdentifier>{e9a94fd2-cf9e-47d7-b92e-786ac20007cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalMapping\fullyDeferred">
+      <UniqueIdentifier>{085ca62d-380c-4693-8d5b-d817fba73a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalMapping\fullyDeferred\ps">
+      <UniqueIdentifier>{fa4d8596-b269-4a74-a4e8-fdeb2e465fff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalMapping\fullyDeferred\vs">
+      <UniqueIdentifier>{dfb3604a-2777-4ce1-8f48-f0e7128ec728}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalDisplacement\fullyDeferred">
+      <UniqueIdentifier>{960a4cf7-3b96-4c78-9a9c-50fdc6fe6348}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalDisplacement\fullyDeferred\ds">
+      <UniqueIdentifier>{614e06fd-a33a-420e-b15e-77b1d5ce491e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalDisplacement\fullyDeferred\hs">
+      <UniqueIdentifier>{b6c6c018-fc80-4fb7-b18f-99f7811b4dd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalDisplacement\fullyDeferred\ps">
+      <UniqueIdentifier>{a06a622c-1858-4b49-a43c-9ce55bf8084b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalDisplacement\fullyDeferred\vs">
+      <UniqueIdentifier>{c132173b-81a9-4f6c-9641-544e7047d6dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="general">
+      <UniqueIdentifier>{8d340f5d-f23a-4fcb-b78b-30342f45cb14}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="managers\SettingsManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
+    <ClCompile Include="managers\ShaderResourcesManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
+    <ClCompile Include="managers\ShadersManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Utility.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\updaters\PositionUpdater.cpp">
+      <Filter>utils\updaters</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\lights\DirectionalLight.cpp">
+      <Filter>rendering\lights</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\lights\SpotLight.cpp">
+      <Filter>rendering\lights</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\models\Mesh.cpp">
+      <Filter>rendering\models</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\models\Model.cpp">
+      <Filter>rendering\models</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\models\ModelMaterial.cpp">
+      <Filter>rendering\models</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPsData.cpp">
+      <Filter>rendering\shaders\filters\gaussianBlur</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.cpp">
+      <Filter>rendering\shaders\filters\grayscale</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.cpp">
+      <Filter>rendering\shaders\filters\inverseColor</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\filters\sepia\SepiaFilterPsData.cpp">
+      <Filter>rendering\shaders\filters\sepia</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredDirLightPsData.cpp">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredSpotLightPsData.cpp">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\vs\FullyDeferredNormalDisplacementVsData.cpp">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\vs</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\ps\FullyDeferredNormalDisplacementPsData.cpp">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\ps</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\hs\FullyDeferredNormalDisplacementHsData.cpp">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\hs</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\ds\FullyDeferredNormalDisplacementDsData.cpp">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\ds</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalMapping\fullyDeferred\ps\FullyDeferredNormalMappingPsData.cpp">
+      <Filter>rendering\shaders\normalMapping\fullyDeferred\ps</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalMapping\fullyDeferred\vs\FullyDeferredNormalMappingVsData.cpp">
+      <Filter>rendering\shaders\normalMapping\fullyDeferred\vs</Filter>
+    </ClCompile>
+    <ClCompile Include="managers\DrawManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalMapping\fullyDeferred\FullyDeferredNormalMappingDrawer.cpp">
+      <Filter>rendering\shaders\normalMapping\fullyDeferred</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredLightsDrawer.cpp">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\FullyDeferredNormalDisplacementDrawer.cpp">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\FullscreenVsData.cpp">
+      <Filter>rendering\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\filters\FiltersVsData.cpp">
+      <Filter>rendering\shaders\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\RenderStateHelper.cpp">
+      <Filter>rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="input\Mouse.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="input\Keyboard.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\GlobalResources.cpp">
+      <Filter>rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="general\Application.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="general\Camera.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\StringDrawer.cpp">
+      <Filter>rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="general\Clock.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightPsData.cpp">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightVsData.cpp">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGsData.cpp">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="input\Keyboard.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="input\Mouse.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="managers\SettingsManager.h">
+      <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="managers\ShaderResourcesManager.h">
+      <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="managers\ShadersManager.h">
+      <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Assert.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Memory.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Utility.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\updaters\PositionUpdater.h">
+      <Filter>utils\updaters</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\RenderStateHelper.h">
+      <Filter>rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\lights\DirectionalLight.h">
+      <Filter>rendering\lights</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\lights\PointLight.h">
+      <Filter>rendering\lights</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\lights\SpotLight.h">
+      <Filter>rendering\lights</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\models\Mesh.h">
+      <Filter>rendering\models</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\models\Model.h">
+      <Filter>rendering\models</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\models\ModelMaterial.h">
+      <Filter>rendering\models</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\LightsData.h">
+      <Filter>rendering\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPsData.h">
+      <Filter>rendering\shaders\filters\gaussianBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.h">
+      <Filter>rendering\shaders\filters\grayscale</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.h">
+      <Filter>rendering\shaders\filters\inverseColor</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\filters\sepia\SepiaFilterPsData.h">
+      <Filter>rendering\shaders\filters\sepia</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredDirLightPsData.h">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredSpotLightPsData.h">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\vs\FullyDeferredNormalDisplacementVsData.h">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\vs</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\ps\FullyDeferredNormalDisplacementPsData.h">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\ps</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\hs\FullyDeferredNormalDisplacementHsData.h">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\hs</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\ds\FullyDeferredNormalDisplacementDsData.h">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalMapping\fullyDeferred\ps\FullyDeferredNormalMappingPsData.h">
+      <Filter>rendering\shaders\normalMapping\fullyDeferred\ps</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalMapping\fullyDeferred\vs\FullyDeferredNormalMappingVsData.h">
+      <Filter>rendering\shaders\normalMapping\fullyDeferred\vs</Filter>
+    </ClInclude>
+    <ClInclude Include="managers\DrawManager.h">
+      <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalMapping\fullyDeferred\FullyDeferredNormalMappingDrawer.h">
+      <Filter>rendering\shaders\normalMapping\fullyDeferred</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredLightsDrawer.h">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\FullyDeferredNormalDisplacementDrawer.h">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\FullscreenVsData.h">
+      <Filter>rendering\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\filters\FiltersVsData.h">
+      <Filter>rendering\shaders\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\GlobalResources.h">
+      <Filter>rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="general\Application.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="general\Camera.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="general\Component.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\StringDrawer.h">
+      <Filter>rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="general\Clock.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightPsData.h">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightVsData.h">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGsData.h">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="doc\LightingModels.txt">
+      <Filter>doc</Filter>
+    </Text>
+    <Text Include="doc\LightTypes.txt">
+      <Filter>doc</Filter>
+    </Text>
+    <Text Include="doc\Mappings.txt">
+      <Filter>doc</Filter>
+    </Text>
+    <Text Include="rendering\shaders\normalDisplacement\fullyDeferred\Explanation.txt">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="rendering\shaders\Lighting.hlsli">
+      <Filter>rendering\shaders</Filter>
+    </None>
+    <None Include="rendering\shaders\Utils.hlsli">
+      <Filter>rendering\shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPS.hlsl">
+      <Filter>rendering\shaders\filters\gaussianBlur</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\filters\grayscale\GrayscaleFilterPS.hlsl">
+      <Filter>rendering\shaders\filters\grayscale</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\filters\inverseColor\InverseColorFilterPS.hlsl">
+      <Filter>rendering\shaders\filters\inverseColor</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\filters\sepia\SepiaFilterPS.hlsl">
+      <Filter>rendering\shaders\filters\sepia</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredDirLightPS.hlsl">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredLightVS.hlsl">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredSpotLightPS.hlsl">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\vs\FullyDeferredNormalDisplacementVS.hlsl">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\vs</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\ps\FullyDeferredNormalDisplacementPS.hlsl">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\ps</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\hs\FullyDeferredNormalDisplacementHS.hlsl">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\hs</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\ds\FullyDeferredNormalDisplacementDS.hlsl">
+      <Filter>rendering\shaders\normalDisplacement\fullyDeferred\ds</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\fullyDeferred\ps\FullyDeferredNormalMappingPS.hlsl">
+      <Filter>rendering\shaders\normalMapping\fullyDeferred\ps</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\fullyDeferred\vs\FullyDeferredNormalMappingVS.hlsl">
+      <Filter>rendering\shaders\normalMapping\fullyDeferred\vs</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\FullscreenVsData.hlsl">
+      <Filter>rendering\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\filters\FiltersVS.hlsl">
+      <Filter>rendering\shaders\filters</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightPS.hlsl">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightVS.hlsl">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGS.hlsl">
+      <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,46 @@
+--- DIRECTIONAL LIGHTS ---
+A directional light represents a light source that is infinitely far away—it
+has no position relative to your 3D objects. As such, the light rays that reach your objects are
+parallel to one another—they all travel in the same direction. The sun (while not infinitely
+distant) is a good example of a directional light. It’s so far away that you cannot discern a difference
+in the direction of individual rays of light.
+
+To model a directional light, you simply need a three-dimensional vector describing where the
+light is coming from. You can also include the concept of color and intensity, just as you did
+for ambient lighting.
+
+
+--- POINT LIGHTS ---
+A point light in a scene is like a light bulb—it has a position that is local to your surroundings,
+and it radiates light in all directions. This is in contrast to a directional light, which is infinitely
+far away and whose light appears to come from a single direction. Directional lights have no
+concept of “moving the light;” point lights have no concept of “rotating the light.”
+
+You can use the same diffuse and specular lighting models with point lights, just as with directional
+lights. But with point lights, you supply the light’s position and then must compute the
+light vector. This is a simple matter of subtracting the position of the object from the position
+of the light (where both positions are in world space).
+
+Additionally, because point lights have a specific location, you can attenuate the light with
+respect to the distance from the surface. The farther the light is from the surface, the less
+brightness it imparts:
+
+Attenuation = 1.0f - |lightDirection| / lightRadius
+
+Storing the attenuation factor in the .w component of the LightDirection
+vector is just an efficiency trick. Because that channel isn’t otherwise employed,
+you can use it instead of occupying another output register unnecessarily.
+The attenuation factor bears no relation to the xyz components of the
+LightDirection vector.
+
+
+--- SPOT LIGHTS ---
+A spotlight is a combination of a directional light and a point light. It has a position in world
+space, but it shines light in a specific direction. Furthermore, a spotlight attenuates with
+distance, as a point light does, but its light also attenuates around its source direction. You can
+think of a spotlight as a virtual flashlight, complete with a focus beam that falls off as the light
+gets father from the center.
+
+You can model a spotlight with a position, a direction, a radius of influence, a color and
+intensity, and floating-point values for inner and outer angles that describe how light radiates
+around the focus beam.

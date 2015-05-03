@@ -1,0 +1,14 @@
+application:
+  screenWidth: 1920
+  screenHeight: 1080
+  frameRate: 60
+  multiSamplingCount: 1
+camera:
+  translation: [0.0, 0.0, -550.0]
+  rotation: [0.0, 0.0, 0.0]
+  nearPlaneDistance: 0.01
+  farPlaneDistance: 5000.0
+  fieldOfView: 0.78539
+  rotationRate: 0.005
+  movementRate: 15.0
+  mouseSensibility: 100.0

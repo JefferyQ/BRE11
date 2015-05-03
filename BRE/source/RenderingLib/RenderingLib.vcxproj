@@ -1,0 +1,450 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{82C52608-13E4-4E52-B373-DC19E7951844}</ProjectGuid>
+    <RootNamespace>RenderingLib</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\external\DirectXTK\Inc;$(ProjectDir);$(WindowsSDK_IncludePath);$(SolutionDir)\external\assimp-3.1.1-win-binaries\include;$(BOOST_ROOT);$(ProjectDir)..\YamlCpp</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;_UNICODE;UNICODE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)\lib\" mkdir "$(SolutionDir)\lib\"
+xcopy "$(TargetPath)" "$(SolutionDir)\lib" /D/S/H/V/C/F/K/Y
+
+IF EXIST "$(SolutionDir)\content\" del /s /f /q "$(SolutionDir)\content\" 
+mkdir "$(SolutionDir)\content\"
+
+IF EXIST "$(ProjectDir)content" xcopy "$(ProjectDir)content" "$(SolutionDir)\content\" /D/S/H/V/C/F/K/Y
+
+IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\content\" /D/S/H/V/C/F/K/Y</Command>
+    </PostBuildEvent>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib;$(SolutionDir)\external\assimp-3.1.1-win-binaries\lib64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp.lib;d3d11.lib;d3dcompiler.lib;dinput8.lib;DirectXTKd.lib;dxguid.lib;Shlwapi.lib;YamlCppd.lib</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\external\assimp-3.1.1-win-binaries\include;$(ProjectDir);$(WindowsSDK_IncludePath);$(SolutionDir)\external\DirectXTK\Inc;$(BOOST_ROOT);$(ProjectDir)..\YamlCpp</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)\lib\" mkdir "$(SolutionDir)\lib\"
+xcopy "$(TargetPath)" "$(SolutionDir)\lib" /D/S/H/V/C/F/K/Y
+
+IF EXIST "$(SolutionDir)\content\" del /s /f /q "$(SolutionDir)\content\" 
+mkdir "$(SolutionDir)\content\"
+
+IF EXIST "$(ProjectDir)content" xcopy "$(ProjectDir)content" "$(SolutionDir)\content\" /D/S/H/V/C/F/K/Y
+
+IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\content\" /D/S/H/V/C/F/K/Y</Command>
+    </PostBuildEvent>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib;$(SolutionDir)\external\assimp-3.1.1-win-binaries\lib64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp.lib;d3d11.lib;d3dcompiler.lib;dinput8.lib;DirectXTK.lib;dxguid.lib;Shlwapi.lib;YamlCpp.lib</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="general\Application.cpp" />
+    <ClCompile Include="general\Camera.cpp" />
+    <ClCompile Include="general\Clock.cpp" />
+    <ClCompile Include="input\Keyboard.cpp" />
+    <ClCompile Include="input\Mouse.cpp" />
+    <ClCompile Include="managers\DrawManager.cpp" />
+    <ClCompile Include="managers\SettingsManager.cpp" />
+    <ClCompile Include="managers\ShaderResourcesManager.cpp" />
+    <ClCompile Include="managers\ShadersManager.cpp" />
+    <ClCompile Include="rendering\GlobalResources.cpp" />
+    <ClCompile Include="rendering\lights\DirectionalLight.cpp" />
+    <ClCompile Include="rendering\lights\SpotLight.cpp" />
+    <ClCompile Include="rendering\models\Mesh.cpp" />
+    <ClCompile Include="rendering\models\Model.cpp" />
+    <ClCompile Include="rendering\models\ModelMaterial.cpp" />
+    <ClCompile Include="rendering\RenderStateHelper.cpp" />
+    <ClCompile Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPsData.cpp" />
+    <ClCompile Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.cpp" />
+    <ClCompile Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.cpp" />
+    <ClCompile Include="rendering\shaders\filters\FiltersVsData.cpp" />
+    <ClCompile Include="rendering\shaders\filters\sepia\SepiaFilterPsData.cpp" />
+    <ClCompile Include="rendering\shaders\FullscreenVsData.cpp" />
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredDirLightPsData.cpp" />
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredLightsDrawer.cpp" />
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredSpotLightPsData.cpp" />
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGsData.cpp" />
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightPsData.cpp" />
+    <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightVsData.cpp" />
+    <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\ds\FullyDeferredNormalDisplacementDsData.cpp" />
+    <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\hs\FullyDeferredNormalDisplacementHsData.cpp" />
+    <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\FullyDeferredNormalDisplacementDrawer.cpp" />
+    <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\ps\FullyDeferredNormalDisplacementPsData.cpp" />
+    <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\vs\FullyDeferredNormalDisplacementVsData.cpp" />
+    <ClCompile Include="rendering\shaders\normalMapping\fullyDeferred\FullyDeferredNormalMappingDrawer.cpp" />
+    <ClCompile Include="rendering\shaders\normalMapping\fullyDeferred\ps\FullyDeferredNormalMappingPsData.cpp" />
+    <ClCompile Include="rendering\shaders\normalMapping\fullyDeferred\vs\FullyDeferredNormalMappingVsData.cpp" />
+    <ClCompile Include="rendering\StringDrawer.cpp" />
+    <ClCompile Include="utils\updaters\PositionUpdater.cpp" />
+    <ClCompile Include="utils\Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="general\Application.h" />
+    <ClInclude Include="general\Camera.h" />
+    <ClInclude Include="general\Clock.h" />
+    <ClInclude Include="general\Component.h" />
+    <ClInclude Include="input\Keyboard.h" />
+    <ClInclude Include="input\Mouse.h" />
+    <ClInclude Include="managers\DrawManager.h" />
+    <ClInclude Include="managers\SettingsManager.h" />
+    <ClInclude Include="managers\ShaderResourcesManager.h" />
+    <ClInclude Include="managers\ShadersManager.h" />
+    <ClInclude Include="rendering\GlobalResources.h" />
+    <ClInclude Include="rendering\lights\DirectionalLight.h" />
+    <ClInclude Include="rendering\lights\PointLight.h" />
+    <ClInclude Include="rendering\lights\SpotLight.h" />
+    <ClInclude Include="rendering\models\Mesh.h" />
+    <ClInclude Include="rendering\models\Model.h" />
+    <ClInclude Include="rendering\models\ModelMaterial.h" />
+    <ClInclude Include="rendering\RenderStateHelper.h" />
+    <ClInclude Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPsData.h" />
+    <ClInclude Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.h" />
+    <ClInclude Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.h" />
+    <ClInclude Include="rendering\shaders\filters\FiltersVsData.h" />
+    <ClInclude Include="rendering\shaders\filters\sepia\SepiaFilterPsData.h" />
+    <ClInclude Include="rendering\shaders\FullscreenVsData.h" />
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredDirLightPsData.h" />
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredLightsDrawer.h" />
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredSpotLightPsData.h" />
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGsData.h" />
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightPsData.h" />
+    <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightVsData.h" />
+    <ClInclude Include="rendering\shaders\LightsData.h" />
+    <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\ds\FullyDeferredNormalDisplacementDsData.h" />
+    <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\FullyDeferredNormalDisplacementDrawer.h" />
+    <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\hs\FullyDeferredNormalDisplacementHsData.h" />
+    <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\ps\FullyDeferredNormalDisplacementPsData.h" />
+    <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\vs\FullyDeferredNormalDisplacementVsData.h" />
+    <ClInclude Include="rendering\shaders\normalMapping\fullyDeferred\FullyDeferredNormalMappingDrawer.h" />
+    <ClInclude Include="rendering\shaders\normalMapping\fullyDeferred\ps\FullyDeferredNormalMappingPsData.h" />
+    <ClInclude Include="rendering\shaders\normalMapping\fullyDeferred\vs\FullyDeferredNormalMappingVsData.h" />
+    <ClInclude Include="rendering\StringDrawer.h" />
+    <ClInclude Include="utils\Assert.h" />
+    <ClInclude Include="utils\Memory.h" />
+    <ClInclude Include="utils\updaters\PositionUpdater.h" />
+    <ClInclude Include="utils\Utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="doc\LightingModels.txt" />
+    <Text Include="doc\LightTypes.txt" />
+    <Text Include="doc\Mappings.txt" />
+    <Text Include="rendering\shaders\normalDisplacement\fullyDeferred\Explanation.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="rendering\shaders\Lighting.hlsli" />
+    <None Include="rendering\shaders\Utils.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPS.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\filters\grayscale\GrayscaleFilterPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\%(Filename).cso</ObjectFileOutput>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\filters\inverseColor\InverseColorFilterPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\%(Filename).cso</ObjectFileOutput>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\filters\FiltersVS.hlsl">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\filters\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\filters\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\filters\sepia\SepiaFilterPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\filters\sepia\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\filters\sepia\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\FullscreenVsData.hlsl">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredDirLightPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredLightVS.hlsl">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\FullyDeferredSpotLightPS.hlsl">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGS.hlsl">
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightPS.hlsl">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightVS.hlsl">
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\ds\FullyDeferredNormalDisplacementDS.hlsl">
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Domain</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\normalDisplacement\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Domain</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\normalDisplacement\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\hs\FullyDeferredNormalDisplacementHS.hlsl">
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Hull</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\normalDisplacement\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Hull</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\normalDisplacement\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\ps\FullyDeferredNormalDisplacementPS.hlsl">
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\normalDisplacement\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\normalDisplacement\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\vs\FullyDeferredNormalDisplacementVS.hlsl">
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\normalDisplacement\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\normalDisplacement\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\fullyDeferred\ps\FullyDeferredNormalMappingPS.hlsl">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\normalMapping\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\normalMapping\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\fullyDeferred\vs\FullyDeferredNormalMappingVS.hlsl">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\normalMapping\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\normalMapping\fullyDeferred\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

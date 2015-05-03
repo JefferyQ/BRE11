@@ -1,0 +1,105 @@
+--- LIGHTING ---
+
+--- AMBIENT LIGHTING --- 
+
+Ambient light is the seemingly ubiquitous “glow” that exists in a lit environment. Look under
+your desk, for example, and you’ll still be able to see into the farthest recesses and make out
+detail, even though no light source is directly illuminating that space. This glow exists because
+of the countless interactions of light between surfaces. As a ray of light reaches a surface, it is
+either reflected or absorbed, in total or in part, and that process continues innumerable times.
+So some light does reach under your desk, even if just a little.
+
+You can achieve a simplified approximation of ambient light by modulating the color of a pixel
+by some constant value. You could consider this a brightness or intensity filter in which the
+color of each pixel is multiplied by a value between 0 and 1 . As the ambient intensity value
+approaches 0 , the object gets darker. Additionally, you can include color into your ambient
+lighting model, simulating a light source that isn’t pure white. This requires a modulation value
+for each of the red, green, and blue (RGB) channels of a pixel. 
+
+// Set ambient color (.rgb) and color intensity (.a)
+float4 ambientColor(r, g, b, a);
+
+// Sample color texture
+float4 texColor = ColorTexture.Sample(TexSampler, texCoords);
+
+// Final color will be composed by color texture and ambient color
+float4 finalColor = texColor;
+finalColor.rgb *= ambientColor.rgb * ambientColor.a
+
+
+--- DIFFUSE LIGHTING ---
+
+Different surfaces reflect light in different ways. Mirrors reflect light with an angle of reflection
+equal to the angle of incidence. That spooky-looking “glow” you see when you shine a light in a
+cat’s eye reveals its retroreflective properties: It reflects light back to the source along a parallel
+vector in the opposite direction. Diffuse surfaces reflect light equally in all directions.
+
+Perhaps the simplest and most common model for approximating a diffuse surface is Lambert’s
+cosine law. Lambert’s cosine law states that the apparent brightness of a surface is directly proportional
+to the cosine of the angle between the light vector and the surface normal. The light
+vector describes the direction the light is coming from, and the normal defines the orientation
+of the surface (which way it’s facing). 
+
+// Compute diffuse color based on light color and the cosine
+// of the angle between normal vector of current pixel and
+// light direction.
+const float3 normal;
+const float3 lightDir;
+const float cosNormalLightDir;
+float3 diffuse = (float3)0;
+if (cosNormalLightDir > 0) {
+	diffuse = LightColor.rgb * LightColor.a * cosNormalLightDir;
+}
+
+// Combine ambient and diffuse colors
+float3 color = ambient.rgb * ambient.a + diffuse;
+
+// Combine them with texture color
+float4 finalColor = texColor;
+finalColor.rgb *= color;
+
+
+--- SPECULAR HIGHLIGHTS ---
+When you simulate a diffuse surface, you provide a matte, nonglossy appearance. This is appropriate
+for myriad objects in a scene and forms the base for much of your lighting. But you’ll also
+want to model shiny surfaces that simulate, for example, polished metal or marble flooring. You
+can achieve that shiny, glossy look through specular highlights.
+
+--- Phong ---
+Unlike diffuse shading, specular highlights depend on where the viewer (the camera) is with
+respect to the surface. You can observe this yourself; just look at a shiny object and notice how
+the sheen of it alters as you change your perspective. Phong’s model states that the specular
+highlight depends on the angle between this view direction and the light’s reflection vector. In
+equation form:
+
+SpecularPhong = Dot(R, V)^S
+
+where, R is the reflection vector, V is the view direction, and s specifies the size of the highlight.
+A smaller highlight is produced with a larger specular exponent. The reflection vector is computed
+with the following equation:
+
+R = 2 * Dot(N, L) * N - L
+
+where N is the surface normal, and L is the light vector.
+
+--- Blinn-Phong ---
+In 1977, Jim Blinn developed a modification to the Phong specular component that replaces the
+reflection vector with a half-vector . This vector lies halfway between the view and light vectors
+and is computed as:
+
+H = (L + V) / |L + V|
+
+Instead of dotting the Phong reflection vector against the view direction, Blinn-Phong dots the
+half-vector with the surface normal and raises the result to an exponent. The final equation is:
+
+SpecularBlinnPhong = Dot(N, H)^S
+
+HLSL provides an intrinsic function, lit() , to compute the Lambertian diffuse and Blinn-
+Phong specular components for you. A good rule of thumb is to use built-in functions wherever
+possible because they are likely optimized or implemented in hardware.
+
+Because the output between Phong and Blinn-Phong is identical, the difference between these
+models is a question of efficiency. Blinn-Phong could be slower because of the square root
+(from the normalization of the half-vector). However, because you’ll use the HLSL lit() intrinsic,
+it’s likely that the built-in implementation of Blinn-Phong yields a minor speed improvement
+over Phong.
