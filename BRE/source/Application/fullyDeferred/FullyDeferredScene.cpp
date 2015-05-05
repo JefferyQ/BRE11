@@ -31,7 +31,7 @@ namespace FullyDeferred {
 
 	void Scene::Update(const float elapsedTime) {
 		//UpdateDirectionalLight(elapsedTime);
-		//mPosUpdater.Update(elapsedTime);
+		mPosUpdater.Update(elapsedTime);
 
 		//
 		// Update constant buffers
