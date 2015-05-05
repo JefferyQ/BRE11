@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/BRE/x64
+/BRE/lib
+/BRE/external/DirectXTK/Bin/Desktop_2015
+/BRE/content/shaders
+/BRE/source
+/BRE/BRE.opensdf
+/BRE/BRE.sdf
+/BRE/.vs/BRE/v14
