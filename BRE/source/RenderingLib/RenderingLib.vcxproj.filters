@@ -82,6 +82,12 @@
     <Filter Include="general">
       <UniqueIdentifier>{8d340f5d-f23a-4fcb-b78b-30342f45cb14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="rendering\shaders\normalMapping\vs">
+      <UniqueIdentifier>{e822131a-7e5f-42b1-a7bb-85a7941a35d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\normalMapping\ps">
+      <UniqueIdentifier>{1d879bcd-098b-4658-8767-c01885e2ea44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="managers\SettingsManager.cpp">
@@ -200,6 +206,33 @@
     </ClCompile>
     <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGsData.cpp">
       <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalMapping\NormalMappingDrawer.cpp">
+      <Filter>rendering\shaders\normalMapping</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalMapping\vs\GBufferPassNormalMappingVsData.cpp">
+      <Filter>rendering\shaders\normalMapping\vs</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalMapping\ps\GBufferPassNormalMappingPsData.cpp">
+      <Filter>rendering\shaders\normalMapping\ps</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\LightPassPointLightGsData.cpp">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\LightPassPointLightPsData.cpp">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\LightPassPointLightVsData.cpp">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\LightsDrawer.cpp">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalMapping\vs\FinalPassNormalMappingVsData.cpp">
+      <Filter>rendering\shaders\normalMapping\vs</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\normalMapping\ps\FinalPassNormalMappingPsData.cpp">
+      <Filter>rendering\shaders\normalMapping\ps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +368,33 @@
     <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGsData.h">
       <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
     </ClInclude>
+    <ClInclude Include="rendering\shaders\normalMapping\NormalMappingDrawer.h">
+      <Filter>rendering\shaders\normalMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalMapping\vs\GBufferPassNormalMappingVsData.h">
+      <Filter>rendering\shaders\normalMapping\vs</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalMapping\ps\GBufferPassNormalMappingPsData.h">
+      <Filter>rendering\shaders\normalMapping\ps</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\LightPassPointLightGsData.h">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\LightPassPointLightPsData.h">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\LightPassPointLightVsData.h">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\LightsDrawer.h">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalMapping\vs\FinalPassNormalMappingVsData.h">
+      <Filter>rendering\shaders\normalMapping\vs</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\normalMapping\ps\FinalPassNormalMappingPsData.h">
+      <Filter>rendering\shaders\normalMapping\ps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="doc\LightingModels.txt">
@@ -412,6 +472,27 @@
     </FxCompile>
     <FxCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGS.hlsl">
       <Filter>rendering\shaders\lightPasses\fullyDeferred</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\vs\GBufferPassNormalMappingVS.hlsl">
+      <Filter>rendering\shaders\normalMapping\vs</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\ps\GBufferPassNormalMappingPS.hlsl">
+      <Filter>rendering\shaders\normalMapping\ps</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\LightPassPointLightGS.hlsl">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\LightPassPointLightPS.hlsl">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\LightPassPointLightVS.hlsl">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\vs\FinalPassNormalMappingVS.hlsl">
+      <Filter>rendering\shaders\normalMapping\vs</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\ps\FinalPassNormalMappingPS.hlsl">
+      <Filter>rendering\shaders\normalMapping\ps</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

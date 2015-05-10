@@ -49,6 +49,10 @@ namespace FullyDeferred {
 		for (BRE::FullyDeferred::LightsDrawer::QuadCulledPointLightData& data : quadCulledPointLightDataVec) {
 			XMStoreFloat3(&data.mQuadCulledPointLightPsData.CameraPosW(), BRE::Camera::gInstance->PositionVector());
 		}
+
+		/*for (BRE::LightsDrawer::PointLightData& data : BRE::DrawManager::gInstance->LightPass().GetPointLightDataVec()) {
+			XMStoreFloat3(&data.mPointLightPsData.CameraPosW(), BRE::Camera::gInstance->PositionVector());
+		}*/
 	}
 
 	void Scene::InitDirectionalLights() {
@@ -86,6 +90,26 @@ namespace FullyDeferred {
 				mPosUpdater.Add(BRE::PositionUpdater::Params(&data.mQuadCulledPointLightVsData.LightPosAndRadius(iLight), XMFLOAT3(-200.0f, -200.0f, -200.0f), XMFLOAT3(200.0f, 200.0f, 200.0f), XMFLOAT3(f5, f6, f7)));
 			}
 		}
+
+		/*std::vector<BRE::LightsDrawer::PointLightData>& pointLightsVec = BRE::DrawManager::gInstance->LightPass().GetPointLightDataVec();
+		pointLightsVec.resize(sNumPointLightShaders);
+		unsigned int lightIndex = 0;
+		for (BRE::LightsDrawer::PointLightData& data : pointLightsVec) {
+			for (unsigned int iLight = 0; iLight < sMaxShaderPointLights; ++iLight, ++lightIndex) {
+				data.mPointLightVsData.LightPosAndRadius(iLight).x = BRE::Utility::RandomFloat(-200.0f, 200.0f);
+				data.mPointLightVsData.LightPosAndRadius(iLight).y = BRE::Utility::RandomFloat(-200.0f, 200.0f);
+				data.mPointLightVsData.LightPosAndRadius(iLight).z = BRE::Utility::RandomFloat(-200.0f, 200.0f);
+				data.mPointLightVsData.LightPosAndRadius(iLight).w = 20;
+				const float c = BRE::Utility::RandomFloat(0.3f, 0.4f);
+				DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(c, c, c, 0.0f);
+				data.mPointLightVsData.LightColor(iLight) = color;
+
+				const float f5 = BRE::Utility::RandomFloat(25.0f, 30.0f) * (rand() % 2 ? 1.0f : -1.0f);
+				const float f6 = BRE::Utility::RandomFloat(25.0f, 30.0f) * (rand() % 2 ? 1.0f : -1.0f);
+				const float f7 = BRE::Utility::RandomFloat(25.0f, 30.0f) * (rand() % 2 ? 1.0f : -1.0f);
+				mPosUpdater.Add(BRE::PositionUpdater::Params(&data.mPointLightVsData.LightPosAndRadius(iLight), XMFLOAT3(-200.0f, -200.0f, -200.0f), XMFLOAT3(200.0f, 200.0f, 200.0f), XMFLOAT3(f5, f6, f7)));
+			}
+		}*/
 	}
 
 	void Scene::UpdateDirectionalLight(const float elapsedTime) {

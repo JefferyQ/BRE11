@@ -35,7 +35,7 @@ void GetGBufferAttributes(in float2 screenPos, out float3 normal, out float3 pos
 }
 
 /********************* Shader *****************************/
-float4 main(const in VS_OUTPUT IN) : SV_TARGET{
+float4 main(const in VS_OUTPUT IN) : SV_TARGET {
 	float3 normal;
 	float3 position;
 	float3 diffuseAlbedo;

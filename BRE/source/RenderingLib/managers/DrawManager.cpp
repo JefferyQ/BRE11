@@ -186,6 +186,7 @@ namespace BRE {
 	{
 		InitFullyDeferredResources(screenWidth, screenHeight);
 		InitPostProcessResources(screenWidth, screenHeight);
+		InitResources(screenWidth, screenHeight);
 	}
 
 	void DrawManager::LoadModels(const char* filepath) {
@@ -235,6 +236,7 @@ namespace BRE {
 
 			if (renderType == "Normal") {
 				FullyDeferred::NormalMappingDrawer renderer;
+				NormalMappingDrawer drawer;
 
 				// Get vertices and indices
 				GetVerticesAndIndices(*model, normalMappingVertices, indices);
@@ -252,6 +254,8 @@ namespace BRE {
 					vertexBuffer = CreateInitializedBuffer(bufferId, &normalMappingVertices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_VERTEX_BUFFER);
 					ASSERT_PTR(vertexBuffer);
 				}
+				drawer.GBufferPassVertexShaderData().VertexBuffer() = vertexBuffer;
+				drawer.FinalPassVertexShaderData().VertexBuffer() = vertexBuffer;
 
 				// Create index buffer
 				bufferName = modelFilePath;
@@ -265,24 +269,36 @@ namespace BRE {
 					ASSERT_PTR(indexBuffer);
 				}
 
+				drawer.GBufferPassVertexShaderData().IndexBuffer() = indexBuffer;
+				drawer.FinalPassVertexShaderData().IndexBuffer() = indexBuffer;
+
 				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(indices.size()));
+				drawer.GBufferPassVertexShaderData().SetIndexCount(static_cast<unsigned int>(indices.size()));
+				drawer.FinalPassVertexShaderData().SetIndexCount(static_cast<unsigned int>(indices.size()));
 
 				// Build world matrix
 				XMStoreFloat4x4(&renderer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
+				XMStoreFloat4x4(&drawer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
 
 				// Initialize pixel shader data
 				ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
 				renderer.PixelShaderData().DiffuseTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(diffuseMapTexture.c_str());
 				ASSERT_PTR(renderer.PixelShaderData().DiffuseTextureSRV());
+				drawer.FinalPassPixelShaderData().DiffuseAlbedoTexture() = shaderResourcesMgr.AddTextureFromFileSRV(diffuseMapTexture.c_str());
 				const std::string normalMapTexture = GetScalar<std::string>(node, "normalMapTexture");
 				renderer.PixelShaderData().NormalMapTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str());
 				ASSERT_PTR(renderer.PixelShaderData().NormalMapTextureSRV());
+				drawer.GBufferPassPixelShaderData().NormalMapTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str());
 				const std::string specularMapTexture = GetScalar<std::string>(node, "specularMapTexture");
 				renderer.PixelShaderData().SpecularMapTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str());
 				ASSERT_PTR(renderer.PixelShaderData().SpecularMapTextureSRV());
+				drawer.FinalPassPixelShaderData().SpecularAlbedoTexture() = shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str());
 				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+				drawer.GBufferPassPixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+				drawer.FinalPassPixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 
 				FullyDeferredNormalMappingDrawerVec().push_back(renderer);
+				GetNormalMappingDrawerVec().push_back(drawer);
 			}
 			else if (renderType == "Normal_Displacement") {
 				FullyDeferred::NormalDisplacementDrawer renderer;
@@ -392,28 +408,45 @@ namespace BRE {
 		for (size_t i = 0; i < numGeometryBuffersRTVs; ++i) {
 			context.ClearRenderTargetView(mGeometryBuffersRTVs[i], reinterpret_cast<const float*>(&Colors::Black));
 		}
+
+		for (size_t i = 0; i < ARRAYSIZE(mSurfacePropsRTVs); ++i) {
+			context.ClearRenderTargetView(mSurfacePropsRTVs[i], reinterpret_cast<const float*>(&Colors::Black));
+		}
+		context.ClearRenderTargetView(mLightBufferRTV, reinterpret_cast<const float*>(&Colors::Black));
+
 		context.OMSetRenderTargets(1, &backBuffer, &depthStencilView);
 
 		// Compute view * projection matrix
 		const XMMATRIX viewProjMatrix = Camera::gInstance->ViewMatrix() * Camera::gInstance->ProjectionMatrix();
 		XMStoreFloat4x4(&mViewProjection, viewProjMatrix);
 
-		for (FullyDeferred::NormalDisplacementDrawer& elem : mDrawers0) {
+		/*for (FullyDeferred::NormalDisplacementDrawer& elem : mDrawers0) {
 			elem.Draw(device, context, mGeometryBuffersRTVs);
-		}
+		}*/
 		for (FullyDeferred::NormalMappingDrawer& elem : mDrawers1) {
 			elem.Draw(device, context, mGeometryBuffersRTVs);
 		}
 
+		/*for (NormalMappingDrawer& elem : mNormalMappingDrawer) {
+			elem.DrawGBufferPass(device, context, mSurfacePropsRTVs);
+		}
+
+		mLightPass.Draw(device, context, mSurfacePropsSRVs, mLightBufferRTV);
+		context.ClearDepthStencilView(&depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);*/
+
 		if (renderMode == BACK_BUFFER) {
 			mLightsDrawer.Draw(device, context, mGeometryBuffersSRVs);
+
+			/*for (NormalMappingDrawer& elem : mNormalMappingDrawer) {
+				elem.DrawFinalPass(device, context, mLightBufferSRV);
+			}*/
 		}
 		else {
 			ID3D11Texture2D* texture;
 			ID3D11Texture2D* backBufferTexture;
 			ASSERT_HR(swapChain.GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBufferTexture)));
 			if (renderMode == DIFFUSE_ALBEDO) {
-				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_diffuse_albedo");
+				texture = ShaderResourcesManager::gInstance->Texture2D("light_buffer");
 			}
 			else if (renderMode == SPECULAR_ALBEDO) {
 				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_specular_albedo");
@@ -521,6 +554,81 @@ namespace BRE {
 			mGeometryBuffersSRVs[iTex] = shaderResourcesMgr.AddResourceSRV(textureIds[iTex], *texture, nullptr);
 			ASSERT_PTR(mGeometryBuffersSRVs[iTex]);
 		}
+	}
+
+	void DrawManager::InitResources(const unsigned int screenWidth, const unsigned int screenHeight) {
+		const size_t numTextures = ARRAYSIZE(mSurfacePropsSRVs);
+
+		//
+		// Texture descriptions
+		//
+		D3D11_TEXTURE2D_DESC textureDesc[numTextures];
+
+		// Normal texture desc
+		ZeroMemory(&textureDesc[0], sizeof(textureDesc[0]));
+		textureDesc[0].Width = screenWidth;
+		textureDesc[0].Height = screenHeight;
+		textureDesc[0].MipLevels = 1;
+		textureDesc[0].ArraySize = 1;
+		textureDesc[0].Format = DXGI_FORMAT_R8G8B8A8_SNORM;
+		textureDesc[0].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc[0].Usage = D3D11_USAGE_DEFAULT;
+		textureDesc[0].SampleDesc.Count = 1;
+		textureDesc[0].SampleDesc.Quality = 0;
+
+		// Positions texture description
+		ZeroMemory(&textureDesc[1], sizeof(textureDesc[1]));
+		textureDesc[1].Width = screenWidth;
+		textureDesc[1].Height = screenHeight;
+		textureDesc[1].MipLevels = 1;
+		textureDesc[1].ArraySize = 1;
+		textureDesc[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		textureDesc[1].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc[1].Usage = D3D11_USAGE_DEFAULT;
+		textureDesc[1].SampleDesc.Count = 1;
+		textureDesc[1].SampleDesc.Quality = 0;
+
+		//
+		// Texture id's
+		//
+		const char* textureIds[numTextures] = {
+			"light_pre_pass_texture2d_normals",
+			"light_pre_pass_texture2d_positions",
+		};
+
+		//
+		// Create texture 2D, shader resource view and render target view
+		//
+		ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
+		for (size_t iTex = 0; iTex < numTextures; ++iTex) {
+			ID3D11Texture2D* texture = shaderResourcesMgr.AddTexture2D(textureIds[iTex], textureDesc[iTex], nullptr);
+			ASSERT_PTR(texture);
+			mSurfacePropsRTVs[iTex] = shaderResourcesMgr.AddRenderTargetView(textureIds[iTex], *texture, nullptr);
+			ASSERT_PTR(mSurfacePropsRTVs[iTex]);
+			mSurfacePropsSRVs[iTex] = shaderResourcesMgr.AddResourceSRV(textureIds[iTex], *texture, nullptr);
+			ASSERT_PTR(mSurfacePropsSRVs[iTex]);
+		}
+
+		// Light buffer
+		D3D11_TEXTURE2D_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+		desc.Width = screenWidth;
+		desc.Height = screenHeight;
+		desc.MipLevels = 1;
+		desc.ArraySize = 1;
+		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.SampleDesc.Count = 1;
+		desc.SampleDesc.Quality = 0;
+
+		ID3D11Texture2D* texture = shaderResourcesMgr.AddTexture2D("light_buffer", desc, nullptr);
+		ASSERT_PTR(texture);
+		mLightBufferRTV = shaderResourcesMgr.AddRenderTargetView("light_buffer", *texture, nullptr);
+		ASSERT_PTR(mLightBufferRTV);
+		mLightBufferSRV = shaderResourcesMgr.AddResourceSRV("light_buffer", *texture, nullptr);
+		ASSERT_PTR(mLightBufferSRV);
+
 	}
 
 	void DrawManager::InitPostProcessResources(const unsigned int screenWidth, const unsigned int screenHeight) {

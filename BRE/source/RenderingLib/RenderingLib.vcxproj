@@ -185,6 +185,10 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGsData.cpp" />
     <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightPsData.cpp" />
     <ClCompile Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightVsData.cpp" />
+    <ClCompile Include="rendering\shaders\lightPasses\LightPassPointLightGsData.cpp" />
+    <ClCompile Include="rendering\shaders\lightPasses\LightPassPointLightPsData.cpp" />
+    <ClCompile Include="rendering\shaders\lightPasses\LightPassPointLightVsData.cpp" />
+    <ClCompile Include="rendering\shaders\lightPasses\LightsDrawer.cpp" />
     <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\ds\FullyDeferredNormalDisplacementDsData.cpp" />
     <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\hs\FullyDeferredNormalDisplacementHsData.cpp" />
     <ClCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\FullyDeferredNormalDisplacementDrawer.cpp" />
@@ -193,6 +197,11 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="rendering\shaders\normalMapping\fullyDeferred\FullyDeferredNormalMappingDrawer.cpp" />
     <ClCompile Include="rendering\shaders\normalMapping\fullyDeferred\ps\FullyDeferredNormalMappingPsData.cpp" />
     <ClCompile Include="rendering\shaders\normalMapping\fullyDeferred\vs\FullyDeferredNormalMappingVsData.cpp" />
+    <ClCompile Include="rendering\shaders\normalMapping\NormalMappingDrawer.cpp" />
+    <ClCompile Include="rendering\shaders\normalMapping\ps\FinalPassNormalMappingPsData.cpp" />
+    <ClCompile Include="rendering\shaders\normalMapping\ps\GBufferPassNormalMappingPsData.cpp" />
+    <ClCompile Include="rendering\shaders\normalMapping\vs\FinalPassNormalMappingVsData.cpp" />
+    <ClCompile Include="rendering\shaders\normalMapping\vs\GBufferPassNormalMappingVsData.cpp" />
     <ClCompile Include="rendering\StringDrawer.cpp" />
     <ClCompile Include="utils\updaters\PositionUpdater.cpp" />
     <ClCompile Include="utils\Utility.cpp" />
@@ -228,6 +237,10 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightGsData.h" />
     <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightPsData.h" />
     <ClInclude Include="rendering\shaders\lightPasses\fullyDeferred\QuadCulledPointLightVsData.h" />
+    <ClInclude Include="rendering\shaders\lightPasses\LightPassPointLightGsData.h" />
+    <ClInclude Include="rendering\shaders\lightPasses\LightPassPointLightPsData.h" />
+    <ClInclude Include="rendering\shaders\lightPasses\LightPassPointLightVsData.h" />
+    <ClInclude Include="rendering\shaders\lightPasses\LightsDrawer.h" />
     <ClInclude Include="rendering\shaders\LightsData.h" />
     <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\ds\FullyDeferredNormalDisplacementDsData.h" />
     <ClInclude Include="rendering\shaders\normalDisplacement\fullyDeferred\FullyDeferredNormalDisplacementDrawer.h" />
@@ -237,6 +250,11 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\shaders\normalMapping\fullyDeferred\FullyDeferredNormalMappingDrawer.h" />
     <ClInclude Include="rendering\shaders\normalMapping\fullyDeferred\ps\FullyDeferredNormalMappingPsData.h" />
     <ClInclude Include="rendering\shaders\normalMapping\fullyDeferred\vs\FullyDeferredNormalMappingVsData.h" />
+    <ClInclude Include="rendering\shaders\normalMapping\NormalMappingDrawer.h" />
+    <ClInclude Include="rendering\shaders\normalMapping\ps\FinalPassNormalMappingPsData.h" />
+    <ClInclude Include="rendering\shaders\normalMapping\ps\GBufferPassNormalMappingPsData.h" />
+    <ClInclude Include="rendering\shaders\normalMapping\vs\FinalPassNormalMappingVsData.h" />
+    <ClInclude Include="rendering\shaders\normalMapping\vs\GBufferPassNormalMappingVsData.h" />
     <ClInclude Include="rendering\StringDrawer.h" />
     <ClInclude Include="utils\Assert.h" />
     <ClInclude Include="utils\Memory.h" />
@@ -377,6 +395,36 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\fullyDeferred\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\LightPassPointLightGS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\LightPassPointLightPS.hlsl">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\LightPassPointLightVS.hlsl">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="rendering\shaders\normalDisplacement\fullyDeferred\ds\FullyDeferredNormalDisplacementDS.hlsl">
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Domain</ShaderType>
@@ -442,6 +490,46 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\ps\FinalPassNormalMappingPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\normalMapping\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\normalMapping\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\ps\GBufferPassNormalMappingPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\normalMapping\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\normalMapping\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\vs\FinalPassNormalMappingVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\normalMapping\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\normalMapping\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\normalMapping\vs\GBufferPassNormalMappingVS.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\normalMapping\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\normalMapping\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
