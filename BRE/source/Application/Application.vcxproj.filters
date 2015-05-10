@@ -2,18 +2,18 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="fullyDeferred\FullyDeferredScene.cpp">
-      <Filter>fullyDeferred</Filter>
+    <ClCompile Include="scenes\Scene.cpp">
+      <Filter>scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="fullyDeferred">
+    <Filter Include="scenes">
       <UniqueIdentifier>{2f67a146-71f2-40b8-a569-ee8adf77d887}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="fullyDeferred\FullyDeferredScene.h">
-      <Filter>fullyDeferred</Filter>
+    <ClInclude Include="scenes\Scene.h">
+      <Filter>scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

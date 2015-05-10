@@ -2,12 +2,12 @@
 
 #include <general/Application.h> 
  
-#include "fullyDeferred/FullyDeferredScene.h"            
+#include "scenes/Scene.h"            
      
-#if defined(DEBUG) || defined(_DEBUG)          
+#if defined(DEBUG) || defined(_DEBUG)           
 #define _CRTDBG_MAP_ALLOC    
 #include <cstdlib>   
-#include <crtdbg.h>       
+#include <crtdbg.h>           
 #endif 
 
 int 
@@ -17,7 +17,7 @@ WINAPI WinMain(HINSTANCE instance, HINSTANCE /*previousInstance*/, LPSTR /*comma
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);     
 #endif
 	BRE::Application app(instance, showCommand); 
-	app.Add(new FullyDeferred::Scene());  
+	app.Add(new Scene());  
 	app.Run();
 	return 0;
 }

@@ -151,11 +151,11 @@ IF EXIST  "$(SolutionDir)\external\assimp-3.1.1-win-binaries\bin64\assimp.dll" x
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="fullyDeferred\FullyDeferredScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="scenes\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="fullyDeferred\FullyDeferredScene.h" />
+    <ClInclude Include="scenes\Scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
