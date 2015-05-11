@@ -184,7 +184,7 @@ namespace BRE {
 	DrawManager::DrawManager(ID3D11Device1& device, ID3D11DeviceContext1& context, const unsigned int screenWidth, const unsigned int screenHeight)
 		: mFrameRateDrawer(device, context)
 	{
-		InitFullyDeferredResources(screenWidth, screenHeight);
+		InitResources(screenWidth, screenHeight);
 		InitPostProcessResources(screenWidth, screenHeight);
 	}
 
@@ -359,7 +359,7 @@ namespace BRE {
 			DIFFUSE_ALBEDO,
 			SPECULAR_ALBEDO,
 			NORMALS,
-			PRIMARY_DEPTH_STENCIL,
+			DEPTH,
 			POSITIONS
 		} renderMode = BACK_BUFFER;
 		if (Keyboard::gInstance->IsKeyDown(DIK_1)) {
@@ -375,7 +375,9 @@ namespace BRE {
 			renderMode = NORMALS;
 		}
 		else if (Keyboard::gInstance->IsKeyDown(DIK_5)) {
-			renderMode = PRIMARY_DEPTH_STENCIL;
+			ID3D11Texture2D* texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_depth");
+			Utility::SaveTextureToFile(context, texture, L"content\\sarasa.dds");
+			renderMode = DEPTH;
 		}
 		else if (Keyboard::gInstance->IsKeyDown(DIK_6)) {
 			renderMode = POSITIONS;
@@ -422,8 +424,8 @@ namespace BRE {
 			else if (renderMode == NORMALS) {
 				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_normals");
 			}
-			else if (renderMode == PRIMARY_DEPTH_STENCIL) {
-				texture = ShaderResourcesManager::gInstance->Texture2D("primary_depth_stencil_texture2d");
+			else if (renderMode == DEPTH) {
+				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_depth");
 			}
 			else {
 				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_positions");
@@ -440,7 +442,7 @@ namespace BRE {
 		RenderStateHelper::gInstance->RestoreAll();
 	}
 
-	void DrawManager::InitFullyDeferredResources(const unsigned int screenWidth, const unsigned int screenHeight) {
+	void DrawManager::InitResources(const unsigned int screenWidth, const unsigned int screenHeight) {
 		const size_t numTextures = ARRAYSIZE(mGeometryBuffersRTVs);
 
 		//
@@ -496,14 +498,27 @@ namespace BRE {
 		textureDesc[3].SampleDesc.Count = 1;
 		textureDesc[3].SampleDesc.Quality = 0;
 
+		// Depth texture description
+		ZeroMemory(&textureDesc[4], sizeof(textureDesc[3]));
+		textureDesc[4].Width = screenWidth;
+		textureDesc[4].Height = screenHeight;
+		textureDesc[4].MipLevels = 1;
+		textureDesc[4].ArraySize = 1;
+		textureDesc[4].Format = DXGI_FORMAT_R16_UNORM;
+		textureDesc[4].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc[4].Usage = D3D11_USAGE_DEFAULT;
+		textureDesc[4].SampleDesc.Count = 1;
+		textureDesc[4].SampleDesc.Quality = 0;
+
 		//
 		// Texture id's
 		//
-		const char* textureIds[4] = {
+		const char* textureIds[numTextures] = {
 			"deferred_rendering_texture2d_normals",
 			"deferred_rendering_texture2d_diffuse_albedo",
 			"deferred_rendering_texture2d_specular_albedo",
-			"deferred_rendering_texture2d_positions"
+			"deferred_rendering_texture2d_positions",
+			"deferred_rendering_texture2d_depth"
 		};
 
 		//

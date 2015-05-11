@@ -1,5 +1,5 @@
 models:
-  - renderType: Normal_Displacement
+  - renderType: Normal
     path: "content\\models\\plane.obj"
     translation: [0.0, -200.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
@@ -11,7 +11,7 @@ models:
     edgeTesselationFactors: [2.0, 2.0, 2.0]
     insideTessellationFactors: 1.0
     displacementScale: 5.0
-  - renderType: Normal_Displacement
+  - renderType: Normal
     path: "content\\models\\plane.obj"
     translation: [0.0, 200.0, 0.0]
     rotation: [3.14, 0.0, 0.0]
@@ -23,7 +23,7 @@ models:
     edgeTesselationFactors: [2.0, 2.0, 2.0]
     insideTessellationFactors: 1.0
     displacementScale: 5.0
-  - renderType: Normal_Displacement
+  - renderType: Normal
     path: "content\\models\\plane.obj"
     translation: [0.0, 0.0, 200.0]
     rotation: [-1.57, 0.0, 0.0]
@@ -35,7 +35,7 @@ models:
     edgeTesselationFactors: [2.0, 2.0, 2.0]
     insideTessellationFactors: 1.0
     displacementScale: 5.0
-  - renderType: Normal_Displacement
+  - renderType: Normal
     path: "content\\models\\plane.obj"
     translation: [200.0, 0.0, 0.0]
     rotation: [1.57, -1.57, 0.0]
@@ -47,7 +47,7 @@ models:
     edgeTesselationFactors: [2.0, 2.0, 2.0]
     insideTessellationFactors: 1.0
     displacementScale: 5.0
-  - renderType: Normal_Displacement
+  - renderType: Normal
     path: "content\\models\\plane.obj"
     translation: [-200.0, 0.0, 0.0]
     rotation: [1.57, 1.57, 0.0]

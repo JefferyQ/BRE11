@@ -67,16 +67,16 @@ namespace BRE {
 			movementAmount.y = -movementFactor;
 		}
 		if (Keyboard::gInstance->IsKeyDown(DIK_A)) {
-			movementAmount.x = -movementFactor;
+			movementAmount.x = movementFactor;
 		}
 		if (Keyboard::gInstance->IsKeyDown(DIK_D)) {
-			movementAmount.x = movementFactor;
+			movementAmount.x = -movementFactor;
 		}
 
 		XMFLOAT2 rotationAmount = ZERO_VECTOR2;
 		if (Mouse::gInstance->IsButtonHeldDown(Mouse::MouseButtonsLeft)) {
 			const DIMOUSESTATE& mouseState = Mouse::gInstance->CurrentState();
-			rotationAmount.x = -mouseState.lX * mMouseSensitivity;
+			rotationAmount.x = mouseState.lX * mMouseSensitivity;
 			rotationAmount.y = -mouseState.lY * mMouseSensitivity;
 		}
 		const XMVECTOR rotationVector = XMLoadFloat2(&rotationAmount) * mRotationRate * elapsedTime;

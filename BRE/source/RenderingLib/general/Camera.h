@@ -59,11 +59,11 @@ namespace BRE {
 		}
 
 		void UpdateViewMatrix() {
-			DirectX::XMStoreFloat4x4(&mViewMatrix, DirectX::XMMatrixLookToRH(DirectX::XMLoadFloat3(&mPosition), DirectX::XMLoadFloat3(&mDirection), DirectX::XMLoadFloat3(&mUp)));
+			DirectX::XMStoreFloat4x4(&mViewMatrix, DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&mPosition), DirectX::XMLoadFloat3(&mDirection), DirectX::XMLoadFloat3(&mUp)));
 		}
 
 		void UpdateProjectionMatrix() {
-			DirectX::XMStoreFloat4x4(&mProjectionMatrix, DirectX::XMMatrixPerspectiveFovRH(mFieldOfView, mAspectRatio, mNearPlaneDistance, mFarPlaneDistance));
+			DirectX::XMStoreFloat4x4(&mProjectionMatrix, DirectX::XMMatrixPerspectiveFovLH(mFieldOfView, mAspectRatio, mNearPlaneDistance, mFarPlaneDistance));
 		}
 
 		float& MouseSensitivity() { return mMouseSensitivity; }

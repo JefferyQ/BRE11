@@ -38,7 +38,7 @@ namespace BRE {
 		StringDrawer& FrameRateDrawer() { return mFrameRateDrawer; }
 
 	private:
-		void InitFullyDeferredResources(const unsigned int screenWidth, const unsigned int screenHeight);
+		void InitResources(const unsigned int screenWidth, const unsigned int screenHeight);
 		void InitPostProcessResources(const unsigned int screenWidth, const unsigned int screenHeight);
 
 		// Each time we draw, view projection matrix is calculated
@@ -51,8 +51,9 @@ namespace BRE {
 		// [1] -> Diffuse albedo
 		// [2] -> Specular albedo
 		// [3] -> Position
-		ID3D11RenderTargetView* mGeometryBuffersRTVs[4];
-		ID3D11ShaderResourceView* mGeometryBuffersSRVs[4];
+		// [4] -> Depth
+		ID3D11RenderTargetView* mGeometryBuffersRTVs[5];
+		ID3D11ShaderResourceView* mGeometryBuffersSRVs[5];
 
 		// Render target views and shader resource views of
 		// textures used for postprocessing purposes
