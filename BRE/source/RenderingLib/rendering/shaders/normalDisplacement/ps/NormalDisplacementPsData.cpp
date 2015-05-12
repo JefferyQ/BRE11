@@ -16,7 +16,7 @@ namespace BRE {
 		ASSERT_PTR(mShader);
 	}
 
-	void NormalDisplacementPsData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[5]) {
+	void NormalDisplacementPsData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[4]) {
 		ASSERT_PTR(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 

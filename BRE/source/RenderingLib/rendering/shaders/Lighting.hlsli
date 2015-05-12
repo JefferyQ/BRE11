@@ -9,12 +9,14 @@ struct DirectionalLight {
 };
 
 struct DirLightContributionData {
+	DirectionalLight mLight;
+	
 	// Surface material information
 	float4 mSpecularColor; // 3 color + 1 power
 	float3 mDiffuseColor;
+	
 	// Normalized surface normal
 	float3 mNormal;
-	DirectionalLight mLight;
 
 	// View direction vector (from surface to camera/eye)
 	float3 mViewDir;
@@ -54,6 +56,8 @@ struct PointLight {
 };
 
 struct PointLightContributionData {
+	PointLight mLight;
+	
 	// Surface material information
 	float4 mSpecularColor; // 3 color + 1 power
 	float3 mDiffuseColor;
@@ -61,8 +65,6 @@ struct PointLightContributionData {
 
 	// Normalized surface normal
 	float3 mNormal;
-
-	PointLight mLight;
 
 	// View direction vector (from surface to camera/eye)
 	float3 mViewDir;
@@ -111,6 +113,8 @@ struct SpotLight {
 };
 
 struct SpotLightContributionData {
+	SpotLight mLight;
+	
 	// Surface material information
 	float4 mSpecularColor; // 3 color + 1 power
 	float3 mDiffuseColor;
@@ -118,8 +122,6 @@ struct SpotLightContributionData {
 
 	// Normalized surface normal
 	float3 mNormal;
-
-	SpotLight mLight;
 
 	// View direction vector (from surface to camera/eye)
 	float3 mViewDir;

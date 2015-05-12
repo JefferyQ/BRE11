@@ -13,7 +13,7 @@ namespace BRE {
 	public:
 		NormalDisplacementPsData();
 
-		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[5]);
+		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[4]);
 		void PostDraw(ID3D11DeviceContext1& context);
 
 		ID3D11ShaderResourceView* &DiffuseTextureSRV() { return mDiffuseTextureSRV; }

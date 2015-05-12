@@ -359,8 +359,7 @@ namespace BRE {
 			DIFFUSE_ALBEDO,
 			SPECULAR_ALBEDO,
 			NORMALS,
-			DEPTH,
-			POSITIONS
+			DEPTH
 		} renderMode = BACK_BUFFER;
 		if (Keyboard::gInstance->IsKeyDown(DIK_1)) {
 			renderMode = BACK_BUFFER;
@@ -375,12 +374,7 @@ namespace BRE {
 			renderMode = NORMALS;
 		}
 		else if (Keyboard::gInstance->IsKeyDown(DIK_5)) {
-			ID3D11Texture2D* texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_depth");
-			Utility::SaveTextureToFile(context, texture, L"content\\sarasa.dds");
 			renderMode = DEPTH;
-		}
-		else if (Keyboard::gInstance->IsKeyDown(DIK_6)) {
-			renderMode = POSITIONS;
 		}
 
 		RenderStateHelper::gInstance->SaveAll();
@@ -396,16 +390,13 @@ namespace BRE {
 
 		context.OMSetRenderTargets(1, &backBuffer, &depthStencilView);
 
-		// Compute view * projection matrix
-		const XMMATRIX viewProjMatrix = Camera::gInstance->ViewMatrix() * Camera::gInstance->ProjectionMatrix();
-		XMStoreFloat4x4(&mViewProjection, viewProjMatrix);
-
-		for (NormalDisplacementDrawer& elem : mDrawers0) {
-			elem.Draw(device, context, mGeometryBuffersRTVs);
+		const XMMATRIX view = Camera::gInstance->ViewMatrix();
+		const XMMATRIX proj = Camera::gInstance->ProjectionMatrix();
+		for (NormalDisplacementDrawer& elem : mNormalDisplacementDrawer) {
+			elem.Draw(device, context, mGeometryBuffersRTVs, view, proj);
 		}
-
-		for (NormalMappingDrawer& elem : mDrawers1) {
-			elem.Draw(device, context, mGeometryBuffersRTVs);
+		for (NormalMappingDrawer& elem : mNormalMappingDrawer) {
+			elem.Draw(device, context, mGeometryBuffersRTVs, view, proj);
 		}
 
 		if (renderMode == BACK_BUFFER) {
@@ -424,11 +415,8 @@ namespace BRE {
 			else if (renderMode == NORMALS) {
 				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_normals");
 			}
-			else if (renderMode == DEPTH) {
-				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_depth");
-			}
 			else {
-				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_positions");
+				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_depth");
 			}
 
 			ASSERT_PTR(texture);
@@ -486,29 +474,17 @@ namespace BRE {
 		textureDesc[2].SampleDesc.Count = 1;
 		textureDesc[2].SampleDesc.Quality = 0;
 
-		// Positions texture description
+		// Depth texture description
 		ZeroMemory(&textureDesc[3], sizeof(textureDesc[3]));
 		textureDesc[3].Width = screenWidth;
 		textureDesc[3].Height = screenHeight;
 		textureDesc[3].MipLevels = 1;
 		textureDesc[3].ArraySize = 1;
-		textureDesc[3].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		textureDesc[3].Format = DXGI_FORMAT_R16_UNORM;
 		textureDesc[3].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[3].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[3].SampleDesc.Count = 1;
 		textureDesc[3].SampleDesc.Quality = 0;
-
-		// Depth texture description
-		ZeroMemory(&textureDesc[4], sizeof(textureDesc[3]));
-		textureDesc[4].Width = screenWidth;
-		textureDesc[4].Height = screenHeight;
-		textureDesc[4].MipLevels = 1;
-		textureDesc[4].ArraySize = 1;
-		textureDesc[4].Format = DXGI_FORMAT_R16_UNORM;
-		textureDesc[4].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		textureDesc[4].Usage = D3D11_USAGE_DEFAULT;
-		textureDesc[4].SampleDesc.Count = 1;
-		textureDesc[4].SampleDesc.Quality = 0;
 
 		//
 		// Texture id's
@@ -517,7 +493,6 @@ namespace BRE {
 			"deferred_rendering_texture2d_normals",
 			"deferred_rendering_texture2d_diffuse_albedo",
 			"deferred_rendering_texture2d_specular_albedo",
-			"deferred_rendering_texture2d_positions",
 			"deferred_rendering_texture2d_depth"
 		};
 

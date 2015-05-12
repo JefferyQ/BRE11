@@ -16,7 +16,7 @@ namespace BRE {
 		ASSERT_PTR(mShader);
 	}
 
-	void NormalMappingPsData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[5]) {
+	void NormalMappingPsData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[4]) {
 		// Set shader
 		ASSERT_PTR(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
@@ -34,7 +34,7 @@ namespace BRE {
 
 		// Set render targets
 		context.OMGetRenderTargets(1, &mDefaultRTV, &mDefaultDSV);
-		context.OMSetRenderTargets(5, geometryBuffersRTVs, mDefaultDSV);
+		context.OMSetRenderTargets(4, geometryBuffersRTVs, mDefaultDSV);
 	}
 
 	void NormalMappingPsData::PostDraw(ID3D11DeviceContext1& context) {

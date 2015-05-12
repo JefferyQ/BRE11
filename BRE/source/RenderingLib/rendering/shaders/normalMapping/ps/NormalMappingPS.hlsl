@@ -3,9 +3,8 @@
 
 /*******************  Data  *************************/
 struct VS_OUTPUT {
-	float4 PositionH : SV_Position;
-	float3 PositionW : POSITION;
-	float3 PositionV : POSITION_VIEW;
+	float4 PosH : SV_Position;
+	float3 PosV : POSITION_VIEW;
 	float3 NormalW : NORMAL;
 	float2 TexCoord : TEXCOORD0;
 	float3 TangentW : TANGENT;
@@ -16,8 +15,7 @@ struct PS_OUTPUT {
 	float2 Normal : SV_Target0;
 	float4 DiffuseAlbedo : SV_Target1;
 	float4 SpecularAlbedo : SV_Target2;
-	float4 Position : SV_Target3;
-	float Depth : SV_Target4;
+	float Depth : SV_Target3;
 };
 
 /*******************  Resources  *************************/
@@ -41,8 +39,7 @@ PS_OUTPUT main(VS_OUTPUT IN) {
 	OUT.Normal = Encode(sampledNormal);
 	OUT.DiffuseAlbedo = diffuseColor;
 	OUT.SpecularAlbedo = SpecularMapTexture.Sample(TexSampler, IN.TexCoord);
-	OUT.Position = float4(IN.PositionW, 1.0f);
-	OUT.Depth = IN.PositionV.z / FAR_CLIP_PLANE_DISTANCE;
+	OUT.Depth = IN.PosV.z / FAR_CLIP_PLANE_DISTANCE;
 
 	return OUT;
 }
