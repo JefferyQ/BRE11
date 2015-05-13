@@ -21,7 +21,7 @@ namespace BRE {
 
 		const Model& GetModel() const { return mModel; }
 		const ModelMaterial& GetMaterial() const { return *mMaterial; }
-		const std::string& Mesh::Name() const { return mName; }
+		const std::string& Name() const { return mName; }
 		const std::vector<DirectX::XMFLOAT3>& Vertices() const { return mVertices; }
 		const std::vector<DirectX::XMFLOAT3>& Normals() const { return mNormals; }
 		const std::vector<DirectX::XMFLOAT3>& Tangents() const { return mTangents; }

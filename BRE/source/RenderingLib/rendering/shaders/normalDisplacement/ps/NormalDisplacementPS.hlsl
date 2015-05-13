@@ -3,16 +3,16 @@
 
 /*******************  Data  *************************/
 struct DS_OUTPUT {
-	float4 PosH : SV_Position;
-	float3 PosV : POSITION_VIEW;
-	float3 NormalW : NORMAL;
+	float4 PosCS : SV_Position;
+	float3 NormalWS : NORMAL;
+	float DepthVS : DEPTH_VIEW_SPACE;
 	float2 TexCoord : TEXCOORD0;
-	float3 TangentW : TANGENT;
-	float3 BinormalW : BINORMAL;
+	float3 TangentWS : TANGENT;
+	float3 BinormalWS : BINORMAL;
 };
 
 struct PS_OUTPUT {
-	float2 Normal : SV_Target0;
+	float2 NormalWS : SV_Target0;
 	float4 DiffuseAlbedo : SV_Target1;
 	float4 SpecularAlbedo : SV_Target2;
 	float Depth : SV_Target3;
@@ -32,14 +32,14 @@ PS_OUTPUT main(DS_OUTPUT IN) {
 	// Transform sampled normal from texture space to world space:
 	// Map normal from [0..1] to [-1..1]
 	float3 sampledNormal = normalize((2 * NormalMapTexture.Sample(TexSampler, IN.TexCoord).xyz) - 1.0);
-	const float3x3 tbn = float3x3(normalize(IN.TangentW), normalize(IN.BinormalW), normalize(IN.NormalW));
+	const float3x3 tbn = float3x3(normalize(IN.TangentWS), normalize(IN.BinormalWS), normalize(IN.NormalWS));
 	sampledNormal = normalize(mul(sampledNormal, tbn));
 	const float4 diffuseColor = DiffuseTexture.Sample(TexSampler, IN.TexCoord);
 
-	OUT.Normal = Encode(sampledNormal);
+	OUT.NormalWS = Encode(sampledNormal);
 	OUT.DiffuseAlbedo = diffuseColor;
 	OUT.SpecularAlbedo = SpecularMapTexture.Sample(TexSampler, IN.TexCoord);
-	OUT.Depth = IN.PosV.z / FAR_CLIP_PLANE_DISTANCE;
+	OUT.Depth = IN.DepthVS / FAR_CLIP_PLANE_DISTANCE;
 
 	return OUT;
 }

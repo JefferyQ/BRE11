@@ -211,24 +211,24 @@ void SpriteBatch::Impl::DeviceResources::CreateShaders(_In_ ID3D11Device* device
 {
 	ThrowIfFailed(
 		device->CreateVertexShader(SpriteEffect_SpriteVertexShader,
-		sizeof(SpriteEffect_SpriteVertexShader),
-		nullptr,
-		&vertexShader)
+			sizeof(SpriteEffect_SpriteVertexShader),
+			nullptr,
+			&vertexShader)
 		);
 
 	ThrowIfFailed(
 		device->CreatePixelShader(SpriteEffect_SpritePixelShader,
-		sizeof(SpriteEffect_SpritePixelShader),
-		nullptr,
-		&pixelShader)
+			sizeof(SpriteEffect_SpritePixelShader),
+			nullptr,
+			&pixelShader)
 		);
 
 	ThrowIfFailed(
 		device->CreateInputLayout(VertexPositionColorTexture::InputElements,
-		VertexPositionColorTexture::InputElementCount,
-		SpriteEffect_SpriteVertexShader,
-		sizeof(SpriteEffect_SpriteVertexShader),
-		&inputLayout)
+			VertexPositionColorTexture::InputElementCount,
+			SpriteEffect_SpriteVertexShader,
+			sizeof(SpriteEffect_SpriteVertexShader),
+			&inputLayout)
 		);
 
 	SetDebugObjectName(vertexShader.Get(), "DirectXTK:SpriteBatch");
@@ -857,38 +857,38 @@ XMMATRIX SpriteBatch::Impl::GetViewportTransform(_In_ ID3D11DeviceContext* devic
 	case DXGI_MODE_ROTATION_ROTATE90:
 		return XMMATRIX
 			(
-			0, -yScale, 0, 0,
-			-xScale, 0, 0, 0,
-			0, 0, 1, 0,
-			1, 1, 0, 1
-			);
+				0, -yScale, 0, 0,
+				-xScale, 0, 0, 0,
+				0, 0, 1, 0,
+				1, 1, 0, 1
+				);
 
 	case DXGI_MODE_ROTATION_ROTATE270:
 		return XMMATRIX
 			(
-			0, yScale, 0, 0,
-			xScale, 0, 0, 0,
-			0, 0, 1, 0,
-			-1, -1, 0, 1
-			);
+				0, yScale, 0, 0,
+				xScale, 0, 0, 0,
+				0, 0, 1, 0,
+				-1, -1, 0, 1
+				);
 
 	case DXGI_MODE_ROTATION_ROTATE180:
 		return XMMATRIX
 			(
-			-xScale, 0, 0, 0,
-			0, yScale, 0, 0,
-			0, 0, 1, 0,
-			1, -1, 0, 1
-			);
+				-xScale, 0, 0, 0,
+				0, yScale, 0, 0,
+				0, 0, 1, 0,
+				1, -1, 0, 1
+				);
 
 	default:
 		return XMMATRIX
 			(
-			xScale, 0, 0, 0,
-			0, -yScale, 0, 0,
-			0, 0, 1, 0,
-			-1, 1, 0, 1
-			);
+				xScale, 0, 0, 0,
+				0, -yScale, 0, 0,
+				0, 0, 1, 0,
+				-1, 1, 0, 1
+				);
 	}
 }
 

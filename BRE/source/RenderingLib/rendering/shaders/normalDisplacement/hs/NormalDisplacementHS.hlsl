@@ -2,10 +2,10 @@
 #define NUM_PATCH_POINTS 3
 
 struct VS_OUTPUT {
-	float4 PosL : POSITION;
-	float3 NormalL : NORMAL;
+	float4 PosOS : POSITION;
+	float3 NormalOS : NORMAL;
 	float2 TexCoord : TEXCOORD0;
-	float3 TangentL : TANGENT;
+	float3 TangentOS : TANGENT;
 };
 
 struct HS_CONSTANT_OUTPUT {
@@ -14,10 +14,10 @@ struct HS_CONSTANT_OUTPUT {
 };
 
 struct HS_OUTPUT {
-	float4 PosL : POSITION;
-	float3 NormalL : NORMAL;
+	float4 PosOS : POSITION;
+	float3 NormalOS : NORMAL;
 	float2 TexCoord : TEXCOORD0;
-	float3 TangentL : TANGENT;
+	float3 TangentOS : TANGENT;
 };
 
 /*******************  Resources  *************************/
@@ -47,10 +47,10 @@ HS_OUTPUT main(const InputPatch <VS_OUTPUT, NUM_PATCH_POINTS> patch, const uint 
 	HS_OUTPUT OUT = (HS_OUTPUT)0;
 
 	// Simply pass through
-	OUT.PosL = patch[controlPointID].PosL;
-	OUT.NormalL = patch[controlPointID].NormalL;
+	OUT.PosOS = patch[controlPointID].PosOS;
+	OUT.NormalOS = patch[controlPointID].NormalOS;
 	OUT.TexCoord = patch[controlPointID].TexCoord;
-	OUT.TangentL = patch[controlPointID].TangentL;
+	OUT.TangentOS = patch[controlPointID].TangentOS;
 
 	return OUT;
 }

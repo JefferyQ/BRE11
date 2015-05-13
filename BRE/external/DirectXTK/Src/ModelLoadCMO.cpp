@@ -190,18 +190,18 @@ static void CreateInputLayout(_In_ ID3D11Device* device, IEffect* effect, _Out_ 
 	{
 		ThrowIfFailed(
 			device->CreateInputLayout(VertexPositionNormalTangentColorTextureSkinning::InputElements,
-			VertexPositionNormalTangentColorTextureSkinning::InputElementCount,
-			shaderByteCode, byteCodeLength,
-			pInputLayout)
+				VertexPositionNormalTangentColorTextureSkinning::InputElementCount,
+				shaderByteCode, byteCodeLength,
+				pInputLayout)
 			);
 	}
 	else
 	{
 		ThrowIfFailed(
 			device->CreateInputLayout(VertexPositionNormalTangentColorTexture::InputElements,
-			VertexPositionNormalTangentColorTexture::InputElementCount,
-			shaderByteCode, byteCodeLength,
-			pInputLayout)
+				VertexPositionNormalTangentColorTexture::InputElementCount,
+				shaderByteCode, byteCodeLength,
+				pInputLayout)
 			);
 	}
 

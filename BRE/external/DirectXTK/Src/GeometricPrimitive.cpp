@@ -102,9 +102,9 @@ namespace
 
 		ThrowIfFailed(
 			device->CreateInputLayout(VertexPositionNormalTexture::InputElements,
-			VertexPositionNormalTexture::InputElementCount,
-			shaderByteCode, byteCodeLength,
-			pInputLayout)
+				VertexPositionNormalTexture::InputElementCount,
+				shaderByteCode, byteCodeLength,
+				pInputLayout)
 			);
 
 		SetDebugObjectName(*pInputLayout, "DirectXTK:GeometricPrimitive");
@@ -236,7 +236,7 @@ void GeometricPrimitive::Impl::Initialize(ID3D11DeviceContext* deviceContext, Ve
 // Draws the primitive.
 _Use_decl_annotations_
 void XM_CALLCONV GeometricPrimitive::Impl::Draw(FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection, FXMVECTOR color,
-ID3D11ShaderResourceView* texture, bool wireframe, std::function<void()> setCustomState)
+	ID3D11ShaderResourceView* texture, bool wireframe, std::function<void()> setCustomState)
 {
 	assert(mResources != 0);
 	auto effect = mResources->effect.get();
@@ -616,9 +616,9 @@ XMFLOAT3(0, -1,  0), // 5 bottom
 					XMStoreFloat3(
 						&outVertex,
 						XMVectorScale(
-						XMVectorAdd(XMLoadFloat3(&vertexPositions[i0]), XMLoadFloat3(&vertexPositions[i1])),
-						0.5f
-						)
+							XMVectorAdd(XMLoadFloat3(&vertexPositions[i0]), XMLoadFloat3(&vertexPositions[i1])),
+							0.5f
+							)
 						);
 
 					outIndex = static_cast<uint16_t>(vertexPositions.size());

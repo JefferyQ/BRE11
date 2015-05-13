@@ -87,13 +87,13 @@ namespace DXUT
 		D3DDECLTYPE_FLOAT4 = 3,  // 4D float
 		D3DDECLTYPE_D3DCOLOR = 4,  // 4D packed unsigned bytes mapped to 0. to 1. range
 									 // Input is in D3DCOLOR format (ARGB) expanded to (R, G, B, A)
-									 D3DDECLTYPE_UBYTE4 = 5,  // 4D unsigned byte
-									 D3DDECLTYPE_UBYTE4N = 8,  // Each of 4 bytes is normalized by dividing to 255.0
-									 D3DDECLTYPE_DEC3N = 14,  // 3D signed 10 10 10 format normalized and expanded to (v[0]/511.0, v[1]/511.0, v[2]/511.0, 1)
-									 D3DDECLTYPE_FLOAT16_2 = 15,  // Two 16-bit floating point values, expanded to (value, value, 0, 1)
-									 D3DDECLTYPE_FLOAT16_4 = 16,  // Four 16-bit floating point values
+		D3DDECLTYPE_UBYTE4 = 5,  // 4D unsigned byte
+		D3DDECLTYPE_UBYTE4N = 8,  // Each of 4 bytes is normalized by dividing to 255.0
+		D3DDECLTYPE_DEC3N = 14,  // 3D signed 10 10 10 format normalized and expanded to (v[0]/511.0, v[1]/511.0, v[2]/511.0, 1)
+		D3DDECLTYPE_FLOAT16_2 = 15,  // Two 16-bit floating point values, expanded to (value, value, 0, 1)
+		D3DDECLTYPE_FLOAT16_4 = 16,  // Four 16-bit floating point values
 
-									 D3DDECLTYPE_UNUSED = 17,  // When the type field in a decl is unused.
+		D3DDECLTYPE_UNUSED = 17,  // When the type field in a decl is unused.
 	};
 
 #pragma pack(push,4)
@@ -562,9 +562,9 @@ static void CreateInputLayout(_In_ ID3D11Device* device, _In_ IEffect* effect, s
 
 	ThrowIfFailed(
 		device->CreateInputLayout(&inputDesc.front(),
-		static_cast<UINT>(inputDesc.size()),
-		shaderByteCode, byteCodeLength,
-		pInputLayout)
+			static_cast<UINT>(inputDesc.size()),
+			shaderByteCode, byteCodeLength,
+			pInputLayout)
 		);
 
 	SetDebugObjectName(*pInputLayout, "ModelSDKMESH");

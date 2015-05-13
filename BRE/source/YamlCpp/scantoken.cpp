@@ -414,7 +414,7 @@ namespace YAML
 		// and comments to the end of the line
 		if (Exp::Comment().Matches(INPUT))
 			while (INPUT && !Exp::Break().Matches(INPUT))
-				INPUT.eat(1);
+			INPUT.eat(1);
 
 		// if it's not a line break, then we ran into a bad character inline
 		if (INPUT && !Exp::Break().Matches(INPUT))

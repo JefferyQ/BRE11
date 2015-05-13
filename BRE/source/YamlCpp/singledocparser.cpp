@@ -237,7 +237,7 @@ namespace YAML
 				HandleNode(eventHandler);
 			}
 			else {
-				eventHandler.OnNull(token.mark, NullAnchor); 
+				eventHandler.OnNull(token.mark, NullAnchor);
 			}
 
 			// now grab value (optional)

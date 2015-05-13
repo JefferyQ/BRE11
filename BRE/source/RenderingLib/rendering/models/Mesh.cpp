@@ -76,12 +76,12 @@ namespace BRE {
 		}
 
 		// Tangents and Binormals
-		ASSERT_COND(mesh.HasTangentsAndBitangents()); 
+		ASSERT_COND(mesh.HasTangentsAndBitangents());
 		mTangents.reserve(mesh.mNumVertices);
 		mBiNormals.reserve(mesh.mNumVertices);
 		for (unsigned int i = 0; i < mesh.mNumVertices; ++i) {
 			mTangents.push_back(XMFLOAT3(reinterpret_cast<const float*>(&mesh.mTangents[i])));
-			mBiNormals.push_back(XMFLOAT3(reinterpret_cast<const float*>(&mesh.mBitangents[i]))); 
+			mBiNormals.push_back(XMFLOAT3(reinterpret_cast<const float*>(&mesh.mBitangents[i])));
 		}
 	}
 

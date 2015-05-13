@@ -361,9 +361,9 @@ namespace DirectX
 				float m10, float m11, float m12, float m13,
 				float m20, float m21, float m22, float m23,
 				float m30, float m31, float m32, float m33) : XMFLOAT4X4(m00, m01, m02, m03,
-				m10, m11, m12, m13,
-				m20, m21, m22, m23,
-				m30, m31, m32, m33) {}
+					m10, m11, m12, m13,
+					m20, m21, m22, m23,
+					m30, m31, m32, m33) {}
 			explicit Matrix(const Vector3& r0, const Vector3& r1, const Vector3& r2) : XMFLOAT4X4(r0.x, r0.y, r0.z, 0,
 				r1.x, r1.y, r1.z, 0,
 				r2.x, r2.y, r2.z, 0,

@@ -28,7 +28,7 @@ namespace BRE {
 		void LoadModels(const char* filepath);
 
 		void DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView);
-		
+
 		std::vector<NormalDisplacementDrawer>& NormalDisplacementDrawerVec() { return mNormalDisplacementDrawer; }
 		std::vector<NormalMappingDrawer>& NormalMappingDrawerVec() { return mNormalMappingDrawer; }
 		std::vector<LightsDrawer::DirLightData>& DirLightDataVec() { return mLightsDrawer.DirLightDataVec(); }
@@ -38,7 +38,7 @@ namespace BRE {
 	private:
 		void InitResources(const unsigned int screenWidth, const unsigned int screenHeight);
 		void InitPostProcessResources(const unsigned int screenWidth, const unsigned int screenHeight);
-		
+
 		// Render target views and shader resources views
 		// for fully deferred rendering purposes
 		// [0] -> Normal

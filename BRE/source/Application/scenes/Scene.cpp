@@ -14,9 +14,8 @@ using namespace DirectX;
 namespace {
 	const XMFLOAT2 sLightRotationRate(XM_PI / 4.0f, XM_PI / 4.0f);
 
-
 	const unsigned int sMaxShaderPointLights = 512;
-	const unsigned int sNumPointLightShaders = 8;
+	const unsigned int sNumPointLightShaders = 16;
 
 	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";
 }
@@ -58,31 +57,32 @@ void Scene::InitDirectionalLights() {
 	mDirectionalLight.SetColor(0.4f, 0.4f, 0.4f);
 	mDirectionalLight.ApplyRotation(XMMatrixRotationX(XM_PI / -2.0f));
 
-	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light(); 
+	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light();
 	dirLightData.mColor = mDirectionalLight.Color();
 	dirLightData.mDirection = mDirectionalLight.Direction();
 
-	dirLightPsData.SamplerState() = BRE::GlobalResources::gInstance->MinMagMipPointSampler(); 
+	dirLightPsData.SamplerState() = BRE::GlobalResources::gInstance->MinMagMipPointSampler();
 }
 
-void Scene::InitPointLights() { 
+void Scene::InitPointLights() {
 	std::vector<BRE::LightsDrawer::PointLightData>& quadCulledPointLightDataVec = BRE::DrawManager::gInstance->PointLightDataVec();
 	quadCulledPointLightDataVec.resize(sNumPointLightShaders);
 	unsigned int lightIndex = 0;
+	const float factor = 500.0f;
 	for (BRE::LightsDrawer::PointLightData& data : quadCulledPointLightDataVec) {
 		for (unsigned int iLight = 0; iLight < sMaxShaderPointLights; ++iLight, ++lightIndex) {
-			data.mPointLightVsData.LightPosAndRadius(iLight).x = BRE::Utility::RandomFloat(-200.0f, 200.0f);
-			data.mPointLightVsData.LightPosAndRadius(iLight).y = BRE::Utility::RandomFloat(-200.0f, 200.0f);
-			data.mPointLightVsData.LightPosAndRadius(iLight).z = BRE::Utility::RandomFloat(-200.0f, 200.0f);
-			data.mPointLightVsData.LightPosAndRadius(iLight).w = 20;
+			data.mPointLightVsData.LightPosAndRadius(iLight).x = BRE::Utility::RandomFloat(-factor, factor);
+			data.mPointLightVsData.LightPosAndRadius(iLight).y = BRE::Utility::RandomFloat(-factor, factor);
+			data.mPointLightVsData.LightPosAndRadius(iLight).z = BRE::Utility::RandomFloat(-factor, factor);
+			data.mPointLightVsData.LightPosAndRadius(iLight).w = 40;
 			const float c = BRE::Utility::RandomFloat(0.3f, 0.4f);
 			DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(c, c, c, 0.0f);
 			data.mPointLightVsData.LightColor(iLight) = color;
 
-			const float f5 = BRE::Utility::RandomFloat(25.0f, 30.0f) * (rand() % 2 ? 1.0f : -1.0f);
-			const float f6 = BRE::Utility::RandomFloat(25.0f, 30.0f) * (rand() % 2 ? 1.0f : -1.0f);
-			const float f7 = BRE::Utility::RandomFloat(25.0f, 30.0f) * (rand() % 2 ? 1.0f : -1.0f);
-			mPosUpdater.Add(BRE::PositionUpdater::Params(&data.mPointLightVsData.LightPosAndRadius(iLight), XMFLOAT3(-200.0f, -200.0f, -200.0f), XMFLOAT3(200.0f, 200.0f, 200.0f), XMFLOAT3(f5, f6, f7)));
+			const float f5 = BRE::Utility::RandomFloat(25.0f, 30.0f) * ((rand() % 2) ? 1.0f : -1.0f);
+			const float f6 = BRE::Utility::RandomFloat(25.0f, 30.0f) * ((rand() % 2) ? 1.0f : -1.0f);
+			const float f7 = BRE::Utility::RandomFloat(25.0f, 30.0f) * ((rand() % 2) ? 1.0f : -1.0f);
+			mPosUpdater.Add(BRE::PositionUpdater::Params(&data.mPointLightVsData.LightPosAndRadius(iLight), XMFLOAT3(-factor, -factor, -factor), XMFLOAT3(factor, factor, factor), XMFLOAT3(f5, f6, f7)));
 		}
 	}
 }

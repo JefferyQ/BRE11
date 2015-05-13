@@ -2212,7 +2212,7 @@ inline Matrix Matrix::CreateBillboard(const Vector3& object, const Vector3& came
 
 _Use_decl_annotations_
 inline Matrix Matrix::CreateConstrainedBillboard(const Vector3& object, const Vector3& cameraPosition, const Vector3& rotateAxis,
-const Vector3* cameraForward, const Vector3* objectForward)
+	const Vector3* cameraForward, const Vector3* objectForward)
 {
 	using namespace DirectX;
 

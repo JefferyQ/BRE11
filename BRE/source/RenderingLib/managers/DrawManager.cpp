@@ -176,7 +176,7 @@ namespace {
 
 		return BRE::ShaderResourcesManager::gInstance->AddBuffer(id, bufferDesc, nullptr);
 	}
-}
+	}
 
 namespace BRE {
 	DrawManager* DrawManager::gInstance = nullptr;
@@ -283,7 +283,8 @@ namespace BRE {
 				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 
 				NormalMappingDrawerVec().push_back(renderer);
-			} else if (renderType == "Normal_Displacement") {
+			}
+			else if (renderType == "Normal_Displacement") {
 				NormalDisplacementDrawer renderer;
 
 				// Get vertices and indices

@@ -57,7 +57,7 @@ namespace BRE {
 		if (findIt != mShaderResourceViews.end()) {
 			return findIt->second;
 		}
-		 
+
 		ID3D11Resource* texture;
 		ID3D11ShaderResourceView* elem;
 		ASSERT_HR(DirectX::CreateDDSTextureFromFile(&mDevice, Utility::ToWideString(filepath).c_str(), &texture, &elem));

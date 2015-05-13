@@ -68,7 +68,7 @@ static BOOL CALLBACK InitializeDecl(PINIT_ONCE initOnce, PVOID Parameter, PVOID 
 //--------------------------------------------------------------------------------------
 _Use_decl_annotations_
 std::unique_ptr<Model> DirectX::Model::CreateFromVBO(ID3D11Device* d3dDevice, const uint8_t* meshData, size_t dataSize,
-std::shared_ptr<IEffect> ieffect, bool ccw, bool pmalpha)
+	std::shared_ptr<IEffect> ieffect, bool ccw, bool pmalpha)
 {
 	if (!InitOnceExecuteOnce(&g_InitOnce, InitializeDecl, nullptr, nullptr))
 		throw std::exception("One-time initialization failed");
@@ -151,9 +151,9 @@ std::shared_ptr<IEffect> ieffect, bool ccw, bool pmalpha)
 
 		ThrowIfFailed(
 			d3dDevice->CreateInputLayout(VertexPositionNormalTexture::InputElements,
-			VertexPositionNormalTexture::InputElementCount,
-			shaderByteCode, byteCodeLength,
-			il.GetAddressOf()));
+				VertexPositionNormalTexture::InputElementCount,
+				shaderByteCode, byteCodeLength,
+				il.GetAddressOf()));
 
 		SetDebugObjectName(il.Get(), "ModelVBO");
 	}
@@ -184,7 +184,7 @@ std::shared_ptr<IEffect> ieffect, bool ccw, bool pmalpha)
 //--------------------------------------------------------------------------------------
 _Use_decl_annotations_
 std::unique_ptr<Model> DirectX::Model::CreateFromVBO(ID3D11Device* d3dDevice, const wchar_t* szFileName,
-std::shared_ptr<IEffect> ieffect, bool ccw, bool pmalpha)
+	std::shared_ptr<IEffect> ieffect, bool ccw, bool pmalpha)
 {
 	size_t dataSize = 0;
 	std::unique_ptr<uint8_t[]> data;

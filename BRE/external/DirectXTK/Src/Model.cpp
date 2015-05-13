@@ -84,9 +84,9 @@ void ModelMeshPart::CreateInputLayout(ID3D11Device* d3dDevice, IEffect* ieffect,
 
 	ThrowIfFailed(
 		d3dDevice->CreateInputLayout(&(vbDecl->front()),
-		static_cast<UINT>(vbDecl->size()),
-		shaderByteCode, byteCodeLength,
-		iinputLayout)
+			static_cast<UINT>(vbDecl->size()),
+			shaderByteCode, byteCodeLength,
+			iinputLayout)
 		);
 }
 
@@ -109,9 +109,9 @@ void ModelMeshPart::ModifyEffect(ID3D11Device* d3dDevice, std::shared_ptr<IEffec
 
 	ThrowIfFailed(
 		d3dDevice->CreateInputLayout(&(vbDecl->front()),
-		static_cast<UINT>(vbDecl->size()),
-		shaderByteCode, byteCodeLength,
-		&inputLayout)
+			static_cast<UINT>(vbDecl->size()),
+			shaderByteCode, byteCodeLength,
+			&inputLayout)
 		);
 }
 
@@ -174,9 +174,9 @@ void ModelMesh::PrepareForRendering(ID3D11DeviceContext* deviceContext, CommonSt
 
 _Use_decl_annotations_
 void XM_CALLCONV ModelMesh::Draw(ID3D11DeviceContext* deviceContext,
-FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection,
-bool alpha,
-std::function<void()> setCustomState) const
+	FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection,
+	bool alpha,
+	std::function<void()> setCustomState) const
 {
 	assert(deviceContext != 0);
 
@@ -209,8 +209,8 @@ std::function<void()> setCustomState) const
 
 _Use_decl_annotations_
 void XM_CALLCONV Model::Draw(ID3D11DeviceContext* deviceContext, CommonStates& states,
-FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection,
-bool wireframe, std::function<void()> setCustomState) const
+	FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection,
+	bool wireframe, std::function<void()> setCustomState) const
 {
 	assert(deviceContext != 0);
 

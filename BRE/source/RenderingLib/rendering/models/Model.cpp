@@ -13,7 +13,7 @@ namespace BRE {
 	Model::Model(const char* filename) {
 		ASSERT_PTR(filename);
 		Assimp::Importer importer;
-#if defined(DEBUG) || defined(_DEBUG)  
+#if defined(DEBUG) || defined(_DEBUG)
 		const unsigned int flags = aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded;
 #else
 		const unsigned int flags = aiProcessPreset_TargetRealtime_Fast | aiProcess_ConvertToLeftHanded;
@@ -24,7 +24,7 @@ namespace BRE {
 			std::cerr << errorMsg << std::endl;
 			ASSERT_PTR(scene);
 		}
-		
+
 		if (scene->HasMaterials()) {
 			for (unsigned int i = 0; i < scene->mNumMaterials; ++i) {
 				mMaterials.push_back(new ModelMaterial(*this, scene->mMaterials[i]));

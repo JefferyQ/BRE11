@@ -118,7 +118,7 @@ namespace BRE {
 		}
 
 		float RandomFloat(const float min, const float max) {
-			ASSERT_COND(max > min);			
+			ASSERT_COND(max > min);
 			const float random = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 
 			// generate (in your case) a float between 0 and (4.5-.78)
