@@ -33,6 +33,7 @@ namespace BRE {
 		DirectX::XMFLOAT4X4& WorldViewProjection() { return mCBufferPerFrameData.mWorldViewProjection; }
 		DirectX::XMFLOAT4X4& WorldView() { return mCBufferPerFrameData.mWorldView; }
 		DirectX::XMFLOAT4X4& World() { return mCBufferPerFrameData.mWorld; }
+		float& TextureScaleFactor() { return mCBufferPerFrameData.mTextureScaleFactor;  }
 
 		ID3D11Buffer* &VertexBuffer() { return mVertexBuffer; }
 		ID3D11Buffer* &IndexBuffer() { return mIndexBuffer; }
@@ -49,6 +50,7 @@ namespace BRE {
 			DirectX::XMFLOAT4X4 mWorldViewProjection;
 			DirectX::XMFLOAT4X4 mWorldView;
 			DirectX::XMFLOAT4X4 mWorld;
+			float mTextureScaleFactor;
 		} mCBufferPerFrameData;
 
 		ID3D11Buffer* mCBufferPerFrame;

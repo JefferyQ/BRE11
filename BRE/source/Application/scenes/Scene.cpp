@@ -15,7 +15,7 @@ namespace {
 	const XMFLOAT2 sLightRotationRate(XM_PI / 4.0f, XM_PI / 4.0f);
 
 	const unsigned int sMaxShaderPointLights = 512;
-	const unsigned int sNumPointLightShaders = 16;
+	const unsigned int sNumPointLightShaders = 8;
 
 	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";
 }
@@ -74,7 +74,7 @@ void Scene::InitPointLights() {
 			data.mPointLightVsData.LightPosAndRadius(iLight).x = BRE::Utility::RandomFloat(-factor, factor);
 			data.mPointLightVsData.LightPosAndRadius(iLight).y = BRE::Utility::RandomFloat(-factor, factor);
 			data.mPointLightVsData.LightPosAndRadius(iLight).z = BRE::Utility::RandomFloat(-factor, factor);
-			data.mPointLightVsData.LightPosAndRadius(iLight).w = 40;
+			data.mPointLightVsData.LightPosAndRadius(iLight).w = 60; 
 			const float c = BRE::Utility::RandomFloat(0.3f, 0.4f);
 			DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(c, c, c, 0.0f);
 			data.mPointLightVsData.LightColor(iLight) = color;

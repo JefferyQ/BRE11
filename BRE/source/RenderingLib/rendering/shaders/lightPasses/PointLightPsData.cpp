@@ -38,7 +38,7 @@ namespace BRE {
 		ASSERT_PTR(mCBufferPerFrame);
 	}
 
-	void PointLightPixelShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[5]) {
+	void PointLightPixelShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[4]) {
 		// Set shader
 		ASSERT_PTR(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
@@ -50,7 +50,7 @@ namespace BRE {
 		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
 		// Set resources
-		context.PSSetShaderResources(0, 5, geometryBuffersSRVs);
+		context.PSSetShaderResources(0, 4, geometryBuffersSRVs);
 
 		// Set samplers
 		ID3D11SamplerState* const samplerStates[] = { mSampler };
@@ -66,7 +66,7 @@ namespace BRE {
 		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
 		// Set resources
-		ID3D11ShaderResourceView* srvs[5];
+		ID3D11ShaderResourceView* srvs[4];
 		ZeroMemory(srvs, sizeof(ID3D11ShaderResourceView*) * ARRAYSIZE(srvs));
 		context.PSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
 

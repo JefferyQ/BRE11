@@ -10,5 +10,5 @@ camera:
   farPlaneDistance: 5000.0
   fieldOfView: 0.78539
   rotationRate: 0.005
-  movementRate: 15.0
+  movementRate: 65.0
   mouseSensibility: 100.0

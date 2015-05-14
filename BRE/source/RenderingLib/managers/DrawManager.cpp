@@ -281,7 +281,8 @@ namespace BRE {
 				renderer.PixelShaderData().SpecularMapTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str());
 				ASSERT_PTR(renderer.PixelShaderData().SpecularMapTextureSRV());
 				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
-
+				renderer.VertexShaderData().TextureScaleFactor() = GetScalar<float>(node, "textureScaleFactor");
+				
 				NormalMappingDrawerVec().push_back(renderer);
 			}
 			else if (renderType == "Normal_Displacement") {
