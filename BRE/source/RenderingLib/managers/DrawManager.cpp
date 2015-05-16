@@ -425,7 +425,7 @@ namespace BRE {
 			context.CopyResource(backBufferTexture, texture);
 		}
 
-		mFrameRateDrawer.Draw();
+		//mFrameRateDrawer.Draw();
 
 		ASSERT_HR(swapChain.Present(0, 0));
 
@@ -446,7 +446,7 @@ namespace BRE {
 		textureDesc[0].Height = screenHeight;
 		textureDesc[0].MipLevels = 1;
 		textureDesc[0].ArraySize = 1;
-		textureDesc[0].Format = DXGI_FORMAT_R8G8B8A8_SNORM;
+		textureDesc[0].Format = DXGI_FORMAT_R8G8_UNORM;
 		textureDesc[0].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[0].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[0].SampleDesc.Count = 1;
