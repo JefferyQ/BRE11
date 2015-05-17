@@ -24,7 +24,7 @@ namespace BRE {
 			std::cerr << errorMsg << std::endl;
 			ASSERT_PTR(scene);
 		}
-
+		
 		if (scene->HasMaterials()) {
 			for (unsigned int i = 0; i < scene->mNumMaterials; ++i) {
 				mMaterials.push_back(new ModelMaterial(*this, scene->mMaterials[i]));
@@ -32,8 +32,8 @@ namespace BRE {
 		}
 		if (scene->HasMeshes()) {
 			for (unsigned int i = 0; i < scene->mNumMeshes; ++i) {
-				Mesh* mesh = new Mesh(*this, *(scene->mMeshes[i]));
-				mMeshes.push_back(mesh);
+				aiMesh* mesh = scene->mMeshes[i];
+				mMeshes.push_back(new Mesh(*this, *(mesh)));
 			}
 		}
 	}

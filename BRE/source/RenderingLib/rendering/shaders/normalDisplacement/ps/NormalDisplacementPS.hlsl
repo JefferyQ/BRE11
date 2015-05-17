@@ -37,8 +37,9 @@ PS_OUTPUT main(DS_OUTPUT IN) {
 	// Map normal from [0..1] to [-1..1]
 	float3 sampledNormal = normalize((2 * NormalMapTexture.Sample(TexSampler, IN.TexCoord).xyz) - 1.0);
 	const float3x3 tbn = float3x3(normalize(IN.TangentWS), normalize(IN.BinormalWS), normalize(IN.NormalWS));
-	sampledNormal = normalize(mul(sampledNormal, tbn));
-	OUT.NormalVS = mul(float4(Encode(sampledNormal), 0.0f, 0.0f), View).xy;
+	sampledNormal = mul(sampledNormal, tbn);
+	sampledNormal = normalize(mul(float4(sampledNormal, 0.0f), View).xyz);
+	OUT.NormalVS = Encode(sampledNormal);
 	OUT.DiffuseAlbedo = DiffuseTexture.Sample(TexSampler, IN.TexCoord);
 	OUT.SpecularAlbedo = SpecularMapTexture.Sample(TexSampler, IN.TexCoord);
 	OUT.DepthVS = IN.DepthVS / FarClipPlaneDistance;

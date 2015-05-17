@@ -27,7 +27,7 @@ void GetGBufferAttributes(in float2 screenPos, in float3 viewRayVS, out float3 n
 	// Determine our indices for sampling the texture based on the current
 	// screen position
 	const int3 sampleIndices = int3(screenPos.xy, 0);
-	normalVS = mul(float4(Decode(NormalTexture.Load(sampleIndices).xy), 0.0f), View).xyz;
+	normalVS = Decode(NormalTexture.Load(sampleIndices).xy);
 
 	const float depth = DepthTexture.Load(sampleIndices).x;
 	posVS = CameraPositionVS + depth * viewRayVS;
