@@ -425,7 +425,7 @@ namespace BRE {
 			context.CopyResource(backBufferTexture, texture);
 		}
 
-		//mFrameRateDrawer.Draw();
+		mFrameRateDrawer.Draw();
 
 		ASSERT_HR(swapChain.Present(0, 0));
 

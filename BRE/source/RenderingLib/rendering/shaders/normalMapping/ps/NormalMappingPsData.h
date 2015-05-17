@@ -1,5 +1,8 @@
 #pragma once
 
+#include <DirectXMath.h>
+
+struct ID3D11Buffer;
 struct ID3D11DepthStencilView;
 struct ID3D11Device1;
 struct ID3D11DeviceContext1;
@@ -20,9 +23,20 @@ namespace BRE {
 		ID3D11ShaderResourceView* &NormalMapTextureSRV() { return mNormalMapTextureSRV; }
 		ID3D11ShaderResourceView* &SpecularMapTextureSRV() { return mSpecularMapTextureSRV; }
 		ID3D11SamplerState* &SamplerState() { return mSampler; }
+		DirectX::XMFLOAT4X4& ViewMatrix() { return mCBufferPerFrameData.mView; }
+		float& FarClipPlaneDistance() { return mCBufferPerFrameData.mFarClipPlaneDistance; }
 
 	private:
+		void InitializeCBuffers();
+
 		ID3D11PixelShader* mShader;
+
+		struct CBufferPerFrameData {
+			DirectX::XMFLOAT4X4 mView;
+			float mFarClipPlaneDistance;;
+		} mCBufferPerFrameData;
+
+		ID3D11Buffer* mCBufferPerFrame;
 
 		ID3D11DepthStencilView* mDefaultDSV;
 		ID3D11RenderTargetView* mDefaultRTV;

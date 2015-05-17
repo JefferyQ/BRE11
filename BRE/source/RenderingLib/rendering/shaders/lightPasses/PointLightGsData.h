@@ -14,7 +14,6 @@ namespace BRE {
 
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context);
 		void PostDraw(ID3D11DeviceContext1& context);
-		DirectX::XMFLOAT4X4& ViewMatrix() { return mCBufferPerFrameData.mView; }
 		DirectX::XMFLOAT4X4& ProjectionMatrix() { return mCBufferPerFrameData.mProj; }
 		float& FarClipPlaneDistance() { return mCBufferPerFrameData.mFarClipPlaneDistance; }
 
@@ -24,7 +23,6 @@ namespace BRE {
 		ID3D11GeometryShader* mShader;
 
 		struct CBufferPerFrameData {
-			DirectX::XMFLOAT4X4 mView;
 			DirectX::XMFLOAT4X4 mProj;
 			float mFarClipPlaneDistance;
 		} mCBufferPerFrameData;

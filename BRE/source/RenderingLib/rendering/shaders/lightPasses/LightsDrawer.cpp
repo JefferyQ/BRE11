@@ -25,13 +25,13 @@ namespace BRE {
 		}*/
 
 		for (PointLightData& data : mPointLightDataVec) {
-			XMStoreFloat4x4(&data.mPointLightGsData.ViewMatrix(), XMMatrixTranspose(Camera::gInstance->ViewMatrix()));
+			XMStoreFloat4x4(&data.mPointLightVsData.ViewMatrix(), XMMatrixTranspose(Camera::gInstance->ViewMatrix()));
+
 			XMStoreFloat4x4(&data.mPointLightGsData.ProjectionMatrix(), XMMatrixTranspose(Camera::gInstance->ProjectionMatrix()));
 			data.mPointLightGsData.FarClipPlaneDistance() = Camera::gInstance->FarPlaneDistance();
 
-			XMStoreFloat4x4(&data.mPointLightPsData.InverseViewMatrix(), Camera::gInstance->ViewMatrix());
 			data.mPointLightPsData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
-			data.mPointLightPsData.CameraDirectionW() = Camera::gInstance->Direction();
+			XMStoreFloat3(&data.mPointLightPsData.CameraPosVS(), XMVector3Transform(Camera::gInstance->PositionVector(), Camera::gInstance->ViewMatrix()));
 
 			data.mPointLightVsData.PreDraw(device, context);
 			data.mPointLightGsData.PreDraw(device, context);

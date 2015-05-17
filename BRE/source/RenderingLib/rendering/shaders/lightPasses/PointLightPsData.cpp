@@ -34,7 +34,7 @@ namespace BRE {
 		bufferDesc.StructureByteStride = 0;
 		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 
-		mCBufferPerFrame = ShaderResourcesManager::gInstance->AddBuffer(reinterpret_cast<size_t>(this), bufferDesc, nullptr);
+		mCBufferPerFrame = ShaderResourcesManager::gInstance->AddBuffer(rand(), bufferDesc, nullptr);
 		ASSERT_PTR(mCBufferPerFrame);
 	}
 

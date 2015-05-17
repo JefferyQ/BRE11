@@ -1,21 +1,25 @@
 #include <rendering/shaders/Utils.hlsli>
-#define FAR_CLIP_PLANE_DISTANCE 5000.0f
 
 /*******************  Data  *************************/
 struct VS_OUTPUT {
 	float4 PosCS : SV_Position;
-	float3 NormalWS : NORMAL;
+	float3 NormalVS : NORMAL;
 	float DepthVS : DEPTH_VIEW_SPACE;
 	float2 TexCoord : TEXCOORD0;
-	float3 TangentWS : TANGENT;
-	float3 BinormalWS : BINORMAL;
+	float3 TangentVS : TANGENT;
+	float3 BinormalVS : BINORMAL;
 };
 
 struct PS_OUTPUT {
-	float2 NormalWS : SV_Target0;
+	float2 NormalVS : SV_Target0;
 	float4 DiffuseAlbedo : SV_Target1;
 	float4 SpecularAlbedo : SV_Target2;
-	float Depth : SV_Target3;
+	float DepthVS : SV_Target3;
+};
+
+cbuffer cbPerFrame : register (b0) {
+	float4x4 View;
+	float FarClipPlaneDistance;
 };
 
 /*******************  Resources  *************************/
@@ -32,14 +36,12 @@ PS_OUTPUT main(VS_OUTPUT IN) {
 	// Transform sampled normal from texture space to world space:
 	// Map normal from [0..1] to [-1..1]
 	float3 sampledNormal = normalize((2 * NormalMapTexture.Sample(TexSampler, IN.TexCoord).xyz) - 1.0);
-	const float3x3 tbn = float3x3(normalize(IN.TangentWS), normalize(IN.BinormalWS), normalize(IN.NormalWS));
+	const float3x3 tbn = float3x3(normalize(IN.TangentVS), normalize(IN.BinormalVS), normalize(IN.NormalVS));
 	sampledNormal = normalize(mul(sampledNormal, tbn));
-	const float4 diffuseColor = DiffuseTexture.Sample(TexSampler, IN.TexCoord);
-
-	OUT.NormalWS = Encode(sampledNormal);
-	OUT.DiffuseAlbedo = diffuseColor;
+	OUT.NormalVS = mul(float4(Encode(sampledNormal), 0.0f, 0.0f), View).xy;
+	OUT.DiffuseAlbedo = DiffuseTexture.Sample(TexSampler, IN.TexCoord);
 	OUT.SpecularAlbedo = SpecularMapTexture.Sample(TexSampler, IN.TexCoord);
-	OUT.Depth = IN.DepthVS / FAR_CLIP_PLANE_DISTANCE;
+	OUT.DepthVS = IN.DepthVS / FarClipPlaneDistance;
 
 	return OUT;
 }

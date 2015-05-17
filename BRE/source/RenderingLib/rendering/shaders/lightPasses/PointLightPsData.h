@@ -19,9 +19,7 @@ namespace BRE {
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[4]);
 		void PostDraw(ID3D11DeviceContext1& context);
 
-		DirectX::XMFLOAT4X4& InverseViewMatrix() { return mCBufferPerFrameData.mInvView; }
-		DirectX::XMFLOAT3& CameraPosW() { return mCBufferPerFrameData.mCameraPosW; }
-		DirectX::XMFLOAT3& CameraDirectionW() { return mCBufferPerFrameData.mCameraDirectionW; }
+		DirectX::XMFLOAT3& CameraPosVS() { return mCBufferPerFrameData.mCameraPosVS; }
 		ID3D11SamplerState* &SamplerState() { return mSampler; }
 
 	private:
@@ -30,9 +28,7 @@ namespace BRE {
 		ID3D11PixelShader* mShader;
 
 		struct CBufferPerFrameData {
-			DirectX::XMFLOAT4X4 mInvView;
-			DirectX::XMFLOAT3 mCameraPosW;
-			DirectX::XMFLOAT3 mCameraDirectionW;
+			DirectX::XMFLOAT3 mCameraPosVS;
 		} mCBufferPerFrameData;
 
 		ID3D11Buffer* mCBufferPerFrame;

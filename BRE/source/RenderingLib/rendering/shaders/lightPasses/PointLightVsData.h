@@ -21,6 +21,7 @@ namespace BRE {
 
 		DirectX::XMFLOAT4& LightPosAndRadius(const unsigned int index);
 		DirectX::XMFLOAT4& LightColor(const unsigned int index);
+		DirectX::XMFLOAT4X4& ViewMatrix() { return mCBufferPerFrameData.mView; }
 
 	private:
 		void InitializeCBuffers();
@@ -28,6 +29,7 @@ namespace BRE {
 		ID3D11VertexShader* mShader;
 
 		struct CBufferPerFrameData {
+			DirectX::XMFLOAT4X4 mView;
 			DirectX::XMFLOAT4 mLightPosAndRadius[sMaxLights];
 			DirectX::XMFLOAT4 mLightColor[sMaxLights];
 		} mCBufferPerFrameData;

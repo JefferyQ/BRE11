@@ -41,12 +41,6 @@ void Scene::Update(const float elapsedTime) {
 		data.mPixelShaderData.Light().mDirection = mDirectionalLight.Direction();
 		XMStoreFloat3(&data.mPixelShaderData.CameraPosW(), BRE::Camera::gInstance->PositionVector());
 	}
-
-	// Point lights Pixel Shader
-	std::vector<BRE::LightsDrawer::PointLightData>& quadCulledPointLightDataVec = BRE::DrawManager::gInstance->PointLightDataVec();
-	for (BRE::LightsDrawer::PointLightData& data : quadCulledPointLightDataVec) {
-		XMStoreFloat3(&data.mPointLightPsData.CameraPosW(), BRE::Camera::gInstance->PositionVector());
-	}
 }
 
 void Scene::InitDirectionalLights() {

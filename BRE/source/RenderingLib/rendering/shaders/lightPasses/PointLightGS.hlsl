@@ -1,19 +1,18 @@
 #define QUAD_VERTICES (4)
 
 cbuffer cbPerFrame : register (b0) {
-	float4x4 View;
 	float4x4 Proj;
 	float FarClipPlaneDistance;
 };
 
 struct GSInput {
-	nointerpolation float3 LightCenterPosWS : POSITION;
+	nointerpolation float3 LightCenterPosVS : POSITION;
 	nointerpolation float4 LightColorAndRadius : LIGHT_COLOR_AND_RADIUS;
 };
 
 struct GSOutput {
 	float4 VertexPosCS : SV_POSITION;
-	nointerpolation float3 LightPosWS : POSITION;
+	nointerpolation float3 LightPosVS : POSITION;
 	nointerpolation float4 LightColorAndRadius : LIGHT_COLOR_AND_RADIUS;
 	float3 ViewRayVS : VIEW_RAY;
 };
@@ -23,7 +22,7 @@ void
 main(const in point GSInput input[1], inout TriangleStream<GSOutput> triangleStream) {
 	// Compute quad center position in view space.
 	// Then we can easily build a quad (two triangles) that face the camera.
-	const float4 lightCenterPosVS = mul(float4(input[0].LightCenterPosWS, 1.0f), View);
+	const float4 lightCenterPosVS = float4(input[0].LightCenterPosVS, 1.0f);
 
 	const float quadHalfSize = input[0].LightColorAndRadius.w;
 
@@ -32,7 +31,7 @@ main(const in point GSInput input[1], inout TriangleStream<GSOutput> triangleStr
 	GSOutput output;
 
 	output.VertexPosCS = mul(lightCenterPosVS + float4(-quadHalfSize, quadHalfSize, 0.0f, 0.0f), Proj);
-	output.LightPosWS = input[0].LightCenterPosWS;
+	output.LightPosVS = input[0].LightCenterPosVS;
 	output.LightColorAndRadius = input[0].LightColorAndRadius;
 	// Extrapolate the view space position to the far clip plane
 	float3 vertexPosVS = lightCenterPosVS.xyz + float3(-quadHalfSize, quadHalfSize, 0.0f);
@@ -40,7 +39,7 @@ main(const in point GSInput input[1], inout TriangleStream<GSOutput> triangleStr
 	triangleStream.Append(output);
 
 	output.VertexPosCS = mul(lightCenterPosVS + float4(quadHalfSize, quadHalfSize, 0.0f, 0.0f), Proj);
-	output.LightPosWS = input[0].LightCenterPosWS;
+	output.LightPosVS = input[0].LightCenterPosVS;
 	output.LightColorAndRadius = input[0].LightColorAndRadius;
 	// Extrapolate the view space position to the far clip plane
 	vertexPosVS = lightCenterPosVS.xyz + float3(quadHalfSize, quadHalfSize, 0.0f);
@@ -48,7 +47,7 @@ main(const in point GSInput input[1], inout TriangleStream<GSOutput> triangleStr
 	triangleStream.Append(output);
 
 	output.VertexPosCS = mul(lightCenterPosVS + float4(-quadHalfSize, -quadHalfSize, 0.0f, 0.0f), Proj);
-	output.LightPosWS = input[0].LightCenterPosWS;
+	output.LightPosVS = input[0].LightCenterPosVS;
 	output.LightColorAndRadius = input[0].LightColorAndRadius;
 	// Extrapolate the view space position to the far clip plane
 	vertexPosVS = lightCenterPosVS.xyz + float3(-quadHalfSize, -quadHalfSize, 0.0f);
@@ -56,7 +55,7 @@ main(const in point GSInput input[1], inout TriangleStream<GSOutput> triangleStr
 	triangleStream.Append(output);
 
 	output.VertexPosCS = mul(lightCenterPosVS + float4(quadHalfSize, -quadHalfSize, 0.0f, 0.0f), Proj);
-	output.LightPosWS = input[0].LightCenterPosWS;
+	output.LightPosVS = input[0].LightCenterPosVS;
 	output.LightColorAndRadius = input[0].LightColorAndRadius;
 	// Extrapolate the view space position to the far clip plane
 	vertexPosVS = lightCenterPosVS.xyz + float3(quadHalfSize, -quadHalfSize, 0.0f);

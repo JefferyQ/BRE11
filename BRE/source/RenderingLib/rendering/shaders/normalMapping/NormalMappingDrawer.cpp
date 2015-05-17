@@ -1,5 +1,7 @@
 #include "NormalMappingDrawer.h"
 
+#include <general/Camera.h>
+
 using namespace DirectX;
 
 namespace BRE {
@@ -8,6 +10,9 @@ namespace BRE {
 		XMStoreFloat4x4(&mVsData.World(), XMMatrixTranspose(world));
 		XMStoreFloat4x4(&mVsData.WorldView(), XMMatrixTranspose(world * view));
 		XMStoreFloat4x4(&mVsData.WorldViewProjection(), XMMatrixTranspose(world * view * proj));
+
+		XMStoreFloat4x4(&mPsData.ViewMatrix(), XMMatrixTranspose(view));
+		mPsData.FarClipPlaneDistance() = Camera::gInstance->FarPlaneDistance();
 
 		mVsData.PreDraw(device, context);
 		mPsData.PreDraw(device, context, geometryBuffersRTVs);

@@ -51,7 +51,7 @@ void computeDirLightContribution(const in DirLightContributionData data, out flo
 
 struct PointLight {
 	float3 Color;
-	float3 PosWS;
+	float3 Pos;
 	float Range;
 };
 
@@ -61,32 +61,32 @@ struct PointLightContributionData {
 	// Surface material information
 	float4 SpecularColor; // 3 color + 1 power
 	float3 DiffuseColor;
-	float3 PosWS;
+	float3 Pos;
 
 	// Normalized surface normal
-	float3 NormalWS;
+	float3 Normal;
 
 	// View direction vector (from surface to camera/eye)
-	float3 ViewDirWS;
+	float3 ViewDir;
 };
 
 // Computes contribution from material and point light to diffuse & specular colors
 void computePointLightContribution(const in PointLightContributionData data, out float3 outColor) {
 	// Compute attenuation
-	const float3 lightDirWS = data.Light.PosWS - data.PosWS;
-	const float dist = length(lightDirWS);
+	const float3 lightDir = data.Light.Pos - data.Pos;
+	const float dist = length(lightDir);
 	const float attenuation = max(0.0f, 1.0f - (dist / data.Light.Range));
 
 	// Compute normalized light direction from surface to light source.
-	const float3 nLightDirWS = normalize(lightDirWS);
+	const float3 nLightDir = normalize(lightDir);
 
 	// Compute normalized view direction
-	const float3 nViewDirWS = normalize(data.ViewDirWS);
+	const float3 nViewDir = normalize(data.ViewDir);
 
 	// Compute light coefficient vector (1, diffuse, specular, 1)
-	const float n_dot_l = dot(data.NormalWS, nLightDirWS);
-	const float3 halfVector = normalize(nLightDirWS + nViewDirWS);
-	const float n_dot_h = dot(data.NormalWS, halfVector);
+	const float n_dot_l = dot(data.Normal, nLightDir);
+	const float3 halfVector = normalize(nLightDir + nViewDir);
+	const float n_dot_h = dot(data.Normal, halfVector);
 	const float4 lightCoefficients = lit(n_dot_l, n_dot_h, data.SpecularColor.w);
 
 	// Material Diffuse Color * Light Color * Diffuse Light Coefficient * Attenuation
