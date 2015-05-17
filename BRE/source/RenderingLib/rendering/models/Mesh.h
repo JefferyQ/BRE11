@@ -26,8 +26,7 @@ namespace BRE {
 		const std::vector<DirectX::XMFLOAT3>& Normals() const { return mNormals; }
 		const std::vector<DirectX::XMFLOAT3>& Tangents() const { return mTangents; }
 		const std::vector<DirectX::XMFLOAT3>& BiNormals() const { return mBiNormals; }
-		const std::vector<std::vector<DirectX::XMFLOAT3>*>& TextureCoordinates() const { return mTextureCoordinates; }
-		const std::vector<std::vector<DirectX::XMFLOAT4>*>& VertexColors() const { return mVertexColors; }
+		const std::vector<DirectX::XMFLOAT3>& TextureCoordinates() const { return mTextureCoordinates; }
 		unsigned int FaceCount() const { return mFaceCount; }
 		const std::vector<unsigned int>& Indices() const { return mIndices; }
 
@@ -41,8 +40,7 @@ namespace BRE {
 		std::vector<DirectX::XMFLOAT3> mNormals;
 		std::vector<DirectX::XMFLOAT3> mTangents;
 		std::vector<DirectX::XMFLOAT3> mBiNormals;
-		std::vector<std::vector<DirectX::XMFLOAT3>*> mTextureCoordinates;
-		std::vector<std::vector<DirectX::XMFLOAT4>*> mVertexColors;
+		std::vector<DirectX::XMFLOAT3> mTextureCoordinates;
 		unsigned int mFaceCount;
 		std::vector<unsigned int> mIndices;
 	};

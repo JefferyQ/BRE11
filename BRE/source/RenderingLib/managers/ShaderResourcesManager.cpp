@@ -55,7 +55,7 @@ namespace BRE {
 		// Names must be unique
 		ShaderResourceViews::iterator findIt = mShaderResourceViews.find(fileHash);
 		if (findIt != mShaderResourceViews.end()) {
-			return findIt->second;
+			return findIt->second; 
 		}
 
 		ID3D11Resource* texture;

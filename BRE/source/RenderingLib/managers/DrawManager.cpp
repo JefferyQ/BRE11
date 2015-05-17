@@ -98,8 +98,8 @@ namespace {
 		ASSERT_PTR(model.Meshes()[0]);
 		BRE::Mesh& mesh = *model.Meshes()[0];
 		const std::vector<XMFLOAT3>& sourceVertices = mesh.Vertices();
-		std::vector<XMFLOAT3>* textureCoordinates = mesh.TextureCoordinates().at(0);
-		ASSERT_COND(textureCoordinates->size() == sourceVertices.size());
+		const std::vector<XMFLOAT3>& textureCoordinates = mesh.TextureCoordinates();
+		ASSERT_COND(textureCoordinates.size() == sourceVertices.size());
 		const std::vector<XMFLOAT3>& normals = mesh.Normals();
 		ASSERT_COND(normals.size() == sourceVertices.size());
 		const std::vector<XMFLOAT3>& tangents = mesh.Tangents();
@@ -109,7 +109,7 @@ namespace {
 		vertices.reserve(numVerts);
 		for (size_t i = 0; i < numVerts; i++) {
 			const XMFLOAT3& posL = sourceVertices[i];
-			const XMFLOAT3& uv = (*textureCoordinates)[i];
+			const XMFLOAT3& uv = textureCoordinates[i];
 			const XMFLOAT3& normalL = normals[i];
 			const XMFLOAT3& tangentL = tangents[i];
 			vertices.push_back(BRE::NormalMappingVsData::VertexData(XMFLOAT4(posL.x, posL.y, posL.z, 1.0f), XMFLOAT2(uv.x, uv.y), normalL, tangentL));
@@ -126,8 +126,8 @@ namespace {
 		ASSERT_PTR(model.Meshes()[0]);
 		BRE::Mesh& mesh = *model.Meshes()[0];
 		const std::vector<XMFLOAT3>& sourceVertices = mesh.Vertices();
-		std::vector<XMFLOAT3>* textureCoordinates = mesh.TextureCoordinates().at(0);
-		ASSERT_COND(textureCoordinates->size() == sourceVertices.size());
+		const std::vector<XMFLOAT3>& textureCoordinates = mesh.TextureCoordinates();
+		ASSERT_COND(textureCoordinates.size() == sourceVertices.size());
 		const std::vector<XMFLOAT3>& normals = mesh.Normals();
 		ASSERT_COND(normals.size() == sourceVertices.size());
 		const std::vector<XMFLOAT3>& tangents = mesh.Tangents();
@@ -137,7 +137,7 @@ namespace {
 		vertices.reserve(numVerts);
 		for (size_t i = 0; i < numVerts; i++) {
 			const XMFLOAT3& posL = sourceVertices[i];
-			const XMFLOAT3& uv = (*textureCoordinates)[i];
+			const XMFLOAT3& uv = textureCoordinates[i];
 			const XMFLOAT3& normalL = normals[i];
 			const XMFLOAT3& tangentL = tangents[i];
 			vertices.push_back(BRE::NormalDisplacementVsData::VertexData(XMFLOAT4(posL.x, posL.y, posL.z, 1.0f), XMFLOAT2(uv.x, uv.y), normalL, tangentL));

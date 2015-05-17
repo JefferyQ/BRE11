@@ -71,9 +71,5 @@ models:
     scaling: [450.0, 450.0, 450.0]   
     textureScaleFactor: 1.0	
     diffuseMapTexture: "content\\textures\\white_diffuse.dds"
-    normalMapTexture: "content\\textures\\white_normal.dds"
-    specularMapTexture: "content\\textures\\white_specular.dds"
-    displacementMapTexture: "content\\textures\\white_height.dds"
-    edgeTesselationFactors: [2.0, 2.0, 2.0]
-    insideTessellationFactors: 1.0
-    displacementScale: 2.0
+    normalMapTexture: "content\\textures\\torusKnot_normal.dds"
+    specularMapTexture: "content\\textures\\torusKnot_specular.dds"

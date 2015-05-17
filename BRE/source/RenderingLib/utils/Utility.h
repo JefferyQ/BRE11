@@ -6,6 +6,7 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
+#include <DirectXMath.h>
 #include <string>
 #include <vector>
 
@@ -15,6 +16,8 @@ struct ID3D11DeviceContext1;
 struct ID3D11Texture2D;
 
 namespace BRE {
+	class Mesh;
+
 	namespace Utility {
 		void GetFileName(const std::string& inputPath, std::string& filename);
 		void GetDirectory(const std::string& inputPath, std::string& directory);
@@ -36,5 +39,7 @@ namespace BRE {
 		size_t Hash(const char* str);
 
 		void SaveTextureToFile(ID3D11DeviceContext1& device, ID3D11Texture2D* texture, const wchar_t* destFilename);
+
+		void CalculateTangentArray(Mesh& mesh, std::vector<DirectX::XMFLOAT3>& tangents);
 	};
 }
