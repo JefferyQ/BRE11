@@ -32,6 +32,7 @@ namespace BRE {
 
 			data.mPointLightPsData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 			XMStoreFloat3(&data.mPointLightPsData.CameraPosVS(), XMVector3Transform(Camera::gInstance->PositionVector(), Camera::gInstance->ViewMatrix()));
+			XMStoreFloat4x4(&data.mPointLightPsData.ViewMatrix(), XMMatrixTranspose(Camera::gInstance->ViewMatrix()));
 
 			data.mPointLightVsData.PreDraw(device, context);
 			data.mPointLightGsData.PreDraw(device, context);

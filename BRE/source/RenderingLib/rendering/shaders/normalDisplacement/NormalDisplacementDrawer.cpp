@@ -1,5 +1,7 @@
 #include "NormalDisplacementDrawer.h"
 
+#include <general/Camera.h>
+
 using namespace DirectX;
 
 namespace BRE {
@@ -8,6 +10,9 @@ namespace BRE {
 		XMStoreFloat4x4(&mDsData.World(), XMMatrixTranspose(world));
 		XMStoreFloat4x4(&mDsData.View(), XMMatrixTranspose(view));
 		XMStoreFloat4x4(&mDsData.ViewProjection(), XMMatrixTranspose(view * proj));
+
+		XMStoreFloat4x4(&mPsData.ViewMatrix(), XMMatrixTranspose(view));
+		mPsData.FarClipPlaneDistance() = Camera::gInstance->FarPlaneDistance();
 
 		mVsData.PreDraw(device, context);
 		mHsData.PreDraw(device, context);

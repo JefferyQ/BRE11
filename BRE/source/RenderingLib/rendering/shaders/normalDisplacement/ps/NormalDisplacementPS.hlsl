@@ -1,5 +1,4 @@
 #include <rendering/shaders/Utils.hlsli>
-#define FAR_CLIP_PLANE_DISTANCE 5000.0f
 
 /*******************  Data  *************************/
 struct DS_OUTPUT {
@@ -12,10 +11,15 @@ struct DS_OUTPUT {
 };
 
 struct PS_OUTPUT {
-	float2 NormalWS : SV_Target0;
+	float2 NormalVS : SV_Target0;
 	float4 DiffuseAlbedo : SV_Target1;
 	float4 SpecularAlbedo : SV_Target2;
-	float Depth : SV_Target3;
+	float DepthVS : SV_Target3;
+};
+
+cbuffer cbPerFrame : register (b0) {
+	float4x4 View;
+	float FarClipPlaneDistance;
 };
 
 /*******************  Resources  *************************/
@@ -34,12 +38,10 @@ PS_OUTPUT main(DS_OUTPUT IN) {
 	float3 sampledNormal = normalize((2 * NormalMapTexture.Sample(TexSampler, IN.TexCoord).xyz) - 1.0);
 	const float3x3 tbn = float3x3(normalize(IN.TangentWS), normalize(IN.BinormalWS), normalize(IN.NormalWS));
 	sampledNormal = normalize(mul(sampledNormal, tbn));
-	const float4 diffuseColor = DiffuseTexture.Sample(TexSampler, IN.TexCoord);
-
-	OUT.NormalWS = Encode(sampledNormal);
-	OUT.DiffuseAlbedo = diffuseColor;
+	OUT.NormalVS = mul(float4(Encode(sampledNormal), 0.0f, 0.0f), View).xy;
+	OUT.DiffuseAlbedo = DiffuseTexture.Sample(TexSampler, IN.TexCoord);
 	OUT.SpecularAlbedo = SpecularMapTexture.Sample(TexSampler, IN.TexCoord);
-	OUT.Depth = IN.DepthVS / FAR_CLIP_PLANE_DISTANCE;
+	OUT.DepthVS = IN.DepthVS / FarClipPlaneDistance;
 
 	return OUT;
 }

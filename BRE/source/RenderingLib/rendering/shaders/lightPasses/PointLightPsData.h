@@ -21,6 +21,7 @@ namespace BRE {
 
 		DirectX::XMFLOAT3& CameraPosVS() { return mCBufferPerFrameData.mCameraPosVS; }
 		ID3D11SamplerState* &SamplerState() { return mSampler; }
+		DirectX::XMFLOAT4X4& ViewMatrix() { return mCBufferPerFrameData.mView; }
 
 	private:
 		void InitializeCBuffers();
@@ -28,6 +29,7 @@ namespace BRE {
 		ID3D11PixelShader* mShader;
 
 		struct CBufferPerFrameData {
+			DirectX::XMFLOAT4X4 mView;
 			DirectX::XMFLOAT3 mCameraPosVS;
 		} mCBufferPerFrameData;
 

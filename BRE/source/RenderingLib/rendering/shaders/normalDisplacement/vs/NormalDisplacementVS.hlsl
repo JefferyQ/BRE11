@@ -15,16 +15,9 @@ struct VS_OUTPUT {
 VS_OUTPUT main(const VS_INPUT IN) {
 	VS_OUTPUT OUT = (VS_OUTPUT)0;
 
-	// Pass through object space position
 	OUT.PosOS = IN.PosOS;
-
-	// Pass through local normal
 	OUT.NormalOS = IN.NormalOS;
-
-	// Pass through texture coordinates
 	OUT.TexCoord = IN.TexCoord;
-
-	// Pass throught tangent
 	OUT.TangentOS = IN.TangentOS;
 
 	return OUT;

@@ -3,11 +3,11 @@
 /*******************  Data  *************************/
 struct VS_OUTPUT {
 	float4 PosCS : SV_Position;
-	float3 NormalVS : NORMAL;
+	float3 NormalWS : NORMAL;
 	float DepthVS : DEPTH_VIEW_SPACE;
 	float2 TexCoord : TEXCOORD0;
-	float3 TangentVS : TANGENT;
-	float3 BinormalVS : BINORMAL;
+	float3 TangentWS : TANGENT;
+	float3 BinormalWS : BINORMAL;
 };
 
 struct PS_OUTPUT {
@@ -33,12 +33,11 @@ Texture2D SpecularMapTexture : register (t2);
 PS_OUTPUT main(VS_OUTPUT IN) {
 	PS_OUTPUT OUT = (PS_OUTPUT)0;
 
-	// Transform sampled normal from texture space to world space:
 	// Map normal from [0..1] to [-1..1]
 	float3 sampledNormal = normalize((2 * NormalMapTexture.Sample(TexSampler, IN.TexCoord).xyz) - 1.0);
-	const float3x3 tbn = float3x3(normalize(IN.TangentVS), normalize(IN.BinormalVS), normalize(IN.NormalVS));
+	const float3x3 tbn = float3x3(normalize(IN.TangentWS), normalize(IN.BinormalWS), normalize(IN.NormalWS));
 	sampledNormal = normalize(mul(sampledNormal, tbn));
-	OUT.NormalVS = mul(float4(Encode(sampledNormal), 0.0f, 0.0f), View).xy;
+	OUT.NormalVS = Encode(sampledNormal);//mul(float4(Encode(sampledNormal), 0.0f, 0.0f), View).xy;
 	OUT.DiffuseAlbedo = DiffuseTexture.Sample(TexSampler, IN.TexCoord);
 	OUT.SpecularAlbedo = SpecularMapTexture.Sample(TexSampler, IN.TexCoord);
 	OUT.DepthVS = IN.DepthVS / FarClipPlaneDistance;
