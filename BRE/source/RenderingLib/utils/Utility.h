@@ -6,6 +6,7 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
+#include <d3d11_1.h>
 #include <DirectXMath.h>
 #include <string>
 #include <vector>
@@ -41,5 +42,8 @@ namespace BRE {
 		void SaveTextureToFile(ID3D11DeviceContext1& device, ID3D11Texture2D* texture, const wchar_t* destFilename);
 
 		void CalculateTangentArray(Mesh& mesh, std::vector<DirectX::XMFLOAT3>& tangents);
+
+		void CreateInitializedBuffer(const size_t id, const void* data, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags);
+		void CreateNonInitializedBuffer(const size_t id, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags);
 	};
 }

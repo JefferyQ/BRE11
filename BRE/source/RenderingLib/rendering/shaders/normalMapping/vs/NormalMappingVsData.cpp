@@ -4,6 +4,7 @@
 
 #include <managers/ShadersManager.h>
 #include <managers/ShaderResourcesManager.h>
+#include <rendering/shaders/VertexType.h>
 #include <utils/Memory.h>
 #include <utils/Utility.h>
 
@@ -14,17 +15,6 @@ namespace {
 }
 
 namespace BRE {
-	NormalMappingVsData::VertexData::VertexData() {
-	}
-
-	NormalMappingVsData::VertexData::VertexData(const XMFLOAT4& posL, const XMFLOAT2& texC, const XMFLOAT3& normalL, const XMFLOAT3& tangentL)
-		: mPosL(posL)
-		, mTexC(texC)
-		, mNormalL(normalL)
-		, mTangentL(tangentL)
-	{
-	}
-
 	NormalMappingVsData::NormalMappingVsData() {
 		InitializeShader();
 		InitializeCBuffers();
@@ -73,7 +63,7 @@ namespace BRE {
 
 		context.VSSetShader(mShader, nullptr, 0);
 
-		const unsigned int stride = sizeof(VertexData);
+		const unsigned int stride = sizeof(NormalMappingVertexData);
 		const unsigned int offset = 0;
 		context.IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 

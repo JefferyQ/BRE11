@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <managers/ShadersManager.h>
+#include <rendering/shaders/VertexType.h>
 
 using namespace DirectX;
 
@@ -12,17 +13,6 @@ namespace {
 }
 
 namespace BRE {
-	NormalDisplacementVsData::VertexData::VertexData() {
-	}
-
-	NormalDisplacementVsData::VertexData::VertexData(const XMFLOAT4& posL, const XMFLOAT2& texC, const XMFLOAT3& normalL, const XMFLOAT3& tangentL)
-		: mPosL(posL)
-		, mTexC(texC)
-		, mNormalL(normalL)
-		, mTangentL(tangentL)
-	{
-	}
-
 	NormalDisplacementVsData::NormalDisplacementVsData() {
 		InitializeShader();
 	}
@@ -53,7 +43,7 @@ namespace BRE {
 		context.IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 		context.IASetInputLayout(mInputLayout);
 		context.VSSetShader(mShader, nullptr, 0);
-		const unsigned int stride = sizeof(VertexData);
+		const unsigned int stride = sizeof(NormalMappingVertexData);
 		const unsigned int offset = 0;
 		context.IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 		context.IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);

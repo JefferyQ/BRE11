@@ -3,11 +3,11 @@
 #include <algorithm>
 #include <codecvt>
 
-#include <d3d11_1.h>
 #include <fstream>
 #include <ScreenGrab.h>
 #include <Shlwapi.h>
 
+#include <managers/ShaderResourcesManager.h>
 #include <rendering/models/Mesh.h>
 #include <utils/Assert.h>
 
@@ -211,12 +211,33 @@ namespace BRE {
 				const float dot = n.x * t.x + n.y * t.y + n.z * t.z;
 				XMStoreFloat3(&tangents[a], XMVectorScale(XMLoadFloat3(&tangents[a]), dot));
 				XMStoreFloat3(&tangents[a], XMVector3Length(XMLoadFloat3(&tangents[a])));
-
-				// Calculate handedness
-				//tangents[a].w = (Dot(Cross(n, t), tan2[a]) < 0.0F) ? -1.0F : 1.0F;
 			}
 
 			delete[] tan1;
+		}
+
+		void CreateInitializedBuffer(const size_t id, const void* data, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags) {
+			ASSERT_PTR(data);
+			ASSERT_COND(dataSize > 0);
+			D3D11_BUFFER_DESC bufferDesc;
+			ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
+			bufferDesc.ByteWidth = dataSize;
+			bufferDesc.Usage = usage;
+			bufferDesc.BindFlags = bindFlags;
+			D3D11_SUBRESOURCE_DATA subResourceData;
+			ZeroMemory(&subResourceData, sizeof(D3D11_SUBRESOURCE_DATA));
+			subResourceData.pSysMem = data;
+			ShaderResourcesManager::gInstance->AddBuffer(id, bufferDesc, &subResourceData);
+		}
+
+		void CreateNonInitializedBuffer(const size_t id, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags) {
+			ASSERT_COND(dataSize > 0);
+			D3D11_BUFFER_DESC bufferDesc;
+			ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
+			bufferDesc.ByteWidth = dataSize;
+			bufferDesc.Usage = usage;
+			bufferDesc.BindFlags = bindFlags;
+			ShaderResourcesManager::gInstance->AddBuffer(id, bufferDesc, nullptr);
 		}
 	}
 }

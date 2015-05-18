@@ -163,6 +163,7 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="input\Keyboard.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
     <ClCompile Include="managers\DrawManager.cpp" />
+    <ClCompile Include="managers\ModelManager.cpp" />
     <ClCompile Include="managers\SettingsManager.cpp" />
     <ClCompile Include="managers\ShaderResourcesManager.cpp" />
     <ClCompile Include="managers\ShadersManager.cpp" />
@@ -193,6 +194,7 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="rendering\shaders\normalMapping\NormalMappingDrawer.cpp" />
     <ClCompile Include="rendering\shaders\normalMapping\ps\NormalMappingPsData.cpp" />
     <ClCompile Include="rendering\shaders\normalMapping\vs\NormalMappingVsData.cpp" />
+    <ClCompile Include="rendering\shaders\VertexType.cpp" />
     <ClCompile Include="rendering\StringDrawer.cpp" />
     <ClCompile Include="utils\updaters\PositionUpdater.cpp" />
     <ClCompile Include="utils\Utility.cpp" />
@@ -205,6 +207,7 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="input\Keyboard.h" />
     <ClInclude Include="input\Mouse.h" />
     <ClInclude Include="managers\DrawManager.h" />
+    <ClInclude Include="managers\ModelManager.h" />
     <ClInclude Include="managers\SettingsManager.h" />
     <ClInclude Include="managers\ShaderResourcesManager.h" />
     <ClInclude Include="managers\ShadersManager.h" />
@@ -237,6 +240,7 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\shaders\normalMapping\NormalMappingDrawer.h" />
     <ClInclude Include="rendering\shaders\normalMapping\ps\NormalMappingPsData.h" />
     <ClInclude Include="rendering\shaders\normalMapping\vs\NormalMappingVsData.h" />
+    <ClInclude Include="rendering\shaders\VertexType.h" />
     <ClInclude Include="rendering\StringDrawer.h" />
     <ClInclude Include="utils\Assert.h" />
     <ClInclude Include="utils\Memory.h" />

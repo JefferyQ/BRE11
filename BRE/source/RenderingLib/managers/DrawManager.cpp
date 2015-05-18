@@ -8,11 +8,13 @@
 
 #include <general/Camera.h>
 #include <input/Keyboard.h>
+#include <managers/ModelManager.h>
 #include <managers/ShaderResourcesManager.h>
 #include <rendering/GlobalResources.h>
 #include <rendering/RenderStateHelper.h>
 #include <rendering/models/Mesh.h>
 #include <rendering/models/Model.h>
+#include <rendering/shaders/VertexType.h>
 #include <rendering/shaders/normalDisplacement/ds/NormalDisplacementDsData.h>
 #include <rendering/shaders/normalDisplacement/hs/NormalDisplacementHsData.h>
 #include <rendering/shaders/normalDisplacement/ps/NormalDisplacementPsData.h>
@@ -89,94 +91,7 @@ namespace {
 		}
 		ASSERT_COND(currentNumElems == numElems);
 	}
-
-	void GetVerticesAndIndices(BRE::Model& model, std::vector<BRE::NormalMappingVsData::VertexData>& vertices, std::vector<unsigned int>& indices) {
-		vertices.clear();
-		indices.clear();
-
-		// Read data from model
-		ASSERT_PTR(model.Meshes()[0]);
-		BRE::Mesh& mesh = *model.Meshes()[0];
-		const std::vector<XMFLOAT3>& sourceVertices = mesh.Vertices();
-		const std::vector<XMFLOAT3>& textureCoordinates = mesh.TextureCoordinates();
-		ASSERT_COND(textureCoordinates.size() == sourceVertices.size());
-		const std::vector<XMFLOAT3>& normals = mesh.Normals();
-		ASSERT_COND(normals.size() == sourceVertices.size());
-		const std::vector<XMFLOAT3>& tangents = mesh.Tangents();
-		ASSERT_COND(tangents.size() == sourceVertices.size());
-
-		const size_t numVerts = sourceVertices.size();
-		vertices.reserve(numVerts);
-		for (size_t i = 0; i < numVerts; i++) {
-			const XMFLOAT3& posL = sourceVertices[i];
-			const XMFLOAT3& uv = textureCoordinates[i];
-			const XMFLOAT3& normalL = normals[i];
-			const XMFLOAT3& tangentL = tangents[i];
-			vertices.push_back(BRE::NormalMappingVsData::VertexData(XMFLOAT4(posL.x, posL.y, posL.z, 1.0f), XMFLOAT2(uv.x, uv.y), normalL, tangentL));
-		}
-
-		indices.insert(indices.end(), mesh.Indices().begin(), mesh.Indices().end());
-	}
-
-	void GetVerticesAndIndices(BRE::Model& model, std::vector<BRE::NormalDisplacementVsData::VertexData>& vertices, std::vector<unsigned int>& indices) {
-		vertices.clear();
-		indices.clear();
-
-		// Read data from model
-		ASSERT_PTR(model.Meshes()[0]);
-		BRE::Mesh& mesh = *model.Meshes()[0];
-		const std::vector<XMFLOAT3>& sourceVertices = mesh.Vertices();
-		const std::vector<XMFLOAT3>& textureCoordinates = mesh.TextureCoordinates();
-		ASSERT_COND(textureCoordinates.size() == sourceVertices.size());
-		const std::vector<XMFLOAT3>& normals = mesh.Normals();
-		ASSERT_COND(normals.size() == sourceVertices.size());
-		const std::vector<XMFLOAT3>& tangents = mesh.Tangents();
-		ASSERT_COND(tangents.size() == sourceVertices.size());
-
-		const size_t numVerts = sourceVertices.size();
-		vertices.reserve(numVerts);
-		for (size_t i = 0; i < numVerts; i++) {
-			const XMFLOAT3& posL = sourceVertices[i];
-			const XMFLOAT3& uv = textureCoordinates[i];
-			const XMFLOAT3& normalL = normals[i];
-			const XMFLOAT3& tangentL = tangents[i];
-			vertices.push_back(BRE::NormalDisplacementVsData::VertexData(XMFLOAT4(posL.x, posL.y, posL.z, 1.0f), XMFLOAT2(uv.x, uv.y), normalL, tangentL));
-		}
-
-		indices.insert(indices.end(), mesh.Indices().begin(), mesh.Indices().end());
-	}
-
-	ID3D11Buffer* CreateInitializedBuffer(const size_t id, const void* data, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags) {
-		ASSERT_PTR(data);
-		ASSERT_COND(dataSize > 0);
-
-		// Create vertex buffer
-		D3D11_BUFFER_DESC bufferDesc;
-		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
-		bufferDesc.ByteWidth = dataSize;
-		bufferDesc.Usage = usage;
-		bufferDesc.BindFlags = bindFlags;
-
-		D3D11_SUBRESOURCE_DATA subResourceData;
-		ZeroMemory(&subResourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-		subResourceData.pSysMem = data;
-
-		return BRE::ShaderResourcesManager::gInstance->AddBuffer(id, bufferDesc, &subResourceData);
-	}
-
-	ID3D11Buffer* CreateNonInitializedBuffer(const size_t id, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags) {
-		ASSERT_COND(dataSize > 0);
-
-		// Create vertex buffer
-		D3D11_BUFFER_DESC bufferDesc;
-		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
-		bufferDesc.ByteWidth = dataSize;
-		bufferDesc.Usage = usage;
-		bufferDesc.BindFlags = bindFlags;
-
-		return BRE::ShaderResourcesManager::gInstance->AddBuffer(id, bufferDesc, nullptr);
-	}
-	}
+}
 
 namespace BRE {
 	DrawManager* DrawManager::gInstance = nullptr;
@@ -198,11 +113,7 @@ namespace BRE {
 		const YAML::Node nodes = yamlFile["models"];
 		ASSERT_COND(nodes.IsDefined());
 		ASSERT_COND(nodes.IsSequence());
-
-		// Store models loaded in file reading process to avoid
-		// loading them more than once.
-		std::unordered_map<size_t, Model*> modelByFilepath;
-
+		
 		// Iterate through each node
 		for (const YAML::Node& node : nodes) {
 			ASSERT_COND(node.IsDefined());
@@ -225,47 +136,15 @@ namespace BRE {
 			GetSequence<float>(node, "scaling", scaling, ARRAYSIZE(scaling));
 			const XMMATRIX scalingMatrix = XMMatrixScaling(scaling[0], scaling[1], scaling[2]);
 
-			std::vector<NormalMappingVsData::VertexData> normalMappingVertices;
-			std::vector<NormalDisplacementVsData::VertexData> normalDisplacementVertices;
-			std::vector<unsigned int> indices;
-			Model* &model = modelByFilepath[Utility::Hash(modelFilePath.c_str())];
-			if (!model) {
-				model = new BRE::Model(modelFilePath.c_str());
-			}
-
+			const Model* model;
+			const size_t modelId = ModelManager::gInstance->LoadModel(modelFilePath.c_str(), &model);			
+			ASSERT_COND(model);
 			if (renderType == "Normal") {
 				NormalMappingDrawer renderer;
-
-				// Get vertices and indices
-				GetVerticesAndIndices(*model, normalMappingVertices, indices);
-				ASSERT_COND(!normalMappingVertices.empty());
-				ASSERT_COND(!indices.empty());
-
-				// Create vertex buffer
-				std::string bufferName(modelFilePath);
-				bufferName += "_vertexBuffer";
-				size_t bufferId = Utility::Hash(bufferName.c_str());
-				ID3D11Buffer* &vertexBuffer = renderer.VertexShaderData().VertexBuffer();
-				vertexBuffer = ShaderResourcesManager::gInstance->Buffer(bufferId);
-				if (!vertexBuffer) {
-					const unsigned int bufferSize = static_cast<unsigned int> (normalMappingVertices.size() * sizeof(NormalMappingVsData::VertexData));
-					vertexBuffer = CreateInitializedBuffer(bufferId, &normalMappingVertices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_VERTEX_BUFFER);
-					ASSERT_PTR(vertexBuffer);
-				}
-
-				// Create index buffer
-				bufferName = modelFilePath;
-				bufferName += "_indexBuffer";
-				bufferId = Utility::Hash(bufferName.c_str());
-				ID3D11Buffer* &indexBuffer = renderer.VertexShaderData().IndexBuffer();
-				indexBuffer = ShaderResourcesManager::gInstance->Buffer(bufferId);
-				if (!indexBuffer) {
-					const unsigned int bufferSize = static_cast<unsigned int> (indices.size() * sizeof(unsigned int));
-					indexBuffer = CreateInitializedBuffer(bufferId, &indices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_INDEX_BUFFER);
-					ASSERT_PTR(indexBuffer);
-				}
-
-				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(indices.size()));
+				renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId));
+				ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
+				renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer());
+				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[0]->Indices().size()));
 
 				// Build world matrix
 				XMStoreFloat4x4(&renderer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
@@ -287,38 +166,11 @@ namespace BRE {
 			}
 			else if (renderType == "Normal_Displacement") {
 				NormalDisplacementDrawer renderer;
-
-				// Get vertices and indices
-				GetVerticesAndIndices(*model, normalDisplacementVertices, indices);
-				ASSERT_COND(!normalDisplacementVertices.empty());
-				ASSERT_COND(!indices.empty());
-
-				// Create vertex buffer
-				std::string bufferName(modelFilePath);
-				bufferName += "_vertexBuffer";
-				size_t bufferId = Utility::Hash(bufferName.c_str());
-				ID3D11Buffer* &vertexBuffer = renderer.VertexShaderData().VertexBuffer();
-				vertexBuffer = ShaderResourcesManager::gInstance->Buffer(bufferId);
-				if (!vertexBuffer) {
-					const unsigned int bufferSize = static_cast<unsigned int> (normalDisplacementVertices.size() * sizeof(NormalDisplacementVsData::VertexData));
-					vertexBuffer = CreateInitializedBuffer(bufferId, &normalDisplacementVertices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_VERTEX_BUFFER);
-					ASSERT_PTR(vertexBuffer);
-				}
-
-				// Create index buffer
-				bufferName = modelFilePath;
-				bufferName += "_indexBuffer";
-				bufferId = Utility::Hash(bufferName.c_str());
-				ID3D11Buffer* &indexBuffer = renderer.VertexShaderData().IndexBuffer();
-				indexBuffer = ShaderResourcesManager::gInstance->Buffer(bufferId);
-				if (!indexBuffer) {
-					const unsigned int bufferSize = static_cast<unsigned int> (indices.size() * sizeof(unsigned int));
-					indexBuffer = CreateInitializedBuffer(bufferId, &indices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_INDEX_BUFFER);
-					ASSERT_PTR(indexBuffer);
-				}
-
-				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int> (indices.size()));
-
+				renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId));
+				ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
+				renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer());
+				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[0]->Indices().size()));
+				
 				// Build world matrix
 				XMStoreFloat4x4(&renderer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
 
@@ -347,11 +199,6 @@ namespace BRE {
 
 				NormalDisplacementDrawerVec().push_back(renderer);
 			}
-		}
-
-		// Free models
-		for (auto& elem : modelByFilepath) {
-			DELETE_OBJECT(elem.second);
 		}
 	}
 

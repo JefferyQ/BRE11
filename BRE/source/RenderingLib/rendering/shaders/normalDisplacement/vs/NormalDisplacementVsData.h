@@ -13,18 +13,6 @@ struct ID3D11VertexShader;
 namespace BRE {
 	class NormalDisplacementVsData {
 	public:
-		struct VertexData {
-			DirectX::XMFLOAT4 mPosL;
-			DirectX::XMFLOAT2 mTexC;
-			DirectX::XMFLOAT3 mNormalL;
-			DirectX::XMFLOAT3 mTangentL;
-
-			VertexData();
-
-			VertexData(const DirectX::XMFLOAT4& posL, const DirectX::XMFLOAT2& texC, const DirectX::XMFLOAT3& normalL, const DirectX::XMFLOAT3& tangentL);
-		};
-
-	public:
 		NormalDisplacementVsData();
 
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context);

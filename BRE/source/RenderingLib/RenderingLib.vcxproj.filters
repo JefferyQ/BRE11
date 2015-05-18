@@ -192,6 +192,12 @@
     <ClCompile Include="rendering\shaders\lightPasses\SpotLightPsData.cpp">
       <Filter>rendering\shaders\lightPasses</Filter>
     </ClCompile>
+    <ClCompile Include="managers\ModelManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\VertexType.cpp">
+      <Filter>rendering\shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input\Keyboard.h">
@@ -325,6 +331,12 @@
     </ClInclude>
     <ClInclude Include="rendering\shaders\lightPasses\SpotLightPsData.h">
       <Filter>rendering\shaders\lightPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="managers\ModelManager.h">
+      <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\VertexType.h">
+      <Filter>rendering\shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

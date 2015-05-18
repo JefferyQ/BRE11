@@ -1,5 +1,5 @@
 models:
-  - renderType: Normal
+  - renderType: Normal_Displacement
     path: "content\\models\\plane.obj"
     translation: [0.0, -500.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
@@ -9,10 +9,10 @@ models:
     normalMapTexture: "content\\textures\\rock1_normal.dds"
     specularMapTexture: "content\\textures\\rock1_specular.dds"
     displacementMapTexture: "content\\textures\\rock1_height.dds"
-    edgeTesselationFactors: [15.0, 15.0, 15.0]
-    insideTessellationFactors: 15.0
-    displacementScale: 1.0
-  - renderType: Normal
+    edgeTesselationFactors: [64.0, 64.0, 64.0]
+    insideTessellationFactors: 64.0
+    displacementScale: 20.0
+  - renderType: Normal_Displacement
     path: "content\\models\\plane.obj"
     translation: [0.0, 500.0, 0.0]
     rotation: [3.14, 0.0, 0.0]
@@ -22,10 +22,10 @@ models:
     normalMapTexture: "content\\textures\\rock1_normal.dds"
     specularMapTexture: "content\\textures\\rock1_specular.dds"
     displacementMapTexture: "content\\textures\\rock1_height.dds"
-    edgeTesselationFactors: [15.0, 15.0, 15.0]
-    insideTessellationFactors: 15.0
-    displacementScale: 1.0
-  - renderType: Normal
+    edgeTesselationFactors: [64.0, 64.0, 64.0]
+    insideTessellationFactors: 64.0
+    displacementScale: 20.0
+  - renderType: Normal_Displacement
     path: "content\\models\\plane.obj"
     translation: [0.0, 0.0, 500.0]
     rotation: [-1.57, 0.0, 0.0]
@@ -35,10 +35,10 @@ models:
     normalMapTexture: "content\\textures\\rock1_normal.dds"
     specularMapTexture: "content\\textures\\rock1_specular.dds"
     displacementMapTexture: "content\\textures\\rock1_height.dds"
-    edgeTesselationFactors: [15.0, 15.0, 15.0]
-    insideTessellationFactors: 15.0
-    displacementScale: 1.0
-  - renderType: Normal
+    edgeTesselationFactors: [64.0, 64.0, 64.0]
+    insideTessellationFactors: 64.0
+    displacementScale: 20.0
+  - renderType: Normal_Displacement
     path: "content\\models\\plane.obj"
     translation: [500.0, 0.0, 0.0]
     rotation: [1.57, -1.57, 0.0]
@@ -48,10 +48,10 @@ models:
     normalMapTexture: "content\\textures\\rock1_normal.dds"
     specularMapTexture: "content\\textures\\rock1_specular.dds"
     displacementMapTexture: "content\\textures\\rock1_height.dds"
-    edgeTesselationFactors: [15.0, 15.0, 15.0]
-    insideTessellationFactors: 15.0
-    displacementScale: 1.0
-  - renderType: Normal
+    edgeTesselationFactors: [64.0, 64.0, 64.0]
+    insideTessellationFactors: 64.0
+    displacementScale: 20.0
+  - renderType: Normal_Displacement
     path: "content\\models\\plane.obj"
     translation: [-500.0, 0.0, 0.0]
     rotation: [1.57, 1.57, 0.0]
@@ -61,9 +61,9 @@ models:
     normalMapTexture: "content\\textures\\rock1_normal.dds"
     specularMapTexture: "content\\textures\\rock1_specular.dds"
     displacementMapTexture: "content\\textures\\rock1_height.dds"
-    edgeTesselationFactors: [15.0, 15.0, 15.0]
-    insideTessellationFactors: 15.0
-    displacementScale: 1.0
+    edgeTesselationFactors: [64.0, 64.0, 64.0]
+    insideTessellationFactors: 64.0
+    displacementScale: 20.0
   - renderType: Normal
     path: "content\\models\\torusKnot.obj"
     translation: [0.0, 0.0, 0.0]

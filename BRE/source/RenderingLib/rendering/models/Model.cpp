@@ -3,14 +3,19 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+#include <d3d11_1.h>
 #include <iostream>
 
+#include <managers/ShaderResourcesManager.h>
 #include <rendering/models/ModelMaterial.h>
 #include <rendering/models/Mesh.h>
 #include <utils/Assert.h>
+#include <utils/Utility.h>
 
 namespace BRE {
-	Model::Model(const char* filename) {
+	Model::Model(const char* filename) 
+		: mFilename(filename)
+	{
 		ASSERT_PTR(filename);
 		Assimp::Importer importer;
 #if defined(DEBUG) || defined(_DEBUG)
@@ -45,5 +50,26 @@ namespace BRE {
 		for (ModelMaterial* material : mMaterials) {
 			delete material;
 		}
+	}
+
+	size_t Model::CreateIndexBuffer(ID3D11Buffer* *buffer) const {
+		// Check if there is already a buffer for current model
+		const std::string bufferName = mFilename + "_indexBuffer";
+		const size_t bufferId = Utility::Hash(bufferName.c_str());
+		if (ShaderResourcesManager::gInstance->Buffer(bufferId, buffer)) {
+			buffer =
+			return bufferId;
+		}
+
+		// Create buffer
+		ASSERT_COND(Meshes().size() == 1);
+		BRE::Mesh& mesh = *Meshes()[0];
+		ASSERT_COND(!mesh.Indices().empty());
+		std::vector<unsigned int> indices;
+		indices.insert(indices.end(), mesh.Indices().begin(), mesh.Indices().end());
+		const unsigned int bufferSize = static_cast<unsigned int> (indices.size() * sizeof(unsigned int));
+		Utility::CreateInitializedBuffer(bufferId, &indices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_INDEX_BUFFER);
+
+		return bufferId;
 	}
 }
