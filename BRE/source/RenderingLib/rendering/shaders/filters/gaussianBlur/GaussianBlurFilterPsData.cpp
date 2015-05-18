@@ -1,6 +1,7 @@
 #include "GaussianBlurFilterPsData.h"
 
 #include <d3d11_1.h>
+#include <sstream>
 
 #include <managers/ShadersManager.h>
 #include <managers/ShaderResourcesManager.h>
@@ -15,12 +16,12 @@ namespace {
 
 namespace BRE {
 	GaussianBlurFilterPsData::GaussianBlurFilterPsData(const unsigned int screenWidth, const unsigned int screenHeight)
-		: mShader(ShadersManager::gInstance->LoadPixelShader(sShaderFile))
-		, mTextureToFilterSRV(nullptr)
+		: mTextureToFilterSRV(nullptr)
 		, mCBufferSampleOffsets(nullptr)
 		, mCBufferSampleWeights(nullptr)
 		, mSampleOffsetType(SampleOffsetType::HORIZONTAL)
 	{
+		ShadersManager::gInstance->LoadPixelShader(sShaderFile, &mShader);
 		ASSERT_PTR(mShader);
 		InitSampleOffsets(screenWidth, screenHeight);
 		InitSampleWeights();
@@ -136,8 +137,14 @@ namespace BRE {
 		bufferDesc.StructureByteStride = 0;
 		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 
-		mCBufferSampleOffsets = ShaderResourcesManager::gInstance->AddBuffer(rand(), bufferDesc, nullptr);
-		ASSERT_PTR(mCBufferSampleOffsets);
+		{
+			std::stringstream str;
+			str << "GaussianBlurFilterPsData_mCBufferSampleOffsets";
+			str << rand();
+			ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferSampleOffsets);
+			ASSERT_PTR(mCBufferSampleOffsets);
+		}
+
 
 		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -147,7 +154,12 @@ namespace BRE {
 		bufferDesc.StructureByteStride = 0;
 		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 
-		mCBufferSampleWeights = ShaderResourcesManager::gInstance->AddBuffer(rand(), bufferDesc, nullptr);
-		ASSERT_PTR(mCBufferSampleWeights);
+		{
+			std::stringstream str;
+			str << "GaussianBlurFilterPsData_mCBufferSampleWeights";
+			str << rand();
+			ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferSampleWeights);
+			ASSERT_PTR(mCBufferSampleWeights);
+		}
 	}
 }

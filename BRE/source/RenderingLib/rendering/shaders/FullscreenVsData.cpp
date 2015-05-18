@@ -40,10 +40,10 @@ namespace BRE {
 		};
 
 		const unsigned int numElems = ARRAYSIZE(inputElementDescriptions);
-		mShader = ShadersManager::gInstance->LoadVertexShader(sShaderFile, sShaderFile, inputElementDescriptions, &numElems);
+		ShadersManager::gInstance->LoadVertexShader(sShaderFile, inputElementDescriptions, &numElems, &mShader);
 		ASSERT_PTR(mShader);
 
-		mInputLayout = ShadersManager::gInstance->InputLayout(sShaderFile);
+		mInputLayout = ShadersManager::gInstance->InputLayout(Utility::Hash(sShaderFile));
 		ASSERT_PTR(mInputLayout);
 	}
 
@@ -84,7 +84,7 @@ namespace BRE {
 		D3D11_SUBRESOURCE_DATA vertexSubResourceData;
 		ZeroMemory(&vertexSubResourceData, sizeof(vertexSubResourceData));
 		vertexSubResourceData.pSysMem = &vertices[0];
-		mVertexBuffer = ShaderResourcesManager::gInstance->AddBuffer(vertexBufferId, vertexBufferDesc, &vertexSubResourceData);
+		ShaderResourcesManager::gInstance->AddBuffer(vertexBufferName, vertexBufferDesc, &vertexSubResourceData, &mVertexBuffer);
 		ASSERT_PTR(mVertexBuffer);
 
 		// Create index buffer
@@ -99,7 +99,7 @@ namespace BRE {
 		D3D11_SUBRESOURCE_DATA indexSubResourceData;
 		ZeroMemory(&indexSubResourceData, sizeof(indexSubResourceData));
 		indexSubResourceData.pSysMem = &indices;
-		mIndexBuffer = ShaderResourcesManager::gInstance->AddBuffer(indexBufferId, indexBufferDesc, &indexSubResourceData);
+		ShaderResourcesManager::gInstance->AddBuffer(indexBufferName, indexBufferDesc, &indexSubResourceData, &mIndexBuffer);
 		ASSERT_PTR(mIndexBuffer);
 
 		mIndexCount = sizeof(indices) / sizeof(unsigned int);

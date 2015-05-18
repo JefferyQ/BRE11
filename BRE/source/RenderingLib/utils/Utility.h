@@ -43,7 +43,7 @@ namespace BRE {
 
 		void CalculateTangentArray(Mesh& mesh, std::vector<DirectX::XMFLOAT3>& tangents);
 
-		void CreateInitializedBuffer(const size_t id, const void* data, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags);
-		void CreateNonInitializedBuffer(const size_t id, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags);
+		void CreateInitializedBuffer(const char* id, const void* data, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags, ID3D11Buffer* *buffer = nullptr);
+		void CreateNonInitializedBuffer(const char* id, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags, ID3D11Buffer* *buffer = nullptr);
 	};
 }

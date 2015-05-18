@@ -1,6 +1,7 @@
 #include "NormalMappingVsData.h"
 
 #include <d3d11_1.h>
+#include <sstream>
 
 #include <managers/ShadersManager.h>
 #include <managers/ShaderResourcesManager.h>
@@ -29,10 +30,10 @@ namespace BRE {
 		};
 
 		const unsigned int numElems = ARRAYSIZE(inputElementDescriptions);
-		mShader = ShadersManager::gInstance->LoadVertexShader(sNormalMappingVS, sNormalMappingVS, inputElementDescriptions, &numElems);
+		ShadersManager::gInstance->LoadVertexShader(sNormalMappingVS, inputElementDescriptions, &numElems, &mShader);
 		ASSERT_PTR(mShader);
 
-		mInputLayout = ShadersManager::gInstance->InputLayout(sNormalMappingVS);
+		mInputLayout = ShadersManager::gInstance->InputLayout(Utility::Hash(sNormalMappingVS));
 		ASSERT_PTR(mInputLayout);
 	}
 
@@ -46,7 +47,10 @@ namespace BRE {
 		bufferDesc.StructureByteStride = 0;
 		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 
-		mCBufferPerFrame = ShaderResourcesManager::gInstance->AddBuffer(rand(), bufferDesc, nullptr);
+		std::stringstream str;
+		str << "NormalMappingVsData";
+		str << rand();
+	    ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferPerFrame);
 		ASSERT_PTR(mCBufferPerFrame);
 	}
 

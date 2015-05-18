@@ -46,66 +46,28 @@ namespace BRE {
 
 		const ShaderResourcesManager& operator=(const ShaderResourcesManager& rhs) = delete;
 
-		ID3D11ShaderResourceView* AddTextureFromFileSRV(const char* filepath);
+		size_t AddTextureFromFileSRV(const char* filepath, ID3D11ShaderResourceView* * resource);
 
-		ID3D11ShaderResourceView* AddResourceSRV(const char* id, ID3D11Resource& resource, const D3D11_SHADER_RESOURCE_VIEW_DESC* desc);
-		ID3D11ShaderResourceView* AddResourceSRV(const size_t id, ID3D11Resource& resource, const D3D11_SHADER_RESOURCE_VIEW_DESC* desc);
+		size_t AddResourceSRV(const char* id, ID3D11Resource& resource, const D3D11_SHADER_RESOURCE_VIEW_DESC* desc, ID3D11ShaderResourceView* * view = nullptr);
+		size_t AddResourceUAV(const char* id, ID3D11Resource& resource, const D3D11_UNORDERED_ACCESS_VIEW_DESC& desc, ID3D11UnorderedAccessView* *view = nullptr);
+		size_t AddBuffer(const char* id, D3D11_BUFFER_DESC& desc, const D3D11_SUBRESOURCE_DATA* const initData, ID3D11Buffer* *buffer = nullptr);
+		size_t AddTexture2D(const char* id, const D3D11_TEXTURE2D_DESC& texDesc, const D3D11_SUBRESOURCE_DATA* initialData, ID3D11Texture2D* *resource = nullptr);
+		size_t AddRasterizerState(const char* id, const D3D11_RASTERIZER_DESC& desc, ID3D11RasterizerState* *state = nullptr);
+		size_t AddRenderTargetView(const char* id, ID3D11Resource& resource, const D3D11_RENDER_TARGET_VIEW_DESC* desc, ID3D11RenderTargetView* *view = nullptr);
+		size_t AddDepthStencilView(const char* id, ID3D11Resource& resource, const D3D11_DEPTH_STENCIL_VIEW_DESC* desc, ID3D11DepthStencilView* *view = nullptr);
+		size_t AddBlendState(const char* id, const D3D11_BLEND_DESC& desc, ID3D11BlendState* *state = nullptr);
+		size_t AddDepthStencilState(const char* id, const D3D11_DEPTH_STENCIL_DESC& desc, ID3D11DepthStencilState* *state = nullptr);
+		size_t AddSamplerState(const char* id, const D3D11_SAMPLER_DESC& desc, ID3D11SamplerState* *state = nullptr);
 
-		ID3D11UnorderedAccessView* AddResourceUAV(const char* id, ID3D11Resource& resource, const D3D11_UNORDERED_ACCESS_VIEW_DESC& desc);
-		ID3D11UnorderedAccessView* AddResourceUAV(const size_t id, ID3D11Resource& resource, const D3D11_UNORDERED_ACCESS_VIEW_DESC& desc);
-
-		ID3D11Buffer* AddBuffer(const char* id, D3D11_BUFFER_DESC& desc, const D3D11_SUBRESOURCE_DATA* const initData);
-		ID3D11Buffer* AddBuffer(const size_t id, D3D11_BUFFER_DESC& desc, const D3D11_SUBRESOURCE_DATA* const initData);
-
-		ID3D11Texture2D* AddTexture2D(const char* id, const D3D11_TEXTURE2D_DESC& texDesc, const D3D11_SUBRESOURCE_DATA* initialData);
-		ID3D11Texture2D* AddTexture2D(const size_t id, const D3D11_TEXTURE2D_DESC& texDesc, const D3D11_SUBRESOURCE_DATA* initialData);
-
-		ID3D11RasterizerState* AddRasterizerState(const char* id, const D3D11_RASTERIZER_DESC& desc);
-		ID3D11RasterizerState* AddRasterizerState(const size_t id, const D3D11_RASTERIZER_DESC& desc);
-
-		ID3D11RenderTargetView* AddRenderTargetView(const char* id, ID3D11Resource& resource, const D3D11_RENDER_TARGET_VIEW_DESC* desc);
-		ID3D11RenderTargetView* AddRenderTargetView(const size_t id, ID3D11Resource& resource, const D3D11_RENDER_TARGET_VIEW_DESC* desc);
-
-		ID3D11DepthStencilView* AddDepthStencilView(const char* id, ID3D11Resource& resource, const D3D11_DEPTH_STENCIL_VIEW_DESC* desc);
-		ID3D11DepthStencilView* AddDepthStencilView(const size_t id, ID3D11Resource& resource, const D3D11_DEPTH_STENCIL_VIEW_DESC* desc);
-
-		ID3D11BlendState* AddBlendState(const char* id, const D3D11_BLEND_DESC& desc);
-		ID3D11BlendState* AddBlendState(const size_t id, const D3D11_BLEND_DESC& desc);
-
-		ID3D11DepthStencilState* AddDepthStencilState(const char* id, const D3D11_DEPTH_STENCIL_DESC& desc);
-		ID3D11DepthStencilState* AddDepthStencilState(const size_t id, const D3D11_DEPTH_STENCIL_DESC& desc);
-
-		ID3D11SamplerState* AddSamplerState(const char* id, const D3D11_SAMPLER_DESC& desc);
-		ID3D11SamplerState* AddSamplerState(const size_t id, const D3D11_SAMPLER_DESC& desc);
-
-		ID3D11ShaderResourceView* ShaderResourceView(const char* id) const;
 		ID3D11ShaderResourceView* ShaderResourceView(const size_t id) const;
-
-		ID3D11UnorderedAccessView* UnorderedAccessView(const char* id) const;
 		ID3D11UnorderedAccessView* UnorderedAccessView(const size_t id) const;
-
-		ID3D11Buffer* Buffer(const char* id) const;
 		ID3D11Buffer* Buffer(const size_t id) const;
-
-		ID3D11Texture2D* Texture2D(const char* id) const;
 		ID3D11Texture2D* Texture2D(const size_t id) const;
-
-		ID3D11RasterizerState* RasterizerState(const char* id) const;
 		ID3D11RasterizerState* RasterizerState(const size_t id) const;
-
-		ID3D11RenderTargetView* RenderTargetView(const char* id) const;
 		ID3D11RenderTargetView* RenderTargetView(const size_t id) const;
-
-		ID3D11DepthStencilView* DepthStencilView(const char* id) const;
 		ID3D11DepthStencilView* DepthStencilView(const size_t id) const;
-
-		ID3D11BlendState* BlendState(const char* id) const;
 		ID3D11BlendState* BlendState(const size_t id) const;
-
-		ID3D11DepthStencilState* DepthStencilState(const char* id) const;
 		ID3D11DepthStencilState* DepthStencilState(const size_t id) const;
-
-		ID3D11SamplerState* SamplerState(const char* id) const;
 		ID3D11SamplerState* SamplerState(const size_t id) const;
 
 	private:

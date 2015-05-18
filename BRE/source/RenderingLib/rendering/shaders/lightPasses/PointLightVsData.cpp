@@ -1,6 +1,7 @@
 #include "PointLightVsData.h"
 
 #include <d3d11_1.h>
+#include <sstream>
 
 #include <managers/ShadersManager.h>
 #include <managers/ShaderResourcesManager.h>
@@ -14,9 +15,8 @@ namespace {
 }
 
 namespace BRE {
-	PointLightVertexShaderData::PointLightVertexShaderData()
-		: mShader(ShadersManager::gInstance->LoadVertexShader(sShaderFile))
-	{
+	PointLightVertexShaderData::PointLightVertexShaderData() {
+		ShadersManager::gInstance->LoadVertexShader(sShaderFile, nullptr, nullptr, &mShader);
 		ASSERT_PTR(mShader);
 		InitializeCBuffers();
 	}
@@ -43,7 +43,10 @@ namespace BRE {
 		bufferDesc.StructureByteStride = 0;
 		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 
-		mCBufferPerFrame = ShaderResourcesManager::gInstance->AddBuffer(rand(), bufferDesc, nullptr);
+		std::stringstream str;
+		str << "PointLightVertexShaderData";
+		str << rand();
+		ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferPerFrame);
 		ASSERT_PTR(mCBufferPerFrame);
 	}
 

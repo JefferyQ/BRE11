@@ -32,14 +32,13 @@ namespace BRE {
 		// For vertex shader loading, you can optionally load a input layout too or not.
 		// Note: Shader should be previously compiled to .cso
 
-		ID3D11VertexShader* LoadVertexShader(const char* filepath, const char* inputLayoutName = nullptr, const D3D11_INPUT_ELEMENT_DESC* inputLayoutDesc = nullptr, const unsigned int* descNumElems = nullptr);
-		ID3D11PixelShader* LoadPixelShader(const char* filepath);
-		ID3D11HullShader* LoadHullShader(const char* filepath);
-		ID3D11DomainShader* LoadDomainShader(const char* filepath);
-		ID3D11GeometryShader* LoadGeometryShader(const char* filepath);
-		ID3D11ComputeShader* LoadComputeShader(const char* filepath);
+		size_t LoadVertexShader(const char* filepath, const D3D11_INPUT_ELEMENT_DESC* inputLayoutDesc = nullptr, const unsigned int* descNumElems = nullptr, ID3D11VertexShader* * shader = nullptr);
+		size_t LoadPixelShader(const char* filepath, ID3D11PixelShader* *shader = nullptr);
+		size_t LoadHullShader(const char* filepath, ID3D11HullShader* *shader = nullptr);
+		size_t LoadDomainShader(const char* filepath, ID3D11DomainShader* *shader = nullptr);
+		size_t LoadGeometryShader(const char* filepath, ID3D11GeometryShader* *shader = nullptr);
+		size_t LoadComputeShader(const char* filepath, ID3D11ComputeShader* *shader = nullptr);
 
-		ID3D11InputLayout* InputLayout(const char* id) const;
 		ID3D11InputLayout* InputLayout(const size_t id) const;
 
 	private:

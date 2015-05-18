@@ -11,9 +11,9 @@ namespace {
 
 namespace BRE {
 	GrayscaleFilterPsData::GrayscaleFilterPsData()
-		: mShader(ShadersManager::gInstance->LoadPixelShader(sShaderFile))
-		, mTextureToFilterSRV(nullptr)
+		: mTextureToFilterSRV(nullptr)
 	{
+		ShadersManager::gInstance->LoadPixelShader(sShaderFile), &mShader;
 		ASSERT_PTR(mShader);
 	}
 

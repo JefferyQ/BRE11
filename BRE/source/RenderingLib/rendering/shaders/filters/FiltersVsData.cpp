@@ -42,10 +42,11 @@ namespace BRE {
 		};
 
 		const unsigned int numElems = ARRAYSIZE(inputElementDescriptions);
-		mShader = ShadersManager::gInstance->LoadVertexShader(sShaderFile, sShaderFile, inputElementDescriptions, &numElems);
+		ShadersManager::gInstance->LoadVertexShader(sShaderFile, inputElementDescriptions, &numElems, &mShader);
 		ASSERT_PTR(mShader);
 
-		mInputLayout = ShadersManager::gInstance->InputLayout(sShaderFile);
+		const size_t id = Utility::Hash(sShaderFile);
+		mInputLayout = ShadersManager::gInstance->InputLayout(id);
 		ASSERT_PTR(mInputLayout);
 	}
 

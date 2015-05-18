@@ -151,13 +151,13 @@ namespace BRE {
 
 				// Initialize pixel shader data
 				ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
-				renderer.PixelShaderData().DiffuseTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(diffuseMapTexture.c_str());
+				shaderResourcesMgr.AddTextureFromFileSRV(diffuseMapTexture.c_str(), &renderer.PixelShaderData().DiffuseTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().DiffuseTextureSRV());
 				const std::string normalMapTexture = GetScalar<std::string>(node, "normalMapTexture");
-				renderer.PixelShaderData().NormalMapTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str());
+				shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &renderer.PixelShaderData().NormalMapTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().NormalMapTextureSRV());
 				const std::string specularMapTexture = GetScalar<std::string>(node, "specularMapTexture");
-				renderer.PixelShaderData().SpecularMapTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str());
+				shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str(), &renderer.PixelShaderData().SpecularMapTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().SpecularMapTextureSRV());
 				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 				renderer.VertexShaderData().TextureScaleFactor() = GetScalar<float>(node, "textureScaleFactor");
@@ -182,18 +182,18 @@ namespace BRE {
 				renderer.DomainShaderData().DisplacementScale() = GetScalar<float>(node, "displacementScale");
 				ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
 				const std::string displacementMapTexture = GetScalar<std::string>(node, "displacementMapTexture");
-				renderer.DomainShaderData().DisplacementMapSRV() = shaderResourcesMgr.AddTextureFromFileSRV(displacementMapTexture.c_str());
+				shaderResourcesMgr.AddTextureFromFileSRV(displacementMapTexture.c_str(), &renderer.DomainShaderData().DisplacementMapSRV());
 				ASSERT_PTR(renderer.DomainShaderData().DisplacementMapSRV());
 				renderer.DomainShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 
 				// Initialize pixel shader data
-				renderer.PixelShaderData().DiffuseTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(diffuseMapTexture.c_str());
+				shaderResourcesMgr.AddTextureFromFileSRV(diffuseMapTexture.c_str(), &renderer.PixelShaderData().DiffuseTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().DiffuseTextureSRV());
 				const std::string normalMapTexture = GetScalar<std::string>(node, "normalMapTexture");
-				renderer.PixelShaderData().NormalMapTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str());
+				shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &renderer.PixelShaderData().NormalMapTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().NormalMapTextureSRV());
 				const std::string specularMapTexture = GetScalar<std::string>(node, "specularMapTexture");
-				renderer.PixelShaderData().SpecularMapTextureSRV() = shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str());
+				shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str(), &renderer.PixelShaderData().SpecularMapTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().SpecularMapTextureSRV());
 				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 
@@ -256,16 +256,16 @@ namespace BRE {
 			ID3D11Texture2D* backBufferTexture;
 			ASSERT_HR(swapChain.GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBufferTexture)));
 			if (renderMode == DIFFUSE_ALBEDO) {
-				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_diffuse_albedo");
+				texture = ShaderResourcesManager::gInstance->Texture2D(Utility::Hash("deferred_rendering_texture2d_diffuse_albedo"));
 			}
 			else if (renderMode == SPECULAR_ALBEDO) {
-				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_specular_albedo");
+				texture = ShaderResourcesManager::gInstance->Texture2D(Utility::Hash("deferred_rendering_texture2d_specular_albedo"));
 			}
 			else if (renderMode == NORMALS) {
-				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_normals");
+				texture = ShaderResourcesManager::gInstance->Texture2D(Utility::Hash("deferred_rendering_texture2d_normals"));
 			}
 			else {
-				texture = ShaderResourcesManager::gInstance->Texture2D("deferred_rendering_texture2d_depth");
+				texture = ShaderResourcesManager::gInstance->Texture2D(Utility::Hash("deferred_rendering_texture2d_depth"));
 			}
 
 			ASSERT_PTR(texture);
@@ -350,15 +350,16 @@ namespace BRE {
 		//
 		ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
 		for (size_t iTex = 0; iTex < numTextures; ++iTex) {
-			ID3D11Texture2D* texture = shaderResourcesMgr.AddTexture2D(textureIds[iTex], textureDesc[iTex], nullptr);
+			ID3D11Texture2D* texture;
+			shaderResourcesMgr.AddTexture2D(textureIds[iTex], textureDesc[iTex], nullptr, &texture);
 			ASSERT_PTR(texture);
 
 			ASSERT_COND(mGeometryBuffersRTVs[iTex] == nullptr);
-			mGeometryBuffersRTVs[iTex] = shaderResourcesMgr.AddRenderTargetView(textureIds[iTex], *texture, nullptr);
+			shaderResourcesMgr.AddRenderTargetView(textureIds[iTex], *texture, nullptr, &mGeometryBuffersRTVs[iTex]);
 			ASSERT_PTR(mGeometryBuffersRTVs[iTex]);
 
 			ASSERT_COND(mGeometryBuffersSRVs[iTex] == nullptr);
-			mGeometryBuffersSRVs[iTex] = shaderResourcesMgr.AddResourceSRV(textureIds[iTex], *texture, nullptr);
+			shaderResourcesMgr.AddResourceSRV(textureIds[iTex], *texture, nullptr, &mGeometryBuffersSRVs[iTex]);
 			ASSERT_PTR(mGeometryBuffersSRVs[iTex]);
 		}
 	}
@@ -383,22 +384,24 @@ namespace BRE {
 
 		// Create texture 2D, shader resource view and render target view
 		ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
-		ID3D11Texture2D* texture1 = shaderResourcesMgr.AddTexture2D(textureId1, textureDesc, nullptr);
+		ID3D11Texture2D* texture1;
+		shaderResourcesMgr.AddTexture2D(textureId1, textureDesc, nullptr, &texture1);
 		ASSERT_PTR(texture1);
 
-		mPostprocess1RTV = shaderResourcesMgr.AddRenderTargetView(textureId1, *texture1, nullptr);
+		shaderResourcesMgr.AddRenderTargetView(textureId1, *texture1, nullptr, &mPostprocess1RTV);
 		ASSERT_PTR(mPostprocess1RTV);
 
-		mPostprocess1SRV = shaderResourcesMgr.AddResourceSRV(textureId1, *texture1, nullptr);
+		shaderResourcesMgr.AddResourceSRV(textureId1, *texture1, nullptr, &mPostprocess1SRV);
 		ASSERT_PTR(mPostprocess1SRV);
 
-		ID3D11Texture2D* texture2 = shaderResourcesMgr.AddTexture2D(textureId2, textureDesc, nullptr);
+		ID3D11Texture2D* texture2;
+		shaderResourcesMgr.AddTexture2D(textureId2, textureDesc, nullptr, &texture2);
 		ASSERT_PTR(texture2);
 
-		mPostprocess2RTV = shaderResourcesMgr.AddRenderTargetView(textureId2, *texture2, nullptr);
+		shaderResourcesMgr.AddRenderTargetView(textureId2, *texture2, nullptr, &mPostprocess2RTV);
 		ASSERT_PTR(mPostprocess2RTV);
 
-		mPostprocess2SRV = shaderResourcesMgr.AddResourceSRV(textureId2, *texture2, nullptr);
+		shaderResourcesMgr.AddResourceSRV(textureId2, *texture2, nullptr, &mPostprocess2SRV);
 		ASSERT_PTR(mPostprocess2SRV);
 	}
 }

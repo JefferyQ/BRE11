@@ -54,10 +54,11 @@ namespace BRE {
 
 	size_t Model::CreateIndexBuffer(ID3D11Buffer* *buffer) const {
 		// Check if there is already a buffer for current model
-		const std::string bufferName = mFilename + "_indexBuffer";
+		const std::string bufferName = mFilename + std::string("_indexBuffer");
 		const size_t bufferId = Utility::Hash(bufferName.c_str());
-		if (ShaderResourcesManager::gInstance->Buffer(bufferId, buffer)) {
-			buffer =
+		ID3D11Buffer* elem = ShaderResourcesManager::gInstance->Buffer(bufferId);
+		if (elem) {
+			if (buffer) *buffer = elem;
 			return bufferId;
 		}
 
@@ -68,7 +69,7 @@ namespace BRE {
 		std::vector<unsigned int> indices;
 		indices.insert(indices.end(), mesh.Indices().begin(), mesh.Indices().end());
 		const unsigned int bufferSize = static_cast<unsigned int> (indices.size() * sizeof(unsigned int));
-		Utility::CreateInitializedBuffer(bufferId, &indices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_INDEX_BUFFER);
+		Utility::CreateInitializedBuffer(bufferName.c_str(), &indices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_INDEX_BUFFER, buffer);
 
 		return bufferId;
 	}

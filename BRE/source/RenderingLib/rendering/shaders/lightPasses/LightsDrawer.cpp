@@ -62,7 +62,7 @@ namespace BRE {
 			ZeroMemory(&blendDesc, sizeof(blendDesc));
 			blendDesc.RenderTarget[0] = desc;
 
-			mDefaultBS = ShaderResourcesManager::gInstance->AddBlendState("default_blend_state", blendDesc);
+			ShaderResourcesManager::gInstance->AddBlendState("default_blend_state", blendDesc, &mDefaultBS);
 			ASSERT_PTR(mDefaultBS);
 		}
 
@@ -70,7 +70,7 @@ namespace BRE {
 		{
 			D3D11_DEPTH_STENCIL_DESC desc;
 			ZeroMemory(&desc, sizeof(desc));
-			mDisableDepthTestDSS = ShaderResourcesManager::gInstance->AddDepthStencilState("disable_depth_test", desc);
+			ShaderResourcesManager::gInstance->AddDepthStencilState("disable_depth_test", desc, &mDisableDepthTestDSS);
 			ASSERT_PTR(mDisableDepthTestDSS);
 		}
 	}

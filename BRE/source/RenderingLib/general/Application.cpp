@@ -159,9 +159,10 @@ namespace {
 			depthStencilDesc.SampleDesc.Count = multisamplingCount;
 			depthStencilDesc.SampleDesc.Quality = multisamplingQualityLevels - 1;
 
-			ID3D11Texture2D* depthStencilBuffer = BRE::ShaderResourcesManager::gInstance->AddTexture2D("primary_depth_stencil_texture2d", depthStencilDesc, nullptr);
+			ID3D11Texture2D* depthStencilBuffer;
+			BRE::ShaderResourcesManager::gInstance->AddTexture2D("primary_depth_stencil_texture2d", depthStencilDesc, nullptr, &depthStencilBuffer);
 			ASSERT_PTR(depthStencilBuffer);
-			primaryDSV = BRE::ShaderResourcesManager::gInstance->AddDepthStencilView("primary_depth_stencil_texture2d", *depthStencilBuffer, nullptr);
+			BRE::ShaderResourcesManager::gInstance->AddDepthStencilView("primary_depth_stencil_texture2d", *depthStencilBuffer, nullptr, &primaryDSV);
 			ASSERT_PTR(primaryDSV);
 		}
 

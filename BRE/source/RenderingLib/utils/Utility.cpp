@@ -216,7 +216,7 @@ namespace BRE {
 			delete[] tan1;
 		}
 
-		void CreateInitializedBuffer(const size_t id, const void* data, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags) {
+		void CreateInitializedBuffer(const char* id, const void* data, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags, ID3D11Buffer* *buffer) {
 			ASSERT_PTR(data);
 			ASSERT_COND(dataSize > 0);
 			D3D11_BUFFER_DESC bufferDesc;
@@ -227,17 +227,17 @@ namespace BRE {
 			D3D11_SUBRESOURCE_DATA subResourceData;
 			ZeroMemory(&subResourceData, sizeof(D3D11_SUBRESOURCE_DATA));
 			subResourceData.pSysMem = data;
-			ShaderResourcesManager::gInstance->AddBuffer(id, bufferDesc, &subResourceData);
+			ShaderResourcesManager::gInstance->AddBuffer(id, bufferDesc, &subResourceData, buffer);
 		}
 
-		void CreateNonInitializedBuffer(const size_t id, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags) {
+		void CreateNonInitializedBuffer(const char* id, const unsigned int dataSize, const D3D11_USAGE usage, const unsigned int bindFlags, ID3D11Buffer* *buffer) {
 			ASSERT_COND(dataSize > 0);
 			D3D11_BUFFER_DESC bufferDesc;
 			ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 			bufferDesc.ByteWidth = dataSize;
 			bufferDesc.Usage = usage;
 			bufferDesc.BindFlags = bindFlags;
-			ShaderResourcesManager::gInstance->AddBuffer(id, bufferDesc, nullptr);
+			ShaderResourcesManager::gInstance->AddBuffer(id, bufferDesc, nullptr, buffer);
 		}
 	}
 }

@@ -39,109 +39,112 @@ namespace BRE {
 		}
 	}
 
-	ID3D11VertexShader*	ShadersManager::LoadVertexShader(const char* filepath, const char* inputLayoutName, const D3D11_INPUT_ELEMENT_DESC* inputLayoutDesc, const unsigned int* descNumElems) {
+	size_t ShadersManager::LoadVertexShader(const char* filepath, const D3D11_INPUT_ELEMENT_DESC* inputLayoutDesc, const unsigned int* descNumElems, ID3D11VertexShader* *shader) {
 		ASSERT_PTR(filepath);
-		const bool createInputLayout = inputLayoutName != nullptr && inputLayoutDesc != nullptr && descNumElems != nullptr;
-		ASSERT_COND(!createInputLayout || (createInputLayout && mInputLayouts.find(*inputLayoutName) == mInputLayouts.end()));
-		const size_t fileHash = Utility::Hash(filepath);
-		VertexShaders::const_iterator findIt = mVertexShaders.find(fileHash);
+		const bool createInputLayout = inputLayoutDesc != nullptr && descNumElems != nullptr;
+		ASSERT_COND(!createInputLayout || (createInputLayout && mInputLayouts.find(*filepath) == mInputLayouts.end()));
+		const size_t id = Utility::Hash(filepath);
+		VertexShaders::const_iterator findIt = mVertexShaders.find(id);
 		if (findIt != mVertexShaders.end()) {
-			return findIt->second;
+			if (shader) *shader = findIt->second;
+			return id;
 		}
 		std::vector<char> shaderByteCode;
 		StoreShaderByteCode(filepath, shaderByteCode);
 		if (createInputLayout) {
 			ID3D11InputLayout* inputLayout;
 			BuildVertexLayout(shaderByteCode, inputLayoutDesc, *descNumElems, inputLayout);
-			const size_t inputLayoutNameHash = Utility::Hash(inputLayoutName);
-			mInputLayouts[inputLayoutNameHash] = inputLayout;
+			mInputLayouts[id] = inputLayout;
 		}
-		ID3D11VertexShader* shader = nullptr;
-		ASSERT_HR(mDevice.CreateVertexShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &shader));
-		mVertexShaders[fileHash] = shader;
-		return shader;
+		ID3D11VertexShader* elem = nullptr;
+		ASSERT_HR(mDevice.CreateVertexShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &elem));
+		mVertexShaders[id] = elem;
+		if (shader) *shader = elem;
+		return id;
 	}
 
-	ID3D11PixelShader* ShadersManager::LoadPixelShader(const char* filepath) {
+	size_t ShadersManager::LoadPixelShader(const char* filepath, ID3D11PixelShader* *shader) {
 		ASSERT_PTR(filepath);
-		const size_t fileHash = Utility::Hash(filepath);
-		PixelShaders::const_iterator findIt = mPixelShaders.find(fileHash);
+		const size_t id = Utility::Hash(filepath);
+		PixelShaders::const_iterator findIt = mPixelShaders.find(id);
 		if (findIt != mPixelShaders.end()) {
-			return findIt->second;
+			if (shader) *shader = findIt->second;
+			return id;
 		}
 		std::vector<char> shaderByteCode;
 		StoreShaderByteCode(filepath, shaderByteCode);
-		ID3D11PixelShader* shader = nullptr;
-		ASSERT_HR(mDevice.CreatePixelShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &shader));
-		mPixelShaders[fileHash] = shader;
-		return shader;
+		ID3D11PixelShader* elem = nullptr;
+		ASSERT_HR(mDevice.CreatePixelShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &elem));
+		mPixelShaders[id] = elem;
+		if (shader) *shader = elem;
+		return id;
 	}
 
-	ID3D11HullShader* ShadersManager::LoadHullShader(const char* filepath) {
+	size_t ShadersManager::LoadHullShader(const char* filepath, ID3D11HullShader* *shader) {
 		ASSERT_PTR(filepath);
-		const size_t fileHash = Utility::Hash(filepath);
-		HullShaders::const_iterator findIt = mHullShaders.find(fileHash);
+		const size_t id = Utility::Hash(filepath);
+		HullShaders::const_iterator findIt = mHullShaders.find(id);
 		if (findIt != mHullShaders.end()) {
-			return findIt->second;
+			if (shader) *shader = findIt->second;
+			return id;
 		}
 		std::vector<char> shaderByteCode;
 		StoreShaderByteCode(filepath, shaderByteCode);
-		ID3D11HullShader* shader = nullptr;
-		ASSERT_HR(mDevice.CreateHullShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &shader));
-		mHullShaders[fileHash] = shader;
-		return shader;
+		ID3D11HullShader* elem = nullptr;
+		ASSERT_HR(mDevice.CreateHullShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &elem));
+		mHullShaders[id] = elem;
+		if (shader) *shader = elem;
+		return id;
 	}
 
-	ID3D11DomainShader* ShadersManager::LoadDomainShader(const char* filepath) {
+	size_t ShadersManager::LoadDomainShader(const char* filepath, ID3D11DomainShader* *shader) {
 		ASSERT_PTR(filepath);
-		const size_t fileHash = Utility::Hash(filepath);
-		DomainShaders::const_iterator findIt = mDomainShaders.find(fileHash);
+		const size_t id = Utility::Hash(filepath);
+		DomainShaders::const_iterator findIt = mDomainShaders.find(id);
 		if (findIt != mDomainShaders.end()) {
-			return findIt->second;
+			if (shader) *shader = findIt->second;
+			return id;
 		}
 		std::vector<char> shaderByteCode;
 		StoreShaderByteCode(filepath, shaderByteCode);
-		ID3D11DomainShader* shader = nullptr;
-		ASSERT_HR(mDevice.CreateDomainShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &shader));
-		mDomainShaders[fileHash] = shader;
-		return shader;
+		ID3D11DomainShader* elem = nullptr;
+		ASSERT_HR(mDevice.CreateDomainShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &elem));
+		mDomainShaders[id] = elem;
+		if (shader) *shader = elem;
+		return id;
 	}
 
-	ID3D11GeometryShader* ShadersManager::LoadGeometryShader(const char* filepath) {
+	size_t ShadersManager::LoadGeometryShader(const char* filepath, ID3D11GeometryShader* *shader) {
 		ASSERT_PTR(filepath);
-		const size_t fileHash = Utility::Hash(filepath);
-		GeometryShaders::const_iterator findIt = mGeometryShaders.find(fileHash);
+		const size_t id = Utility::Hash(filepath);
+		GeometryShaders::const_iterator findIt = mGeometryShaders.find(id);
 		if (findIt != mGeometryShaders.end()) {
-			return findIt->second;
+			if (shader) *shader = findIt->second;
+			return id;
 		}
 		std::vector<char> shaderByteCode;
 		StoreShaderByteCode(filepath, shaderByteCode);
-		ID3D11GeometryShader* shader = nullptr;
-		ASSERT_HR(mDevice.CreateGeometryShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &shader));
-		mGeometryShaders[fileHash] = shader;
-		return shader;
+		ID3D11GeometryShader* elem = nullptr;
+		ASSERT_HR(mDevice.CreateGeometryShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &elem));
+		mGeometryShaders[id] = elem;
+		if (shader) *shader = elem;
+		return id;
 	}
 
-	ID3D11ComputeShader* ShadersManager::LoadComputeShader(const char* filepath) {
+	size_t ShadersManager::LoadComputeShader(const char* filepath, ID3D11ComputeShader* *shader) {
 		ASSERT_PTR(filepath);
-		const size_t fileHash = Utility::Hash(filepath);
-		ComputeShaders::const_iterator findIt = mComputeShaders.find(fileHash);
+		const size_t id = Utility::Hash(filepath);
+		ComputeShaders::const_iterator findIt = mComputeShaders.find(id);
 		if (findIt != mComputeShaders.end()) {
-			return findIt->second;
+			if (shader) *shader = findIt->second;
+			return id;
 		}
 		std::vector<char> shaderByteCode;
 		StoreShaderByteCode(filepath, shaderByteCode);
-		ID3D11ComputeShader* shader = nullptr;
-		ASSERT_HR(mDevice.CreateComputeShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &shader));
-		mComputeShaders[fileHash] = shader;
-		return shader;
-	}
-
-	ID3D11InputLayout* ShadersManager::InputLayout(const char* id) const {
-		const size_t idHash = Utility::Hash(id);
-		InputLayouts::const_iterator findIt = mInputLayouts.find(idHash);
-		ASSERT_COND(findIt != mInputLayouts.end());
-		return findIt->second;
+		ID3D11ComputeShader* elem = nullptr;
+		ASSERT_HR(mDevice.CreateComputeShader(&shaderByteCode[0], shaderByteCode.size(), nullptr, &elem));
+		mComputeShaders[id] = elem;
+		return id;
 	}
 
 	ID3D11InputLayout* ShadersManager::InputLayout(const size_t id) const {

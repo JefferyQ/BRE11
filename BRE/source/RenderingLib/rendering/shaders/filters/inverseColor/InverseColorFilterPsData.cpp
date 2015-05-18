@@ -11,9 +11,9 @@ namespace {
 
 namespace BRE {
 	InverseColorFilterPsData::InverseColorFilterPsData()
-		: mShader(ShadersManager::gInstance->LoadPixelShader(sShaderFile))
-		, mTextureToFilterSRV(nullptr)
+		: mTextureToFilterSRV(nullptr)
 	{
+		ShadersManager::gInstance->LoadPixelShader(sShaderFile, &mShader);
 		ASSERT_PTR(mShader);
 	}
 

@@ -25,7 +25,7 @@ namespace BRE {
 		desc.BorderColor[3] = 0.0f;
 		desc.MinLOD = 0.0f;
 		desc.MaxLOD = 0.0f;
-		mMinMagMipPointSS = ShaderResourcesManager::gInstance->AddSamplerState("D3D11_FILTER_MIN_MAG_MIP_POINT_sampler_state", desc);
+		ShaderResourcesManager::gInstance->AddSamplerState("D3D11_FILTER_MIN_MAG_MIP_POINT_sampler_state", desc, &mMinMagMipPointSS);
 		ASSERT_PTR(mMinMagMipPointSS);
 	}
 }

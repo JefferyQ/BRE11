@@ -1,6 +1,9 @@
 #pragma once
 
+#include <string>
 #include <vector>
+
+struct ID3D11Buffer;
 
 namespace BRE {
 	class Mesh;
@@ -19,7 +22,7 @@ namespace BRE {
 		const std::vector<Mesh*>& Meshes() const { return mMeshes; }
 		const std::vector<ModelMaterial*>& Materials() const { return mMaterials; }
 
-		size_t Model::CreateIndexBuffer(ID3D11Buffer* *buffer = nullptr) const;
+		size_t CreateIndexBuffer(ID3D11Buffer* *buffer = nullptr) const;
 
 	private:
 		std::string mFilename;

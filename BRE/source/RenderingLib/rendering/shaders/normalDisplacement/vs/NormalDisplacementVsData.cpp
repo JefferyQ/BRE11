@@ -5,6 +5,7 @@
 
 #include <managers/ShadersManager.h>
 #include <rendering/shaders/VertexType.h>
+#include <utils/Utility.h>
 
 using namespace DirectX;
 
@@ -26,10 +27,10 @@ namespace BRE {
 		};
 
 		const unsigned int numElems = ARRAYSIZE(inputElementDescriptions);
-		mShader = ShadersManager::gInstance->LoadVertexShader(sNormalDisplacementVS, sNormalDisplacementVS, inputElementDescriptions, &numElems);
+		ShadersManager::gInstance->LoadVertexShader(sNormalDisplacementVS, inputElementDescriptions, &numElems, &mShader);
 		ASSERT_PTR(mShader);
 
-		mInputLayout = ShadersManager::gInstance->InputLayout(sNormalDisplacementVS);
+		mInputLayout = ShadersManager::gInstance->InputLayout(Utility::Hash(sNormalDisplacementVS));
 		ASSERT_PTR(mInputLayout);
 	}
 
