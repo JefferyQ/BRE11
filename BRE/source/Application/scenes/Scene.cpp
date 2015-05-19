@@ -28,18 +28,13 @@ Scene::Scene() {
 }
 
 void Scene::Update(const float elapsedTime) {
-	//UpdateDirectionalLight(elapsedTime);
+	UpdateDirectionalLight(elapsedTime);
 	mPosUpdater.Update(elapsedTime);
-
-	//
-	// Update constant buffers
-	//
 
 	// Directional
 	std::vector<BRE::LightsDrawer::DirLightData>& dirLightDataVec = BRE::DrawManager::gInstance->DirLightDataVec();
 	for (BRE::LightsDrawer::DirLightData& data : dirLightDataVec) {
 		data.mPixelShaderData.Light().mDirection = mDirectionalLight.Direction();
-		XMStoreFloat3(&data.mPixelShaderData.CameraPosW(), BRE::Camera::gInstance->PositionVector());
 	}
 }
 

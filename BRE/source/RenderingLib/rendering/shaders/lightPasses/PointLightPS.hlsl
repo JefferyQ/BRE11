@@ -10,7 +10,6 @@ struct PsInput {
 };
 
 cbuffer CBufferPerFrame : register (b0) {
-	float4x4 View;
 	float3 CameraPositionVS;
 };
 

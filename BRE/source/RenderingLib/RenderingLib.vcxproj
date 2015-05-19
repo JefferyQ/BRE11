@@ -185,7 +185,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="rendering\shaders\lightPasses\PointLightGsData.cpp" />
     <ClCompile Include="rendering\shaders\lightPasses\PointLightPsData.cpp" />
     <ClCompile Include="rendering\shaders\lightPasses\PointLightVsData.cpp" />
-    <ClCompile Include="rendering\shaders\lightPasses\SpotLightPsData.cpp" />
     <ClCompile Include="rendering\shaders\normalDisplacement\ds\NormalDisplacementDsData.cpp" />
     <ClCompile Include="rendering\shaders\normalDisplacement\hs\NormalDisplacementHsData.cpp" />
     <ClCompile Include="rendering\shaders\normalDisplacement\NormalDisplacementDrawer.cpp" />
@@ -231,7 +230,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\shaders\lightPasses\PointLightGsData.h" />
     <ClInclude Include="rendering\shaders\lightPasses\PointLightPsData.h" />
     <ClInclude Include="rendering\shaders\lightPasses\PointLightVsData.h" />
-    <ClInclude Include="rendering\shaders\lightPasses\SpotLightPsData.h" />
     <ClInclude Include="rendering\shaders\LightsData.h" />
     <ClInclude Include="rendering\shaders\normalDisplacement\ds\NormalDisplacementDsData.h" />
     <ClInclude Include="rendering\shaders\normalDisplacement\hs\NormalDisplacementHsData.h" />
@@ -326,16 +324,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
     </FxCompile>
-    <FxCompile Include="rendering\shaders\lightPasses\LightVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
-    </FxCompile>
     <FxCompile Include="rendering\shaders\lightPasses\PointLightGS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
@@ -361,16 +349,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
-    </FxCompile>
-    <FxCompile Include="rendering\shaders\lightPasses\SpotLightPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>

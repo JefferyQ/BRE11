@@ -189,9 +189,6 @@
     <ClCompile Include="rendering\shaders\lightPasses\PointLightVsData.cpp">
       <Filter>rendering\shaders\lightPasses</Filter>
     </ClCompile>
-    <ClCompile Include="rendering\shaders\lightPasses\SpotLightPsData.cpp">
-      <Filter>rendering\shaders\lightPasses</Filter>
-    </ClCompile>
     <ClCompile Include="managers\ModelManager.cpp">
       <Filter>managers</Filter>
     </ClCompile>
@@ -329,9 +326,6 @@
     <ClInclude Include="rendering\shaders\lightPasses\PointLightVsData.h">
       <Filter>rendering\shaders\lightPasses</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\shaders\lightPasses\SpotLightPsData.h">
-      <Filter>rendering\shaders\lightPasses</Filter>
-    </ClInclude>
     <ClInclude Include="managers\ModelManager.h">
       <Filter>managers</Filter>
     </ClInclude>
@@ -404,9 +398,6 @@
     <FxCompile Include="rendering\shaders\lightPasses\DirLightPS.hlsl">
       <Filter>rendering\shaders\lightPasses</Filter>
     </FxCompile>
-    <FxCompile Include="rendering\shaders\lightPasses\LightVS.hlsl">
-      <Filter>rendering\shaders\lightPasses</Filter>
-    </FxCompile>
     <FxCompile Include="rendering\shaders\lightPasses\PointLightGS.hlsl">
       <Filter>rendering\shaders\lightPasses</Filter>
     </FxCompile>
@@ -414,9 +405,6 @@
       <Filter>rendering\shaders\lightPasses</Filter>
     </FxCompile>
     <FxCompile Include="rendering\shaders\lightPasses\PointLightVS.hlsl">
-      <Filter>rendering\shaders\lightPasses</Filter>
-    </FxCompile>
-    <FxCompile Include="rendering\shaders\lightPasses\SpotLightPS.hlsl">
       <Filter>rendering\shaders\lightPasses</Filter>
     </FxCompile>
   </ItemGroup>

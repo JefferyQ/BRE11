@@ -275,6 +275,6 @@ namespace BRE {
 		std::wostringstream frameRate;
 		frameRate << mClock.FrameRate();
 		DrawManager::gInstance->FrameRateDrawer().Text() = frameRate.str();
-		DrawManager::gInstance->DrawAll(*mDevice, *mContext, *mSwapChain, *mBackBufferRTV, *mPrimaryDSV);
+		DrawManager::gInstance->DrawAll(*mDevice, *mContext, *mSwapChain, *mBackBufferRTV, *mPrimaryDSV, mScreenWidth, mScreenHeight);
 	}
 }

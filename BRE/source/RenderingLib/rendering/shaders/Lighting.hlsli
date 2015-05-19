@@ -5,7 +5,7 @@
 
 struct DirectionalLight {
 	float3 Color;
-	float3 DirectionWS;
+	float3 Direction;
 };
 
 struct DirLightContributionData {
@@ -16,25 +16,25 @@ struct DirLightContributionData {
 	float3 DiffuseColor;
 
 	// Normalized surface normal
-	float3 NormalWS;
+	float3 Normal;
 
 	// View direction vector (from surface to camera/eye)
-	float3 ViewDirWS;
+	float3 ViewDir;
 };
 
 // Computes contribution from material and directional light to diffuse & specular colors
 void computeDirLightContribution(const in DirLightContributionData data, out float3 outColor) {
 	// Compute normalized light direction from surface to light source.
 	// Because there is not light source, then we simply negate it.
-	const float3 nLightDirWS = -normalize(data.Light.DirectionWS);
+	const float3 nLightDir = -normalize(data.Light.Direction);
 
 	// Compute normalized view direction
-	const float3 nViewDirWS = normalize(data.ViewDirWS);
+	const float3 nViewDir = normalize(data.ViewDir);
 
 	// Compute light coefficient vector (1, diffuse, specular, 1)
-	const float n_dot_l = dot(data.NormalWS, nLightDirWS);
-	const float3 halfVector = normalize(nLightDirWS + nViewDirWS);
-	const float n_dot_h = dot(data.NormalWS, halfVector);
+	const float n_dot_l = dot(data.Normal, nLightDir);
+	const float3 halfVector = normalize(nLightDir + nViewDir);
+	const float n_dot_h = dot(data.Normal, halfVector);
 	const float4 lightCoefficients = lit(n_dot_l, n_dot_h, data.SpecularColor.w);
 
 	// Material Diffuse Color * Diffuse Light Coefficient

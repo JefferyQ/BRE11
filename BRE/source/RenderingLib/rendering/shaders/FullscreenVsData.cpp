@@ -3,11 +3,11 @@
 #include <d3d11_1.h>
 #include <DirectXMath.h>
 #include <memory>
+#include <sstream>
 
 #include <managers/ShadersManager.h>
 #include <managers/ShaderResourcesManager.h>
 #include <utils/Assert.h>
-#include <utils/Utility.h>
 
 using namespace DirectX;
 
@@ -32,6 +32,7 @@ namespace BRE {
 	FullscreenVertexShaderData::FullscreenVertexShaderData() {
 		InitializeShader();
 		InitializeGeometryBuffers();
+		InitializeCBuffers();
 	}
 
 	void FullscreenVertexShaderData::InitializeShader() {
@@ -45,6 +46,23 @@ namespace BRE {
 
 		mInputLayout = ShadersManager::gInstance->InputLayout(Utility::Hash(sShaderFile));
 		ASSERT_PTR(mInputLayout);
+	}
+
+	void FullscreenVertexShaderData::InitializeCBuffers() {
+		// Initialize constant buffer
+		D3D11_BUFFER_DESC bufferDesc;
+		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
+		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bufferDesc.ByteWidth = static_cast<unsigned int> (sizeof(CBufferPerFrameData));
+		bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		bufferDesc.MiscFlags = 0;
+		bufferDesc.StructureByteStride = 0;
+		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+
+		std::stringstream str;
+		str << "FullscreenVertexShaderData";
+		str << rand();
+		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
 	void FullscreenVertexShaderData::InitializeGeometryBuffers() {
@@ -105,7 +123,7 @@ namespace BRE {
 		mIndexCount = sizeof(indices) / sizeof(unsigned int);
 	}
 
-	void FullscreenVertexShaderData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context) {
+	void FullscreenVertexShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
 		ASSERT_PTR(mInputLayout);
 		ASSERT_PTR(mShader);
 		ASSERT_PTR(mVertexBuffer);
@@ -118,6 +136,10 @@ namespace BRE {
 		const unsigned int offset[] = { 0 };
 		context.IASetVertexBuffers(0, ARRAYSIZE(vertexBuffers), vertexBuffers, stride, offset);
 		context.IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+		mCBuffer.CopyDataToBuffer(device);
+		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
+		context.VSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 	}
 
 	void FullscreenVertexShaderData::PostDraw(ID3D11DeviceContext1& context) {
@@ -129,6 +151,9 @@ namespace BRE {
 		const unsigned int stride[] = { 0 };
 		const unsigned int offset[] = { 0 };
 		context.IASetVertexBuffers(0, 1, vertexBuffers, stride, offset);
+
+		ID3D11Buffer* const cBuffers[] = { nullptr };
+		context.VSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 	}
 
 	void FullscreenVertexShaderData::DrawIndexed(ID3D11DeviceContext1& context) {

@@ -27,7 +27,7 @@ namespace BRE {
 
 		void LoadModels(const char* filepath);
 
-		void DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView);
+		void DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView, const unsigned int screenWidth, const unsigned int screenHeight);
 
 		std::vector<NormalDisplacementDrawer>& NormalDisplacementDrawerVec() { return mNormalDisplacementDrawer; }
 		std::vector<NormalMappingDrawer>& NormalMappingDrawerVec() { return mNormalMappingDrawer; }

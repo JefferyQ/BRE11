@@ -3,7 +3,6 @@
 #include <d3d11_1.h>
 #include <DirectXMath.h>
 
-#include <general/Camera.h>
 #include <managers/ShaderResourcesManager.h>
 #include <utils/Assert.h>
 
@@ -12,27 +11,30 @@
 using namespace DirectX;
 
 namespace BRE {
-	void LightsDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[5]) {
+	void LightsDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[4], const unsigned int screenWidth, const unsigned int screenHeight, const float farClipPlaneDistance, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj, const DirectX::XMVECTOR cameraPos) {
 		context.OMSetBlendState(mDefaultBS, nullptr, UINT32_MAX);
 		context.OMSetDepthStencilState(mDisableDepthTestDSS, UINT32_MAX);
 
-		/*for (DirLightData& data : mDirLightDataVec) {
-		data.mVertexShaderData.PreDraw(device, context);
-		data.mPixelShaderData.PreDraw(device, context, geometryBuffersSRVs);
-		data.mVertexShaderData.DrawIndexed(context);
-		data.mPixelShaderData.PostDraw(context);
-		data.mVertexShaderData.PostDraw(context);
-		}*/
+		for (DirLightData& data : mDirLightDataVec) {
+			data.mVertexShaderData.ScreenWidth() = screenWidth;
+			data.mVertexShaderData.ScreenHeight() = screenHeight;
+			data.mVertexShaderData.FarClipPlaneDistance() = farClipPlaneDistance;
+			XMStoreFloat3(&data.mPixelShaderData.CameraPosVS(), XMVector3Transform(cameraPos, view));
+			data.mVertexShaderData.PreDraw(device, context);
+			data.mPixelShaderData.PreDraw(device, context, geometryBuffersSRVs);
+			data.mVertexShaderData.DrawIndexed(context);
+			data.mPixelShaderData.PostDraw(context);
+			data.mVertexShaderData.PostDraw(context);
+		}
 
 		for (PointLightData& data : mPointLightDataVec) {
-			XMStoreFloat4x4(&data.mPointLightVsData.ViewMatrix(), XMMatrixTranspose(Camera::gInstance->ViewMatrix()));
+			XMStoreFloat4x4(&data.mPointLightVsData.ViewMatrix(), XMMatrixTranspose(view));
 
-			XMStoreFloat4x4(&data.mPointLightGsData.ProjectionMatrix(), XMMatrixTranspose(Camera::gInstance->ProjectionMatrix()));
-			data.mPointLightGsData.FarClipPlaneDistance() = Camera::gInstance->FarPlaneDistance();
+			XMStoreFloat4x4(&data.mPointLightGsData.ProjectionMatrix(), XMMatrixTranspose(proj));
+			data.mPointLightGsData.FarClipPlaneDistance() = farClipPlaneDistance;
 
 			data.mPointLightPsData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
-			XMStoreFloat3(&data.mPointLightPsData.CameraPosVS(), XMVector3Transform(Camera::gInstance->PositionVector(), Camera::gInstance->ViewMatrix()));
-			XMStoreFloat4x4(&data.mPointLightPsData.ViewMatrix(), XMMatrixTranspose(Camera::gInstance->ViewMatrix()));
+			XMStoreFloat3(&data.mPointLightPsData.CameraPosVS(), XMVector3Transform(cameraPos, view));
 
 			data.mPointLightVsData.PreDraw(device, context);
 			data.mPointLightGsData.PreDraw(device, context);

@@ -202,7 +202,7 @@ namespace BRE {
 		}
 	}
 
-	void DrawManager::DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView) {
+	void DrawManager::DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView, const unsigned int screenWidth, const unsigned int screenHeight) {
 		static enum RenderMode {
 			BACK_BUFFER,
 			DIFFUSE_ALBEDO,
@@ -241,15 +241,16 @@ namespace BRE {
 
 		const XMMATRIX view = Camera::gInstance->ViewMatrix();
 		const XMMATRIX proj = Camera::gInstance->ProjectionMatrix();
+		const float farClipPlaneDistance = Camera::gInstance->FarPlaneDistance();
 		for (NormalDisplacementDrawer& elem : mNormalDisplacementDrawer) {
-			elem.Draw(device, context, mGeometryBuffersRTVs, view, proj);
+			elem.Draw(device, context, mGeometryBuffersRTVs, view, proj, farClipPlaneDistance);
 		}
 		for (NormalMappingDrawer& elem : mNormalMappingDrawer) {
-			elem.Draw(device, context, mGeometryBuffersRTVs, view, proj);
+			elem.Draw(device, context, mGeometryBuffersRTVs, view, proj, farClipPlaneDistance);
 		}
 
 		if (renderMode == BACK_BUFFER) {
-			mLightsDrawer.Draw(device, context, mGeometryBuffersSRVs);
+			mLightsDrawer.Draw(device, context, mGeometryBuffersSRVs, screenWidth, screenHeight, farClipPlaneDistance, view, proj, Camera::gInstance->PositionVector());
 		}
 		else {
 			ID3D11Texture2D* texture;
