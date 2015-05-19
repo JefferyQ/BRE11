@@ -2,7 +2,8 @@
 
 #include <DirectXMath.h>
 
-struct ID3D11Buffer;
+#include <rendering/shaders/Buffer.h>
+
 struct ID3D11Device1;
 struct ID3D11DeviceContext1;
 struct ID3D11GeometryShader;
@@ -14,8 +15,8 @@ namespace BRE {
 
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context);
 		void PostDraw(ID3D11DeviceContext1& context);
-		DirectX::XMFLOAT4X4& ProjectionMatrix() { return mCBufferPerFrameData.mProj; }
-		float& FarClipPlaneDistance() { return mCBufferPerFrameData.mFarClipPlaneDistance; }
+		DirectX::XMFLOAT4X4& ProjectionMatrix() { return mCBuffer.mData.mProj; }
+		float& FarClipPlaneDistance() { return mCBuffer.mData.mFarClipPlaneDistance; }
 
 	private:
 		void InitializeCBuffers();
@@ -25,8 +26,8 @@ namespace BRE {
 		struct CBufferPerFrameData {
 			DirectX::XMFLOAT4X4 mProj;
 			float mFarClipPlaneDistance;
-		} mCBufferPerFrameData;
+		};
+		Buffer<CBufferPerFrameData> mCBuffer;
 
-		ID3D11Buffer* mCBufferPerFrame;
 	};
 }

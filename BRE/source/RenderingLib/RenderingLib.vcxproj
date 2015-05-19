@@ -219,6 +219,7 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\models\Model.h" />
     <ClInclude Include="rendering\models\ModelMaterial.h" />
     <ClInclude Include="rendering\RenderStateHelper.h" />
+    <ClInclude Include="rendering\shaders\Buffer.h" />
     <ClInclude Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPsData.h" />
     <ClInclude Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.h" />
     <ClInclude Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.h" />

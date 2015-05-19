@@ -4,9 +4,7 @@
 #include <sstream>
 
 #include <managers/ShadersManager.h>
-#include <managers/ShaderResourcesManager.h>
 #include <utils/Assert.h>
-#include <utils/Utility.h>
 
 using namespace DirectX;
 
@@ -15,9 +13,7 @@ namespace {
 }
 
 namespace BRE {
-	PointLightPixelShaderData::PointLightPixelShaderData()
-		: mCBufferPerFrame(nullptr)
-	{
+	PointLightPixelShaderData::PointLightPixelShaderData() {
 		ShadersManager::gInstance->LoadPixelShader(sShaderFile, &mShader);
 		ASSERT_PTR(mShader);
 		InitializeCBuffers();
@@ -25,7 +21,6 @@ namespace BRE {
 
 	void PointLightPixelShaderData::InitializeCBuffers() {
 		// Initialize constant buffer
-		ASSERT_COND(mCBufferPerFrame == nullptr);
 		D3D11_BUFFER_DESC bufferDesc;
 		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -38,8 +33,7 @@ namespace BRE {
 		std::stringstream str;
 		str << "PointLightPixelShaderData_";
 		str << rand();
-		ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferPerFrame);
-		ASSERT_PTR(mCBufferPerFrame);
+		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
 	void PointLightPixelShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[4]) {
@@ -48,9 +42,8 @@ namespace BRE {
 		context.PSSetShader(mShader, nullptr, 0);
 
 		// Set constant buffers
-		ASSERT_PTR(mCBufferPerFrame);
-		Utility::CopyData(device, &mCBufferPerFrameData, sizeof(CBufferPerFrameData), *mCBufferPerFrame);
-		ID3D11Buffer* const cBuffers[] = { mCBufferPerFrame };
+		mCBuffer.CopyDataToBuffer(device);
+		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
 		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
 		// Set resources

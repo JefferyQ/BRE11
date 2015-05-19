@@ -2,6 +2,7 @@
 
 #include <DirectXMath.h>
 
+#include <rendering/shaders/Buffer.h>
 #include <utils/Assert.h>
 
 struct ID3D11Buffer;
@@ -19,10 +20,10 @@ namespace BRE {
 		void DrawIndexed(ID3D11DeviceContext1& context);
 		void PostDraw(ID3D11DeviceContext1& context);
 
-		DirectX::XMFLOAT4X4& WorldViewProjection() { return mCBufferPerFrameData.mWorldViewProjection; }
-		DirectX::XMFLOAT4X4& WorldView() { return mCBufferPerFrameData.mWorldView; }
-		DirectX::XMFLOAT4X4& World() { return mCBufferPerFrameData.mWorld; }
-		float& TextureScaleFactor() { return mCBufferPerFrameData.mTextureScaleFactor;  }
+		DirectX::XMFLOAT4X4& WorldViewProjection() { return mCBuffer.mData.mWorldViewProjection; }
+		DirectX::XMFLOAT4X4& WorldView() { return mCBuffer.mData.mWorldView; }
+		DirectX::XMFLOAT4X4& World() { return mCBuffer.mData.mWorld; }
+		float& TextureScaleFactor() { return mCBuffer.mData.mTextureScaleFactor;  }
 
 		ID3D11Buffer* &VertexBuffer() { return mVertexBuffer; }
 		ID3D11Buffer* &IndexBuffer() { return mIndexBuffer; }
@@ -40,9 +41,8 @@ namespace BRE {
 			DirectX::XMFLOAT4X4 mWorldView;
 			DirectX::XMFLOAT4X4 mWorld;
 			float mTextureScaleFactor;
-		} mCBufferPerFrameData;
-
-		ID3D11Buffer* mCBufferPerFrame;
+		};
+		Buffer<CBufferPerFrameData> mCBuffer;
 
 		ID3D11Buffer* mVertexBuffer;
 		ID3D11Buffer* mIndexBuffer;

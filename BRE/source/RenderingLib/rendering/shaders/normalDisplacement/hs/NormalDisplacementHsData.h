@@ -1,6 +1,7 @@
 #pragma once
 
-struct ID3D11Buffer;
+#include <rendering/shaders/Buffer.h>
+
 struct ID3D11Device1;
 struct ID3D11DeviceContext1;
 struct ID3D11HullShader;
@@ -13,7 +14,7 @@ namespace BRE {
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context);
 		void PostDraw(ID3D11DeviceContext1& context);
 
-		float* TessellationFactors() { return mCBufferPerFrameData.mTessellationFactors; }
+		float* TessellationFactors() { return mCBuffer.mData.mTessellationFactors; }
 
 	private:
 		void InitializeCBuffers();
@@ -23,8 +24,7 @@ namespace BRE {
 		struct CBufferPerFrameData {
 			// 3 Tessellation edge & 1 inside factors
 			float mTessellationFactors[4];
-		} mCBufferPerFrameData;
-
-		ID3D11Buffer* mCBufferPerFrame;
+		};
+		Buffer<CBufferPerFrameData> mCBuffer;
 	};
 }

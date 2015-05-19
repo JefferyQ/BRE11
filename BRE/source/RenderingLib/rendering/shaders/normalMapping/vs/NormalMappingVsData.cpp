@@ -4,10 +4,7 @@
 #include <sstream>
 
 #include <managers/ShadersManager.h>
-#include <managers/ShaderResourcesManager.h>
 #include <rendering/shaders/VertexType.h>
-#include <utils/Memory.h>
-#include <utils/Utility.h>
 
 using namespace DirectX;
 
@@ -50,8 +47,7 @@ namespace BRE {
 		std::stringstream str;
 		str << "NormalMappingVsData";
 		str << rand();
-	    ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferPerFrame);
-		ASSERT_PTR(mCBufferPerFrame);
+		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
 	void NormalMappingVsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
@@ -74,8 +70,8 @@ namespace BRE {
 		context.IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 		// Set constant buffers
-		ID3D11Buffer* const cBuffers[] = { mCBufferPerFrame };
-		Utility::CopyData(device, &mCBufferPerFrameData, sizeof(CBufferPerFrameData), *mCBufferPerFrame);
+		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
+		mCBuffer.CopyDataToBuffer(device);
 		context.VSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 	}
 

@@ -338,6 +338,9 @@
     <ClInclude Include="rendering\shaders\VertexType.h">
       <Filter>rendering\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="rendering\shaders\Buffer.h">
+      <Filter>rendering\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="doc\LightingModels.txt">

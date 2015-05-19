@@ -2,7 +2,8 @@
 
 #include <DirectXMath.h>
 
-struct ID3D11Buffer;
+#include <rendering/shaders/Buffer.h>
+
 struct ID3D11Device1;
 struct ID3D11DeviceContext1;
 struct ID3D11VertexShader;
@@ -21,7 +22,7 @@ namespace BRE {
 
 		DirectX::XMFLOAT4& LightPosAndRadius(const unsigned int index);
 		DirectX::XMFLOAT4& LightColor(const unsigned int index);
-		DirectX::XMFLOAT4X4& ViewMatrix() { return mCBufferPerFrameData.mView; }
+		DirectX::XMFLOAT4X4& ViewMatrix() { return mCBuffer.mData.mView; }
 
 	private:
 		void InitializeCBuffers();
@@ -32,8 +33,7 @@ namespace BRE {
 			DirectX::XMFLOAT4X4 mView;
 			DirectX::XMFLOAT4 mLightPosAndRadius[sMaxLights];
 			DirectX::XMFLOAT4 mLightColor[sMaxLights];
-		} mCBufferPerFrameData;
-
-		ID3D11Buffer* mCBufferPerFrame;
+		};
+		Buffer<CBufferPerFrameData> mCBuffer;
 	};
 }

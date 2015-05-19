@@ -4,9 +4,7 @@
 #include <sstream>
 
 #include <managers/ShadersManager.h>
-#include <managers/ShaderResourcesManager.h>
 #include <utils/Assert.h>
-#include <utils/Utility.h>
 
 namespace {
 	const char* sNormalDisplacementDS = "content\\shaders\\normalDisplacement\\NormalDisplacementDS.cso";
@@ -32,16 +30,15 @@ namespace BRE {
 		std::stringstream str;
 		str << "NormalDisplacementDsData";
 		str << rand();
-		ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferPerFrame);
-		ASSERT_PTR(mCBufferPerFrame);
+		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
 	void NormalDisplacementDsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
 		ASSERT_PTR(mShader);
 		context.DSSetShader(mShader, nullptr, 0);
 
-		ID3D11Buffer* const cBuffers[] = { mCBufferPerFrame };
-		Utility::CopyData(device, &mCBufferPerFrameData, sizeof(CBufferPerFrameData), *mCBufferPerFrame);
+		mCBuffer.CopyDataToBuffer(device);
+		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
 		context.DSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
 		ASSERT_PTR(mDisplacementMapSRV);

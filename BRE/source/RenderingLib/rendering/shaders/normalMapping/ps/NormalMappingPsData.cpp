@@ -4,9 +4,7 @@
 #include <sstream>
 
 #include <managers/ShadersManager.h>
-#include <managers/ShaderResourcesManager.h>
 #include <utils/Assert.h>
-#include <utils/Utility.h>
 
 namespace {
 	const char* sNormalMappingPS = "content\\shaders\\normalMapping\\NormalMappingPS.cso";
@@ -33,8 +31,7 @@ namespace BRE {
 		std::stringstream str;
 		str << "NormalMappingPsData";
 		str << rand();
-		ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferPerFrame);
-		ASSERT_PTR(mCBufferPerFrame);
+		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
 	void NormalMappingPsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[4]) {
@@ -50,9 +47,8 @@ namespace BRE {
 		context.PSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
 
 		// Set constant buffers
-		ASSERT_PTR(mCBufferPerFrame);
-		Utility::CopyData(device, &mCBufferPerFrameData, sizeof(CBufferPerFrameData), *mCBufferPerFrame);
-		ID3D11Buffer* const cBuffers[] = { mCBufferPerFrame };
+		mCBuffer.CopyDataToBuffer(device);
+		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
 		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
 		// Set samplers

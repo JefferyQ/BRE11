@@ -2,7 +2,8 @@
 
 #include <DirectXMath.h>
 
-struct ID3D11Buffer;
+#include <rendering/shaders/Buffer.h>
+
 struct ID3D11DepthStencilView;
 struct ID3D11Device1;
 struct ID3D11DeviceContext1;
@@ -23,8 +24,8 @@ namespace BRE {
 		ID3D11ShaderResourceView* &NormalMapTextureSRV() { return mNormalMapTextureSRV; }
 		ID3D11ShaderResourceView* &SpecularMapTextureSRV() { return mSpecularMapTextureSRV; }
 		ID3D11SamplerState* &SamplerState() { return mSampler; }
-		DirectX::XMFLOAT4X4& ViewMatrix() { return mCBufferPerFrameData.mView; }
-		float& FarClipPlaneDistance() { return mCBufferPerFrameData.mFarClipPlaneDistance; }
+		DirectX::XMFLOAT4X4& ViewMatrix() { return mCBuffer.mData.mView; }
+		float& FarClipPlaneDistance() { return mCBuffer.mData.mFarClipPlaneDistance; }
 
 	private:
 		void InitializeCBuffers();
@@ -34,9 +35,8 @@ namespace BRE {
 		struct CBufferPerFrameData {
 			DirectX::XMFLOAT4X4 mView;
 			float mFarClipPlaneDistance;;
-		} mCBufferPerFrameData;
-
-		ID3D11Buffer* mCBufferPerFrame;
+		};
+		Buffer<CBufferPerFrameData> mCBuffer;
 
 		ID3D11DepthStencilView* mDefaultDSV;
 		ID3D11RenderTargetView* mDefaultRTV;

@@ -4,9 +4,7 @@
 #include <sstream>
 
 #include <managers/ShadersManager.h>
-#include <managers/ShaderResourcesManager.h>
 #include <utils/Assert.h>
-#include <utils/Utility.h>
 
 namespace {
 	const char* sNormalDisplacementHS = "content\\shaders\\normalDisplacement\\NormalDisplacementHS.cso";
@@ -20,10 +18,6 @@ namespace BRE {
 	}
 
 	void NormalDisplacementHsData::InitializeCBuffers() {
-		D3D11_SUBRESOURCE_DATA initData;
-		ZeroMemory(&initData, sizeof(D3D11_SUBRESOURCE_DATA));
-		initData.pSysMem = &mCBufferPerFrameData;
-
 		D3D11_BUFFER_DESC bufferDesc;
 		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -36,16 +30,15 @@ namespace BRE {
 		std::stringstream str;
 		str << "NormalDisplacementHsData";
 		str << rand();
-		ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferPerFrame);
-		ASSERT_PTR(mCBufferPerFrame);
+		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
 	void NormalDisplacementHsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
 		ASSERT_PTR(mShader);
 		context.HSSetShader(mShader, nullptr, 0);
 
-		ID3D11Buffer* const cBuffers[] = { mCBufferPerFrame };
-		Utility::CopyData(device, &mCBufferPerFrameData, sizeof(CBufferPerFrameData), *mCBufferPerFrame);
+		mCBuffer.CopyDataToBuffer(device);
+		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
 		context.HSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 	}
 
