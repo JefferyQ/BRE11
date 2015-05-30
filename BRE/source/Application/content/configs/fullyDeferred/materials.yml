@@ -1,0 +1,7 @@
+materials:
+  - name: "gold"
+    normal: "content\\textures\\gold\\gold_normal.dds"
+    baseColor: "content\\textures\\gold\\gold_base_color.dds"
+    smoothness: "content\\textures\\gold\\gold_smoothness.dds"
+    metalMask: "content\\textures\\gold\\gold_metal_mask.dds"
+    reflectance: "content\\textures\\gold\\gold_reflectance.dds"
