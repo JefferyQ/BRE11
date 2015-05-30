@@ -13,7 +13,7 @@ namespace BRE {
 		ASSERT_PTR(file);
 
 		// Compute file hash
-		const size_t fileHash = Utility::Hash(file);
+		const size_t fileHash = Hash(file);
 
 		// Skip if file was already loaded
 		if (mFileMap.find(fileHash) != mFileMap.end()) {
@@ -36,7 +36,7 @@ namespace BRE {
 			const std::string categoryName = categoryNode.as<std::string>();
 
 			// Add an entry for current category name
-			const size_t categoryHash = Utility::Hash(categoryName.c_str());
+			const size_t categoryHash = Hash(categoryName.c_str());
 			AttributeMap& attrMap = categoryMap[categoryHash];
 			ASSERT_COND(attrMap.empty() == true);
 
@@ -51,7 +51,7 @@ namespace BRE {
 				const YAML::Node& attrNameNode = nodePair.first;
 				ASSERT_COND(attrNameNode.IsScalar());
 				const std::string attrName = attrNameNode.as<std::string>();
-				const size_t attrHash = Utility::Hash(attrName.c_str());
+				const size_t attrHash = Hash(attrName.c_str());
 
 				// Get attribute value
 				const YAML::Node& attrValueNode = nodePair.second;

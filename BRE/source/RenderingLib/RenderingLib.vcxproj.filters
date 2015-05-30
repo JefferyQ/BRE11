@@ -73,6 +73,24 @@
     <Filter Include="rendering\shaders\normalMapping\vs">
       <UniqueIdentifier>{dfb3604a-2777-4ce1-8f48-f0e7128ec728}</UniqueIdentifier>
     </Filter>
+    <Filter Include="rendering\shaders\color">
+      <UniqueIdentifier>{78fc0ffd-4eb9-4241-81c8-de04beaa1e3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\color\vs">
+      <UniqueIdentifier>{502f1937-1a6d-4d1f-a639-c351d5495f0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\color\ps">
+      <UniqueIdentifier>{a440b61c-a1c9-4470-9bfc-96fdf3675399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\basic">
+      <UniqueIdentifier>{88d4772f-c97b-4a9c-bd28-2db1d5e24950}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\basic\vs">
+      <UniqueIdentifier>{3f6e0e29-bbb5-4f78-8d9c-0fd44fff8562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rendering\shaders\basic\ps">
+      <UniqueIdentifier>{15f2911d-e6dc-4fd2-beb5-b2a3247a5e4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="managers\SettingsManager.cpp">
@@ -194,6 +212,30 @@
     </ClCompile>
     <ClCompile Include="rendering\shaders\VertexType.cpp">
       <Filter>rendering\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\color\ColorDrawer.cpp">
+      <Filter>rendering\shaders\color</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\color\vs\ColorVsData.cpp">
+      <Filter>rendering\shaders\color\vs</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\color\ps\ColorPsData.cpp">
+      <Filter>rendering\shaders\color\ps</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\basic\BasicDrawer.cpp">
+      <Filter>rendering\shaders\basic</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\basic\ps\BasicPsData.cpp">
+      <Filter>rendering\shaders\basic\ps</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\shaders\basic\vs\BasicVsData.cpp">
+      <Filter>rendering\shaders\basic\vs</Filter>
+    </ClCompile>
+    <ClCompile Include="managers\MaterialManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Hash.cpp">
+      <Filter>utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +377,33 @@
     <ClInclude Include="rendering\shaders\Buffer.h">
       <Filter>rendering\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="rendering\shaders\color\ColorDrawer.h">
+      <Filter>rendering\shaders\color</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\color\vs\ColorVsData.h">
+      <Filter>rendering\shaders\color\vs</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\color\ps\ColorPsData.h">
+      <Filter>rendering\shaders\color\ps</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\basic\BasicDrawer.h">
+      <Filter>rendering\shaders\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\basic\ps\BasicPsData.h">
+      <Filter>rendering\shaders\basic\ps</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\shaders\basic\vs\BasicVsData.h">
+      <Filter>rendering\shaders\basic\vs</Filter>
+    </ClInclude>
+    <ClInclude Include="managers\MaterialManager.h">
+      <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Hash.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\YamlUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="doc\LightingModels.txt">
@@ -401,11 +470,23 @@
     <FxCompile Include="rendering\shaders\lightPasses\PointLightGS.hlsl">
       <Filter>rendering\shaders\lightPasses</Filter>
     </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\PointLightVS.hlsl">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </FxCompile>
     <FxCompile Include="rendering\shaders\lightPasses\PointLightPS.hlsl">
       <Filter>rendering\shaders\lightPasses</Filter>
     </FxCompile>
-    <FxCompile Include="rendering\shaders\lightPasses\PointLightVS.hlsl">
-      <Filter>rendering\shaders\lightPasses</Filter>
+    <FxCompile Include="rendering\shaders\color\vs\ColorVS.hlsl">
+      <Filter>rendering\shaders\color\vs</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\color\ps\ColorPS.hlsl">
+      <Filter>rendering\shaders\color\ps</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\basic\ps\BasicPS.hlsl">
+      <Filter>rendering\shaders\basic\ps</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\basic\vs\BasicVS.hlsl">
+      <Filter>rendering\shaders\basic\vs</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

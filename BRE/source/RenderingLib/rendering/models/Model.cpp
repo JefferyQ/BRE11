@@ -10,6 +10,7 @@
 #include <rendering/models/ModelMaterial.h>
 #include <rendering/models/Mesh.h>
 #include <utils/Assert.h>
+#include <utils/Hash.h>
 #include <utils/Utility.h>
 
 namespace BRE {
@@ -55,7 +56,7 @@ namespace BRE {
 	size_t Model::CreateIndexBuffer(ID3D11Buffer* *buffer) const {
 		// Check if there is already a buffer for current model
 		const std::string bufferName = mFilename + std::string("_indexBuffer");
-		const size_t bufferId = Utility::Hash(bufferName.c_str());
+		const size_t bufferId = Hash(bufferName.c_str());
 		ID3D11Buffer* elem = ShaderResourcesManager::gInstance->Buffer(bufferId);
 		if (elem) {
 			if (buffer) *buffer = elem;

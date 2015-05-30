@@ -5,12 +5,12 @@
 
 #include <managers/ShadersManager.h>
 #include <rendering/shaders/VertexType.h>
-#include <utils/Utility.h>
+#include <utils/Hash.h>
 
 using namespace DirectX;
 
 namespace {
-	const char* sNormalDisplacementVS = "content\\shaders\\normalDisplacement\\NormalDisplacementVS.cso";
+	const char* shader = "content\\shaders\\normalDisplacement\\NormalDisplacementVS.cso";
 }
 
 namespace BRE {
@@ -27,10 +27,10 @@ namespace BRE {
 		};
 
 		const unsigned int numElems = ARRAYSIZE(inputElementDescriptions);
-		ShadersManager::gInstance->LoadVertexShader(sNormalDisplacementVS, inputElementDescriptions, &numElems, &mShader);
+		ShadersManager::gInstance->LoadVertexShader(shader, inputElementDescriptions, &numElems, &mShader);
 		ASSERT_PTR(mShader);
 
-		mInputLayout = ShadersManager::gInstance->InputLayout(Utility::Hash(sNormalDisplacementVS));
+		mInputLayout = ShadersManager::gInstance->InputLayout(Hash(shader));
 		ASSERT_PTR(mInputLayout);
 	}
 

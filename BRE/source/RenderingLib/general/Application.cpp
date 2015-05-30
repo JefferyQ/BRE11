@@ -9,6 +9,7 @@
 #include <input/Keyboard.h>
 #include <input/Mouse.h>
 #include <managers/DrawManager.h>
+#include <managers/MaterialManager.h>
 #include <managers/ModelManager.h>
 #include <managers/SettingsManager.h>
 #include <managers/ShadersManager.h>
@@ -198,6 +199,7 @@ namespace BRE {
 		InitDirectX(multisamplingCount, mScreenWidth, mScreenHeight, frameRate, mWindowHandle, mDevice, mContext, mSwapChain, mBackBufferRTV, mPrimaryDSV);
 
 		ShadersManager::gInstance = new ShadersManager(*mDevice);
+		MaterialManager::gInstance = new MaterialManager();
 		ModelManager::gInstance = new ModelManager();
 		DrawManager::gInstance = new DrawManager(*mDevice, *mContext, mScreenWidth, mScreenHeight);
 		RenderStateHelper::gInstance = new RenderStateHelper(*mContext);

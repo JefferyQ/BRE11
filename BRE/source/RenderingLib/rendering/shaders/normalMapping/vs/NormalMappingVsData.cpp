@@ -5,11 +5,12 @@
 
 #include <managers/ShadersManager.h>
 #include <rendering/shaders/VertexType.h>
+#include <utils/Hash.h>
 
 using namespace DirectX;
 
 namespace {
-	const char* sNormalMappingVS = "content\\shaders\\normalMapping\\NormalMappingVS.cso";
+	const char* shader = "content\\shaders\\normalMapping\\NormalMappingVS.cso";
 }
 
 namespace BRE {
@@ -27,10 +28,10 @@ namespace BRE {
 		};
 
 		const unsigned int numElems = ARRAYSIZE(inputElementDescriptions);
-		ShadersManager::gInstance->LoadVertexShader(sNormalMappingVS, inputElementDescriptions, &numElems, &mShader);
+		ShadersManager::gInstance->LoadVertexShader(shader, inputElementDescriptions, &numElems, &mShader);
 		ASSERT_PTR(mShader);
 
-		mInputLayout = ShadersManager::gInstance->InputLayout(Utility::Hash(sNormalMappingVS));
+		mInputLayout = ShadersManager::gInstance->InputLayout(Hash(shader));
 		ASSERT_PTR(mInputLayout);
 	}
 

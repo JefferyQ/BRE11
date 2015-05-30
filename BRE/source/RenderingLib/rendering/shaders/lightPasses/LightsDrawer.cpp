@@ -11,7 +11,7 @@
 using namespace DirectX;
 
 namespace BRE {
-	void LightsDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[4], const unsigned int screenWidth, const unsigned int screenHeight, const float farClipPlaneDistance, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj, const DirectX::XMVECTOR cameraPos) {
+	void LightsDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[6], const unsigned int screenWidth, const unsigned int screenHeight, const float farClipPlaneDistance, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj, const DirectX::XMVECTOR cameraPos) {
 		context.OMSetBlendState(mDefaultBS, nullptr, UINT32_MAX);
 		context.OMSetDepthStencilState(mDisableDepthTestDSS, UINT32_MAX);
 

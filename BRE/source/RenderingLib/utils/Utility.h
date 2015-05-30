@@ -37,8 +37,6 @@ namespace BRE {
 
 		float RandomFloat(const float min, const float max);
 
-		size_t Hash(const char* str);
-
 		void SaveTextureToFile(ID3D11DeviceContext1& device, ID3D11Texture2D* texture, const wchar_t* destFilename);
 
 		void CalculateTangentArray(Mesh& mesh, std::vector<DirectX::XMFLOAT3>& tangents);

@@ -11,7 +11,7 @@ struct VS_OUTPUT {
 };
 
 struct PS_OUTPUT {
-	float2 NormalVS : SV_Target0;
+	float3 NormalVS : SV_Target0;
 	float4 DiffuseAlbedo : SV_Target1;
 	float4 SpecularAlbedo : SV_Target2;
 	float DepthVS : SV_Target3;
@@ -38,7 +38,7 @@ PS_OUTPUT main(VS_OUTPUT IN) {
 	const float3x3 tbn = float3x3(normalize(IN.TangentWS), normalize(IN.BinormalWS), normalize(IN.NormalWS));
 	sampledNormal = mul(sampledNormal, tbn);
 	sampledNormal = normalize(mul(float4(sampledNormal, 0.0f), View).xyz);
-	OUT.NormalVS = Encode(sampledNormal);
+	OUT.NormalVS = sampledNormal;
 	OUT.DiffuseAlbedo = DiffuseTexture.Sample(TexSampler, IN.TexCoord);
 	OUT.SpecularAlbedo = SpecularMapTexture.Sample(TexSampler, IN.TexCoord);
 	OUT.DepthVS = IN.DepthVS / FarClipPlaneDistance;

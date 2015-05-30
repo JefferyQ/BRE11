@@ -23,75 +23,10 @@
 #include <rendering/shaders/normalMapping/vs/NormalMappingVsData.h>
 #include <utils/Assert.h>
 #include <utils/Memory.h>
-#include <utils/Utility.h>
+#include <utils/Hash.h>
+#include <utils/YamlUtils.h>
 
 using namespace DirectX;
-
-namespace {
-	template<typename T>
-	T GetScalar(const YAML::Node& node, const char* key) {
-		ASSERT_PTR(key);
-
-		YAML::Node attr = node[key];
-		ASSERT_COND(attr.IsDefined());
-		ASSERT_COND(attr.IsScalar());
-		return boost::lexical_cast<T>(attr.as<std::string>());
-	}
-
-	template<>
-	std::string GetScalar(const YAML::Node& node, const char* key) {
-		ASSERT_PTR(key);
-
-		YAML::Node attr = node[key];
-		ASSERT_COND(attr.IsDefined());
-		ASSERT_COND(attr.IsScalar());
-		return attr.as<std::string>();
-	}
-
-	template<typename T>
-#ifdef _DEBUG
-	void GetSequence(const YAML::Node& node, const char* key, T* const sequence, const size_t numElems) {
-#else
-	void GetSequence(const YAML::Node& node, const char* key, T* const sequence, const size_t) {
-#endif
-		ASSERT_PTR(key);
-		ASSERT_PTR(sequence);
-
-		YAML::Node attr = node[key];
-		ASSERT_COND(attr.IsDefined());
-		ASSERT_COND(attr.IsSequence());
-		size_t currentNumElems = 0;
-		for (const YAML::Node& seqNode : attr) {
-			ASSERT_COND(seqNode.IsScalar());
-			ASSERT_COND(currentNumElems < numElems);
-			sequence[currentNumElems] = seqNode.as<T>();
-			++currentNumElems;
-		}
-		ASSERT_COND(currentNumElems == numElems);
-	}
-
-	template<>
-#ifdef _DEBUG
-	void GetSequence(const YAML::Node& node, const char* key, float* const sequence, const size_t numElems) {
-#else
-	void GetSequence(const YAML::Node& node, const char* key, float* const sequence, const size_t) {
-#endif
-		ASSERT_PTR(key);
-		ASSERT_PTR(sequence);
-
-		YAML::Node attr = node[key];
-		ASSERT_COND(attr.IsDefined());
-		ASSERT_COND(attr.IsSequence());
-		size_t currentNumElems = 0;
-		for (const YAML::Node& seqNode : attr) {
-			ASSERT_COND(seqNode.IsScalar());
-			ASSERT_COND(currentNumElems < numElems);
-			sequence[currentNumElems] = boost::lexical_cast<float>(seqNode.as<std::string>());
-			++currentNumElems;
-		}
-		ASSERT_COND(currentNumElems == numElems);
-	}
-}
 
 namespace BRE {
 	DrawManager* DrawManager::gInstance = nullptr;
@@ -101,6 +36,7 @@ namespace BRE {
 	{
 		InitResources(screenWidth, screenHeight);
 		InitPostProcessResources(screenWidth, screenHeight);
+		InitGBuffers(screenWidth, screenHeight);
 	}
 
 	void DrawManager::LoadModels(const char* filepath) {
@@ -120,20 +56,19 @@ namespace BRE {
 			ASSERT_COND(node.IsMap());
 
 			// Get common rendering attributes
-			const std::string modelFilePath = GetScalar<std::string>(node, "path");
-			const std::string renderType = GetScalar<std::string>(node, "renderType");
-			const std::string diffuseMapTexture = GetScalar<std::string>(node, "diffuseMapTexture");
+			const std::string modelFilePath = YamlUtils::GetScalar<std::string>(node, "path");
+			const std::string renderType = YamlUtils::GetScalar<std::string>(node, "renderType");
 
 			float translation[3];
-			GetSequence<float>(node, "translation", translation, ARRAYSIZE(translation));
+			YamlUtils::GetSequence<float>(node, "translation", translation, ARRAYSIZE(translation));
 			const XMMATRIX translationMatrix = XMMatrixTranslation(translation[0], translation[1], translation[2]);
 
 			float rotation[3];
-			GetSequence<float>(node, "rotation", rotation, ARRAYSIZE(rotation));
+			YamlUtils::GetSequence<float>(node, "rotation", rotation, ARRAYSIZE(rotation));
 			const XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(rotation[0], rotation[1], rotation[2]);
 
 			float scaling[3];
-			GetSequence<float>(node, "scaling", scaling, ARRAYSIZE(scaling));
+			YamlUtils::GetSequence<float>(node, "scaling", scaling, ARRAYSIZE(scaling));
 			const XMMATRIX scalingMatrix = XMMatrixScaling(scaling[0], scaling[1], scaling[2]);
 
 			const Model* model;
@@ -151,16 +86,17 @@ namespace BRE {
 
 				// Initialize pixel shader data
 				ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
+				const std::string diffuseMapTexture = YamlUtils::GetScalar<std::string>(node, "diffuseMapTexture");
 				shaderResourcesMgr.AddTextureFromFileSRV(diffuseMapTexture.c_str(), &renderer.PixelShaderData().DiffuseTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().DiffuseTextureSRV());
-				const std::string normalMapTexture = GetScalar<std::string>(node, "normalMapTexture");
+				const std::string normalMapTexture = YamlUtils::GetScalar<std::string>(node, "normalMapTexture");
 				shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &renderer.PixelShaderData().NormalMapTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().NormalMapTextureSRV());
-				const std::string specularMapTexture = GetScalar<std::string>(node, "specularMapTexture");
+				const std::string specularMapTexture = YamlUtils::GetScalar<std::string>(node, "specularMapTexture");
 				shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str(), &renderer.PixelShaderData().SpecularMapTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().SpecularMapTextureSRV());
 				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
-				renderer.VertexShaderData().TextureScaleFactor() = GetScalar<float>(node, "textureScaleFactor");
+				renderer.VertexShaderData().TextureScaleFactor() = YamlUtils::GetScalar<float>(node, "textureScaleFactor");
 				
 				NormalMappingDrawerVec().push_back(renderer);
 			}
@@ -175,29 +111,46 @@ namespace BRE {
 				XMStoreFloat4x4(&renderer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
 
 				// Initialize hull shader data
-				GetSequence<float>(node, "edgeTesselationFactors", renderer.HullShaderData().TessellationFactors(), 3);
-				renderer.HullShaderData().TessellationFactors()[3] = GetScalar<float>(node, "insideTessellationFactors");
+				YamlUtils::GetSequence<float>(node, "edgeTesselationFactors", renderer.HullShaderData().TessellationFactors(), 3);
+				renderer.HullShaderData().TessellationFactors()[3] = YamlUtils::GetScalar<float>(node, "insideTessellationFactors");
 
 				// Initialize domain shader data
-				renderer.DomainShaderData().DisplacementScale() = GetScalar<float>(node, "displacementScale");
+				renderer.DomainShaderData().DisplacementScale() = YamlUtils::GetScalar<float>(node, "displacementScale");
 				ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
-				const std::string displacementMapTexture = GetScalar<std::string>(node, "displacementMapTexture");
+				const std::string displacementMapTexture = YamlUtils::GetScalar<std::string>(node, "displacementMapTexture");
 				shaderResourcesMgr.AddTextureFromFileSRV(displacementMapTexture.c_str(), &renderer.DomainShaderData().DisplacementMapSRV());
 				ASSERT_PTR(renderer.DomainShaderData().DisplacementMapSRV());
 				renderer.DomainShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 
 				// Initialize pixel shader data
+				const std::string diffuseMapTexture = YamlUtils::GetScalar<std::string>(node, "diffuseMapTexture");
 				shaderResourcesMgr.AddTextureFromFileSRV(diffuseMapTexture.c_str(), &renderer.PixelShaderData().DiffuseTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().DiffuseTextureSRV());
-				const std::string normalMapTexture = GetScalar<std::string>(node, "normalMapTexture");
+				const std::string normalMapTexture = YamlUtils::GetScalar<std::string>(node, "normalMapTexture");
 				shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &renderer.PixelShaderData().NormalMapTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().NormalMapTextureSRV());
-				const std::string specularMapTexture = GetScalar<std::string>(node, "specularMapTexture");
+				const std::string specularMapTexture = YamlUtils::GetScalar<std::string>(node, "specularMapTexture");
 				shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str(), &renderer.PixelShaderData().SpecularMapTextureSRV());
 				ASSERT_PTR(renderer.PixelShaderData().SpecularMapTextureSRV());
 				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 
 				NormalDisplacementDrawerVec().push_back(renderer);
+			}
+			else if (renderType == "Basic") {
+				BasicDrawer renderer;
+				renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(BasicVertexData::CreateVertexBuffer(modelId));
+				ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
+				renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer());
+				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[0]->Indices().size()));
+
+				XMStoreFloat4x4(&renderer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
+
+				const std::string material = YamlUtils::GetScalar<std::string>(node, "material");
+				const size_t matId = Hash(material.c_str());
+				renderer.PixelShaderData().SetMaterial(matId);
+				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+
+				BasicDrawerVec().push_back(renderer);
 			}
 		}
 	}
@@ -205,25 +158,29 @@ namespace BRE {
 	void DrawManager::DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView, const unsigned int screenWidth, const unsigned int screenHeight) {
 		static enum RenderMode {
 			BACK_BUFFER,
-			DIFFUSE_ALBEDO,
-			SPECULAR_ALBEDO,
-			NORMALS,
-			DEPTH
+			NORMAL,
+			BASE_COLOR,
+			SMOOTHNESS,
+			METAL_MASK,
+			REFLECTANCE
 		} renderMode = BACK_BUFFER;
 		if (Keyboard::gInstance->IsKeyDown(DIK_1)) {
 			renderMode = BACK_BUFFER;
 		}
 		else if (Keyboard::gInstance->IsKeyDown(DIK_2)) {
-			renderMode = DIFFUSE_ALBEDO;
+			renderMode = NORMAL;
 		}
 		else if (Keyboard::gInstance->IsKeyDown(DIK_3)) {
-			renderMode = SPECULAR_ALBEDO;
+			renderMode = BASE_COLOR;
 		}
 		else if (Keyboard::gInstance->IsKeyDown(DIK_4)) {
-			renderMode = NORMALS;
+			renderMode = SMOOTHNESS;
 		}
 		else if (Keyboard::gInstance->IsKeyDown(DIK_5)) {
-			renderMode = DEPTH;
+			renderMode = METAL_MASK;
+		}
+		else if (Keyboard::gInstance->IsKeyDown(DIK_6)) {
+			renderMode = REFLECTANCE;
 		}
 
 		RenderStateHelper::gInstance->SaveAll();
@@ -237,6 +194,10 @@ namespace BRE {
 			context.ClearRenderTargetView(mGeometryBuffersRTVs[i], reinterpret_cast<const float*>(&Colors::Black));
 		}
 
+		for (size_t i = 0; i < ARRAYSIZE(mGBuffersSRVs); ++i) {
+			context.ClearRenderTargetView(mGBuffersRTVs[i], reinterpret_cast<const float*>(&Colors::Black));
+		}
+
 		context.OMSetRenderTargets(1, &backBuffer, &depthStencilView);
 
 		const XMMATRIX view = Camera::gInstance->ViewMatrix();
@@ -248,25 +209,31 @@ namespace BRE {
 		for (NormalMappingDrawer& elem : mNormalMappingDrawer) {
 			elem.Draw(device, context, mGeometryBuffersRTVs, view, proj, farClipPlaneDistance);
 		}
+		for (BasicDrawer& elem : mBasicDrawer) {
+			elem.Draw(device, context, mGBuffersRTVs, view, proj, farClipPlaneDistance);
+		}
 
 		if (renderMode == BACK_BUFFER) {
-			mLightsDrawer.Draw(device, context, mGeometryBuffersSRVs, screenWidth, screenHeight, farClipPlaneDistance, view, proj, Camera::gInstance->PositionVector());
+			mLightsDrawer.Draw(device, context, mGBuffersSRVs, screenWidth, screenHeight, farClipPlaneDistance, view, proj, Camera::gInstance->PositionVector());
 		}
 		else {
 			ID3D11Texture2D* texture;
 			ID3D11Texture2D* backBufferTexture;
 			ASSERT_HR(swapChain.GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBufferTexture)));
-			if (renderMode == DIFFUSE_ALBEDO) {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Utility::Hash("deferred_rendering_texture2d_diffuse_albedo"));
+			if (renderMode == NORMAL) {
+				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_normal"));
 			}
-			else if (renderMode == SPECULAR_ALBEDO) {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Utility::Hash("deferred_rendering_texture2d_specular_albedo"));
+			else if (renderMode == BASE_COLOR) {
+				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_base_color"));
 			}
-			else if (renderMode == NORMALS) {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Utility::Hash("deferred_rendering_texture2d_normals"));
+			else if (renderMode == SMOOTHNESS) {
+				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_smoothness"));
+			}
+			else if (renderMode == METAL_MASK) {
+				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_metal_mask"));
 			}
 			else {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Utility::Hash("deferred_rendering_texture2d_depth"));
+				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_reflectance"));
 			}
 
 			ASSERT_PTR(texture);
@@ -294,7 +261,7 @@ namespace BRE {
 		textureDesc[0].Height = screenHeight;
 		textureDesc[0].MipLevels = 1;
 		textureDesc[0].ArraySize = 1;
-		textureDesc[0].Format = DXGI_FORMAT_R8G8_UNORM;
+		textureDesc[0].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		textureDesc[0].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[0].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[0].SampleDesc.Count = 1;
@@ -343,7 +310,7 @@ namespace BRE {
 			"deferred_rendering_texture2d_normals",
 			"deferred_rendering_texture2d_diffuse_albedo",
 			"deferred_rendering_texture2d_specular_albedo",
-			"deferred_rendering_texture2d_depth"
+			"deferred_rendering_texture2d_depth",
 		};
 
 		//
@@ -362,6 +329,117 @@ namespace BRE {
 			ASSERT_COND(mGeometryBuffersSRVs[iTex] == nullptr);
 			shaderResourcesMgr.AddResourceSRV(textureIds[iTex], *texture, nullptr, &mGeometryBuffersSRVs[iTex]);
 			ASSERT_PTR(mGeometryBuffersSRVs[iTex]);
+		}
+	}
+
+	void DrawManager::InitGBuffers(const unsigned int screenWidth, const unsigned int screenHeight) {
+		const size_t numTextures = ARRAYSIZE(mGBuffersSRVs);
+
+		//
+		// Texture descriptions
+		//
+		D3D11_TEXTURE2D_DESC textureDesc[numTextures];
+
+		// Normal texture desc
+		ZeroMemory(&textureDesc[0], sizeof(textureDesc[0]));
+		textureDesc[0].Width = screenWidth;
+		textureDesc[0].Height = screenHeight;
+		textureDesc[0].MipLevels = 1;
+		textureDesc[0].ArraySize = 1;
+		textureDesc[0].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		textureDesc[0].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc[0].Usage = D3D11_USAGE_DEFAULT;
+		textureDesc[0].SampleDesc.Count = 1;
+		textureDesc[0].SampleDesc.Quality = 0;
+
+		// Base color texture desc
+		ZeroMemory(&textureDesc[1], sizeof(textureDesc[1]));
+		textureDesc[1].Width = screenWidth;
+		textureDesc[1].Height = screenHeight;
+		textureDesc[1].MipLevels = 1;
+		textureDesc[1].ArraySize = 1;
+		textureDesc[1].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		textureDesc[1].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc[1].Usage = D3D11_USAGE_DEFAULT;
+		textureDesc[1].SampleDesc.Count = 1;
+		textureDesc[1].SampleDesc.Quality = 0;
+
+		// Smoothness texture desc
+		ZeroMemory(&textureDesc[2], sizeof(textureDesc[2]));
+		textureDesc[2].Width = screenWidth;
+		textureDesc[2].Height = screenHeight;
+		textureDesc[2].MipLevels = 1;
+		textureDesc[2].ArraySize = 1;
+		textureDesc[2].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		textureDesc[2].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc[2].Usage = D3D11_USAGE_DEFAULT;
+		textureDesc[2].SampleDesc.Count = 1;
+		textureDesc[2].SampleDesc.Quality = 0;
+
+		// Metal mask texture desc
+		ZeroMemory(&textureDesc[3], sizeof(textureDesc[3]));
+		textureDesc[3].Width = screenWidth;
+		textureDesc[3].Height = screenHeight;
+		textureDesc[3].MipLevels = 1;
+		textureDesc[3].ArraySize = 1;
+		textureDesc[3].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		textureDesc[3].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc[3].Usage = D3D11_USAGE_DEFAULT;
+		textureDesc[3].SampleDesc.Count = 1;
+		textureDesc[3].SampleDesc.Quality = 0;
+
+		// Reflectance texture desc
+		ZeroMemory(&textureDesc[4], sizeof(textureDesc[4]));
+		textureDesc[4].Width = screenWidth;
+		textureDesc[4].Height = screenHeight;
+		textureDesc[4].MipLevels = 1;
+		textureDesc[4].ArraySize = 1;
+		textureDesc[4].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		textureDesc[4].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc[4].Usage = D3D11_USAGE_DEFAULT;
+		textureDesc[4].SampleDesc.Count = 1;
+		textureDesc[4].SampleDesc.Quality = 0;
+
+		// Depth texture description
+		ZeroMemory(&textureDesc[5], sizeof(textureDesc[5]));
+		textureDesc[5].Width = screenWidth;
+		textureDesc[5].Height = screenHeight;
+		textureDesc[5].MipLevels = 1;
+		textureDesc[5].ArraySize = 1;
+		textureDesc[5].Format = DXGI_FORMAT_R16_UNORM;
+		textureDesc[5].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc[5].Usage = D3D11_USAGE_DEFAULT;
+		textureDesc[5].SampleDesc.Count = 1;
+		textureDesc[5].SampleDesc.Quality = 0;
+
+		//
+		// Texture id's
+		//
+		const char* textureIds[numTextures] = {
+			"gbuffers_normal",
+			"gbuffers_base_color",
+			"gbuffers_smoothness",
+			"gbuffers_metal_mask",
+			"gbuffers_reflectance",
+			"gbuffers_depth",
+		};
+
+		//
+		// Create texture 2D, shader resource view and render target view
+		//
+		ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
+		for (size_t iTex = 0; iTex < numTextures; ++iTex) {
+			ID3D11Texture2D* texture;
+			shaderResourcesMgr.AddTexture2D(textureIds[iTex], textureDesc[iTex], nullptr, &texture);
+			ASSERT_PTR(texture);
+
+			ASSERT_COND(mGBuffersRTVs[iTex] == nullptr);
+			shaderResourcesMgr.AddRenderTargetView(textureIds[iTex], *texture, nullptr, &mGBuffersRTVs[iTex]);
+			ASSERT_PTR(mGBuffersRTVs[iTex]);
+
+			ASSERT_COND(mGBuffersSRVs[iTex] == nullptr);
+			shaderResourcesMgr.AddResourceSRV(textureIds[iTex], *texture, nullptr, &mGBuffersSRVs[iTex]);
+			ASSERT_PTR(mGBuffersSRVs[iTex]);
 		}
 	}
 

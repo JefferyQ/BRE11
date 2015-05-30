@@ -1,51 +1,14 @@
 #ifndef LIGHTING_HEADER
 #define LIGHTING_HEADER
 
+#define PI 3.14159f
+
 /******************** Directional Light  ***************************/
 
 struct DirectionalLight {
 	float3 Color;
 	float3 Direction;
 };
-
-struct DirLightContributionData {
-	DirectionalLight Light;
-
-	// Surface material information
-	float4 SpecularColor; // 3 color + 1 power
-	float3 DiffuseColor;
-
-	// Normalized surface normal
-	float3 Normal;
-
-	// View direction vector (from surface to camera/eye)
-	float3 ViewDir;
-};
-
-// Computes contribution from material and directional light to diffuse & specular colors
-void computeDirLightContribution(const in DirLightContributionData data, out float3 outColor) {
-	// Compute normalized light direction from surface to light source.
-	// Because there is not light source, then we simply negate it.
-	const float3 nLightDir = -normalize(data.Light.Direction);
-
-	// Compute normalized view direction
-	const float3 nViewDir = normalize(data.ViewDir);
-
-	// Compute light coefficient vector (1, diffuse, specular, 1)
-	const float n_dot_l = dot(data.Normal, nLightDir);
-	const float3 halfVector = normalize(nLightDir + nViewDir);
-	const float n_dot_h = dot(data.Normal, halfVector);
-	const float4 lightCoefficients = lit(n_dot_l, n_dot_h, data.SpecularColor.w);
-
-	// Material Diffuse Color * Diffuse Light Coefficient
-	outColor = data.DiffuseColor * lightCoefficients.y;
-
-	// + Material Specular Color * Specular Light Coefficient
-	outColor += data.SpecularColor.rgb * lightCoefficients.z;
-
-	// * Light Color
-	outColor *= data.Light.Color;
-}
 
 /******************** Point Light  ***************************/
 
@@ -54,50 +17,6 @@ struct PointLight {
 	float3 Pos;
 	float Range;
 };
-
-struct PointLightContributionData {
-	PointLight Light;
-
-	// Surface material information
-	float4 SpecularColor; // 3 color + 1 power
-	float3 DiffuseColor;
-	float3 Pos;
-
-	// Normalized surface normal
-	float3 Normal;
-
-	// View direction vector (from surface to camera/eye)
-	float3 ViewDir;
-};
-
-// Computes contribution from material and point light to diffuse & specular colors
-void computePointLightContribution(const in PointLightContributionData data, out float3 outColor) {
-	// Compute attenuation
-	const float3 lightDir = data.Light.Pos - data.Pos;
-	const float dist = length(lightDir);
-	const float attenuation = max(0.0f, 1.0f - (dist / data.Light.Range));
-
-	// Compute normalized light direction from surface to light source.
-	const float3 nLightDir = normalize(lightDir);
-
-	// Compute normalized view direction
-	const float3 nViewDir = normalize(data.ViewDir);
-
-	// Compute light coefficient vector (1, diffuse, specular, 1)
-	const float n_dot_l = dot(data.Normal, nLightDir);
-	const float3 halfVector = normalize(nLightDir + nViewDir);
-	const float n_dot_h = dot(data.Normal, halfVector);
-	const float4 lightCoefficients = lit(n_dot_l, n_dot_h, data.SpecularColor.w);
-
-	// Material Diffuse Color * Light Color * Diffuse Light Coefficient * Attenuation
-	outColor = data.DiffuseColor * lightCoefficients.y;
-
-	// + Material Specular Color * Light Color * Specular Light Coefficient * Attenuation
-	outColor += data.SpecularColor.rgb * lightCoefficients.z;
-
-	// * Light Color * Attenuation
-	outColor *= data.Light.Color * attenuation;
-}
 
 /******************** Spot Light  ***************************/
 struct SpotLight {
@@ -111,52 +30,51 @@ struct SpotLight {
 	float Range;
 };
 
-struct SpotLightContributionData {
-	SpotLight Light;
-
-	// Surface material information
-	float4 SpecularColor; // 3 color + 1 power
+struct MaterialData {
+	float3 SpecularColor;
 	float3 DiffuseColor;
-	float3 PosWS;
-
-	// Normalized surface normal
-	float3 NormalWS;
-
-	// View direction vector (from surface to camera/eye)
-	float3 ViewDirWS;
+	float Roughness;
+	float ReflectanceAtNormalIncidence;
 };
 
-// Computes contribution from material and spot light to diffuse & specular colors
-void computeSpotLightContribution(const in SpotLightContributionData data, out float3 outColor) {
-	// Compute attenuation (adding also the spotlight attenuation factor)
-	const float3 lightDirWS = data.Light.PosWS - data.PosWS;
-	const float dist = length(lightDirWS);
-	float attenuation = max(0.0f, 1.0f - (dist / data.Light.Range));
+float G1V(float dotNV, float k)
+{
+	return 1.0f / (dotNV*(1.0f - k) + k);
+}
 
-	// Compute normalized light direction from surface to light source.
-	const float3 nLightDirWS = normalize(lightDirWS);
 
-	// Compute normalized view direction
-	const float3 nViewDirWS = normalize(data.ViewDirWS);
+float3 cook_torrance(const float3 N, const float3 V, const float3 L, const MaterialData data)
+{
+	const float3 cSpecular = data.SpecularColor;
+	const float3 cDiffuse = data.DiffuseColor;
 
-	// Adding the spotlight attenuation factor
-	const float rho = dot(-nLightDirWS, normalize(data.Light.DirectionWS));
-	attenuation *= smoothstep(data.Light.OuterAngle, data.Light.InnerAngle, rho);
+	const float alpha = data.Roughness * data.Roughness;
 
-	// Compute light coefficient vector (1, diffuse, specular, 1)
-	const float n_dot_l = dot(data.NormalWS, nLightDirWS);
-	const float3 halfVector = normalize(nLightDirWS + nViewDirWS);
-	const float n_dot_h = dot(data.NormalWS, halfVector);
-	const float4 lightCoefficients = lit(n_dot_l, n_dot_h, data.SpecularColor.w);
+	const float3 H = normalize(V + L);
 
-	// Material Diffuse Color * Diffuse Light Coefficient
-	outColor = data.DiffuseColor * lightCoefficients.y;
+	const float dotNL = saturate(dot(N, L));
+	const float dotNV = saturate(dot(N, V));
+	const float dotNH = saturate(dot(N, H));
+	const float dotLH = saturate(dot(L, H));
+	
+	// Specular D (Normal Distribution Function NDF)
+	const float alphaSqr = alpha * alpha;
+	float denom = dotNH * dotNH * (alphaSqr - 1.0) + 1.0f;
+	const float D = alphaSqr / (PI * denom * denom);
 
-	// + Material Specular Color * Specular Light Coefficient
-	outColor += data.SpecularColor.rgb * lightCoefficients.z;
+	// Specular F (Fresnel)
+	const float dotLH5 = pow(1.0f - dotLH, 5);
+	const float F = data.ReflectanceAtNormalIncidence + (1.0 - data.ReflectanceAtNormalIncidence) * (dotLH5);
 
-	// * Light Color * Attenuation
-	outColor *= data.Light.Color * attenuation;
+	// Specular G (Geometryc Attenuation)
+	const float k = alpha / 2.0f;
+	const float G = (1.0f / (dotNL * (1.0f - k) + k)) * (1.0f / (dotNV * (1.0f - k) + k));
+
+	const float microfacetSpecular = dotNL * D * F * G;
+	
+	// Put all the parts together to generate
+	// the final colour
+	return max(0.0f, dotNL) * (cSpecular * microfacetSpecular + cDiffuse);
 }
 
 #endif

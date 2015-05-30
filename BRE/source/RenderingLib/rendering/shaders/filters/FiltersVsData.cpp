@@ -6,7 +6,7 @@
 #include <managers/ShadersManager.h>
 #include <managers/ShaderResourcesManager.h>
 #include <utils/Assert.h>
-#include <utils/Utility.h>
+#include <utils/Hash.h>
 
 using namespace DirectX;
 
@@ -45,16 +45,16 @@ namespace BRE {
 		ShadersManager::gInstance->LoadVertexShader(sShaderFile, inputElementDescriptions, &numElems, &mShader);
 		ASSERT_PTR(mShader);
 
-		const size_t id = Utility::Hash(sShaderFile);
+		const size_t id = Hash(sShaderFile);
 		mInputLayout = ShadersManager::gInstance->InputLayout(id);
 		ASSERT_PTR(mInputLayout);
 	}
 
 	void FiltersVertexShaderData::InitializeGeometryBuffers(ID3D11Device1& device) {
 		const char* vertexBufferName = "FiltersVertexShaderData";
-		const size_t vertexBufferId = Utility::Hash(vertexBufferName);
+		const size_t vertexBufferId = Hash(vertexBufferName);
 		const char* indexBufferName = "FiltersVertexShaderData";
-		const size_t indexBufferId = Utility::Hash(indexBufferName);
+		const size_t indexBufferId = Hash(indexBufferName);
 		mVertexBuffer = ShaderResourcesManager::gInstance->Buffer(vertexBufferId);
 		if (mVertexBuffer) {
 			mIndexBuffer = ShaderResourcesManager::gInstance->Buffer(indexBufferId);

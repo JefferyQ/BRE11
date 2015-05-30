@@ -163,6 +163,7 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="input\Keyboard.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
     <ClCompile Include="managers\DrawManager.cpp" />
+    <ClCompile Include="managers\MaterialManager.cpp" />
     <ClCompile Include="managers\ModelManager.cpp" />
     <ClCompile Include="managers\SettingsManager.cpp" />
     <ClCompile Include="managers\ShaderResourcesManager.cpp" />
@@ -174,6 +175,12 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="rendering\models\Model.cpp" />
     <ClCompile Include="rendering\models\ModelMaterial.cpp" />
     <ClCompile Include="rendering\RenderStateHelper.cpp" />
+    <ClCompile Include="rendering\shaders\basic\BasicDrawer.cpp" />
+    <ClCompile Include="rendering\shaders\basic\ps\BasicPsData.cpp" />
+    <ClCompile Include="rendering\shaders\basic\vs\BasicVsData.cpp" />
+    <ClCompile Include="rendering\shaders\color\ColorDrawer.cpp" />
+    <ClCompile Include="rendering\shaders\color\ps\ColorPsData.cpp" />
+    <ClCompile Include="rendering\shaders\color\vs\ColorVsData.cpp" />
     <ClCompile Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPsData.cpp" />
     <ClCompile Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.cpp" />
     <ClCompile Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.cpp" />
@@ -195,6 +202,7 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="rendering\shaders\normalMapping\vs\NormalMappingVsData.cpp" />
     <ClCompile Include="rendering\shaders\VertexType.cpp" />
     <ClCompile Include="rendering\StringDrawer.cpp" />
+    <ClCompile Include="utils\Hash.cpp" />
     <ClCompile Include="utils\updaters\PositionUpdater.cpp" />
     <ClCompile Include="utils\Utility.cpp" />
   </ItemGroup>
@@ -206,6 +214,7 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="input\Keyboard.h" />
     <ClInclude Include="input\Mouse.h" />
     <ClInclude Include="managers\DrawManager.h" />
+    <ClInclude Include="managers\MaterialManager.h" />
     <ClInclude Include="managers\ModelManager.h" />
     <ClInclude Include="managers\SettingsManager.h" />
     <ClInclude Include="managers\ShaderResourcesManager.h" />
@@ -218,7 +227,13 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\models\Model.h" />
     <ClInclude Include="rendering\models\ModelMaterial.h" />
     <ClInclude Include="rendering\RenderStateHelper.h" />
+    <ClInclude Include="rendering\shaders\basic\BasicDrawer.h" />
+    <ClInclude Include="rendering\shaders\basic\ps\BasicPsData.h" />
+    <ClInclude Include="rendering\shaders\basic\vs\BasicVsData.h" />
     <ClInclude Include="rendering\shaders\Buffer.h" />
+    <ClInclude Include="rendering\shaders\color\ColorDrawer.h" />
+    <ClInclude Include="rendering\shaders\color\ps\ColorPsData.h" />
+    <ClInclude Include="rendering\shaders\color\vs\ColorVsData.h" />
     <ClInclude Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPsData.h" />
     <ClInclude Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.h" />
     <ClInclude Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.h" />
@@ -242,9 +257,11 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\shaders\VertexType.h" />
     <ClInclude Include="rendering\StringDrawer.h" />
     <ClInclude Include="utils\Assert.h" />
+    <ClInclude Include="utils\Hash.h" />
     <ClInclude Include="utils\Memory.h" />
     <ClInclude Include="utils\updaters\PositionUpdater.h" />
     <ClInclude Include="utils\Utility.h" />
+    <ClInclude Include="utils\YamlUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="doc\LightingModels.txt" />
@@ -257,6 +274,46 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <None Include="rendering\shaders\Utils.hlsli" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="rendering\shaders\basic\ps\BasicPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\basic\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\basic\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\basic\vs\BasicVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\basic\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\basic\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\color\ps\ColorPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\color\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\color\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\color\vs\ColorVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\color\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\color\%(Filename).cso</ObjectFileOutput>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+    </FxCompile>
     <FxCompile Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPS.hlsl">
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\%(Filename).cso</ObjectFileOutput>
@@ -335,14 +392,16 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
     </FxCompile>
     <FxCompile Include="rendering\shaders\lightPasses\PointLightPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\lightPasses\%(Filename).cso</ObjectFileOutput>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="rendering\shaders\lightPasses\PointLightVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

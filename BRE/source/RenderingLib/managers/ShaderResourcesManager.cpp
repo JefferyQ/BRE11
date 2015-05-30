@@ -9,6 +9,7 @@
 
 #include <utils/Assert.h>
 #include <utils/Memory.h>
+#include <utils/Hash.h>
 #include <utils/Utility.h>
 
 namespace BRE {
@@ -49,7 +50,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddTextureFromFileSRV(const char* filepath, ID3D11ShaderResourceView* *resource) {
 		ASSERT_PTR(filepath);
-		const size_t id = Utility::Hash(filepath);
+		const size_t id = Hash(filepath);
 		ShaderResourceViews::iterator findIt = mShaderResourceViews.find(id);
 		if (findIt != mShaderResourceViews.end()) {
 			if (resource) *resource = findIt->second;
@@ -67,7 +68,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddResourceSRV(const char* id, ID3D11Resource& resource, const D3D11_SHADER_RESOURCE_VIEW_DESC* desc, ID3D11ShaderResourceView* *view) {
 		ASSERT_PTR(id);
-		const size_t idHash = Utility::Hash(id);
+		const size_t idHash = Hash(id);
 		ASSERT_COND(mShaderResourceViews.find(idHash) == mShaderResourceViews.end());
 		ID3D11ShaderResourceView* elem;
 		ASSERT_HR(mDevice.CreateShaderResourceView(&resource, desc, &elem));
@@ -78,7 +79,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddResourceUAV(const char* id, ID3D11Resource& resource, const D3D11_UNORDERED_ACCESS_VIEW_DESC& desc, ID3D11UnorderedAccessView* *view) {
 		ASSERT_PTR(id);
-		const size_t idHash = Utility::Hash(id);
+		const size_t idHash = Hash(id);
 		ASSERT_COND(mUnorderedAccessViews.find(idHash) == mUnorderedAccessViews.end())
 		ID3D11UnorderedAccessView* elem;
 		ASSERT_HR(mDevice.CreateUnorderedAccessView(&resource, &desc, &elem));
@@ -89,7 +90,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddBuffer(const char* id, D3D11_BUFFER_DESC& desc, const D3D11_SUBRESOURCE_DATA* const initData, ID3D11Buffer* *buffer) {
 		ASSERT_PTR(id);
-		const size_t idHash = Utility::Hash(id);
+		const size_t idHash = Hash(id);
 		ASSERT_COND(mBuffers.find(idHash) == mBuffers.end());
 
 		// If the bind flag is D3D11_BIND_CONSTANT_BUFFER,
@@ -108,7 +109,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddTexture2D(const char* id, const D3D11_TEXTURE2D_DESC& texDesc, const D3D11_SUBRESOURCE_DATA* initialData, ID3D11Texture2D* *texture) {
 		ASSERT_PTR(id);
-		const size_t idHash = Utility::Hash(id);
+		const size_t idHash = Hash(id);
 		ASSERT_COND(mTextures2D.find(idHash) == mTextures2D.end());
 		ID3D11Texture2D* elem;
 		ASSERT_HR(mDevice.CreateTexture2D(&texDesc, initialData, &elem));
@@ -119,7 +120,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddRasterizerState(const char* id, const D3D11_RASTERIZER_DESC& desc, ID3D11RasterizerState* *state) {
 		ASSERT_PTR(id);
-		const size_t idHash = Utility::Hash(id);
+		const size_t idHash = Hash(id);
 		ASSERT_COND(mRasterizerStates.find(idHash) == mRasterizerStates.end());
 		ID3D11RasterizerState* elem;
 		ASSERT_HR(mDevice.CreateRasterizerState(&desc, &elem));
@@ -130,7 +131,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddRenderTargetView(const char* id, ID3D11Resource& resource, const D3D11_RENDER_TARGET_VIEW_DESC* desc, ID3D11RenderTargetView* *view) {
 		ASSERT_PTR(id);
-		const size_t idHash = Utility::Hash(id);
+		const size_t idHash = Hash(id);
 		ASSERT_COND(mRenderTargetViews.find(idHash) == mRenderTargetViews.end());
 		ID3D11RenderTargetView* elem;
 		ASSERT_HR(mDevice.CreateRenderTargetView(&resource, desc, &elem));
@@ -141,7 +142,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddDepthStencilView(const char* id, ID3D11Resource& resource, const D3D11_DEPTH_STENCIL_VIEW_DESC* desc, ID3D11DepthStencilView* *view) {
 		ASSERT_PTR(id);
-		const size_t idHash = Utility::Hash(id);
+		const size_t idHash = Hash(id);
 		ASSERT_COND(mDepthStencilViews.find(idHash) == mDepthStencilViews.end());
 		ID3D11DepthStencilView* elem;
 		ASSERT_HR(mDevice.CreateDepthStencilView(&resource, desc, &elem));
@@ -152,7 +153,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddBlendState(const char* id, const D3D11_BLEND_DESC& desc, ID3D11BlendState* *state) {
 		ASSERT_PTR(id);
-		const size_t idHash = Utility::Hash(id);
+		const size_t idHash = Hash(id);
 		ASSERT_COND(mBlendStates.find(idHash) == mBlendStates.end());
 		ID3D11BlendState* elem;
 		ASSERT_HR(mDevice.CreateBlendState(&desc, &elem));
@@ -163,7 +164,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddDepthStencilState(const char* id, const D3D11_DEPTH_STENCIL_DESC& desc, ID3D11DepthStencilState* *state) {
 		ASSERT_PTR(id);
-		const size_t idHash = Utility::Hash(id);
+		const size_t idHash = Hash(id);
 		ASSERT_COND(mDepthStencilStates.find(idHash) == mDepthStencilStates.end());
 		ID3D11DepthStencilState* elem;
 		ASSERT_HR(mDevice.CreateDepthStencilState(&desc, &elem));
@@ -174,7 +175,7 @@ namespace BRE {
 
 	size_t ShaderResourcesManager::AddSamplerState(const char* id, const D3D11_SAMPLER_DESC& desc, ID3D11SamplerState* *state) {
 		ASSERT_PTR(id);
-		const size_t idHash = Utility::Hash(id);
+		const size_t idHash = Hash(id);
 		ASSERT_COND(mSamplerStates.find(idHash) == mSamplerStates.end());
 		ID3D11SamplerState* elem;
 		ASSERT_HR(mDevice.CreateSamplerState(&desc, &elem));

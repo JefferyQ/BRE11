@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <rendering/StringDrawer.h>
+#include <rendering/shaders/basic/BasicDrawer.h>
 #include <rendering/shaders/lightPasses/LightsDrawer.h>
 #include <rendering/shaders/normalDisplacement/NormalDisplacementDrawer.h>
 #include <rendering/shaders/normalMapping/NormalMappingDrawer.h>
@@ -31,6 +32,7 @@ namespace BRE {
 
 		std::vector<NormalDisplacementDrawer>& NormalDisplacementDrawerVec() { return mNormalDisplacementDrawer; }
 		std::vector<NormalMappingDrawer>& NormalMappingDrawerVec() { return mNormalMappingDrawer; }
+		std::vector<BasicDrawer>& BasicDrawerVec() { return mBasicDrawer; }
 		std::vector<LightsDrawer::DirLightData>& DirLightDataVec() { return mLightsDrawer.DirLightDataVec(); }
 		std::vector<LightsDrawer::PointLightData>& PointLightDataVec() { return mLightsDrawer.PointLightDataVec(); }
 		StringDrawer& FrameRateDrawer() { return mFrameRateDrawer; }
@@ -38,6 +40,7 @@ namespace BRE {
 	private:
 		void InitResources(const unsigned int screenWidth, const unsigned int screenHeight);
 		void InitPostProcessResources(const unsigned int screenWidth, const unsigned int screenHeight);
+		void InitGBuffers(const unsigned int screenWidth, const unsigned int screenHeight);
 
 		// Render target views and shader resources views
 		// for fully deferred rendering purposes
@@ -48,6 +51,17 @@ namespace BRE {
 		ID3D11RenderTargetView* mGeometryBuffersRTVs[4];
 		ID3D11ShaderResourceView* mGeometryBuffersSRVs[4];
 
+		// Render target views and shader resources views
+		// for fully deferred rendering purposes
+		// [0] -> Normal
+		// [1] -> Base Color
+		// [2] -> Smoothness
+		// [3] -> Metal Mask
+		// [4] -> Reflectance
+		// [5] -> Depth
+		ID3D11RenderTargetView* mGBuffersRTVs[6];
+		ID3D11ShaderResourceView* mGBuffersSRVs[6];
+
 		// Render target views and shader resource views of
 		// textures used for postprocessing purposes
 		ID3D11RenderTargetView* mPostprocess1RTV;
@@ -57,6 +71,7 @@ namespace BRE {
 
 		std::vector<NormalDisplacementDrawer> mNormalDisplacementDrawer;
 		std::vector<NormalMappingDrawer> mNormalMappingDrawer;
+		std::vector<BasicDrawer> mBasicDrawer;
 		LightsDrawer mLightsDrawer;
 		StringDrawer mFrameRateDrawer;
 	};

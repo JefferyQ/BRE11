@@ -3,6 +3,7 @@
 #include <general/Camera.h>
 #include <input/Keyboard.h>
 #include <managers/DrawManager.h>
+#include <managers/MaterialManager.h>
 #include <rendering/GlobalResources.h>
 #include <rendering/shaders/lightPasses/DirLightPsData.h>
 #include <utils/Assert.h>
@@ -17,6 +18,7 @@ namespace {
 	const unsigned int sMaxShaderPointLights = 512;
 	const unsigned int sNumPointLightShaders = 8;
 
+	const char* sMaterialsFile = "content\\configs\\fullyDeferred\\materials.yml";
 	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";
 }
 
@@ -24,6 +26,7 @@ Scene::Scene() {
 	InitDirectionalLights();
 	InitPointLights();
 
+	BRE::MaterialManager::gInstance->LoadMaterials(sMaterialsFile);
 	BRE::DrawManager::gInstance->LoadModels(sSceneModelsFile);
 }
 
@@ -42,8 +45,8 @@ void Scene::InitDirectionalLights() {
 	std::vector<BRE::LightsDrawer::DirLightData>& dirLightDataVec = BRE::DrawManager::gInstance->DirLightDataVec();
 	dirLightDataVec.resize(1);
 	BRE::DirLightPixelShaderData& dirLightPsData = dirLightDataVec[0].mPixelShaderData;
-
-	mDirectionalLight.SetColor(0.4f, 0.4f, 0.4f);
+	 
+	mDirectionalLight.SetColor(5000.0f, 5000.0f, 5000.0f);
 	mDirectionalLight.ApplyRotation(XMMatrixRotationX(XM_PI / -2.0f));
 
 	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light();

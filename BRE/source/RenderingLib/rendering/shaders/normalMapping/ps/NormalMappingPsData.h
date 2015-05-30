@@ -34,7 +34,7 @@ namespace BRE {
 
 		struct CBufferPerFrameData {
 			DirectX::XMFLOAT4X4 mView;
-			float mFarClipPlaneDistance;;
+			float mFarClipPlaneDistance;
 		};
 		Buffer<CBufferPerFrameData> mCBuffer;
 

@@ -7,12 +7,12 @@
 #include <utils/Assert.h>
 
 namespace {
-	const char* sNormalMappingPS = "content\\shaders\\normalMapping\\NormalMappingPS.cso";
+	const char* shader = "content\\shaders\\normalMapping\\NormalMappingPS.cso";
 }
 
 namespace BRE {
 	NormalMappingPsData::NormalMappingPsData() {
-		ShadersManager::gInstance->LoadPixelShader(sNormalMappingPS, &mShader);
+		ShadersManager::gInstance->LoadPixelShader(shader, &mShader);
 		ASSERT_PTR(mShader);
 		InitializeCBuffers();
 	}

@@ -16,50 +16,49 @@ cbuffer CBufferPerFrame : register (b0) {
 SamplerState TexSampler : register (s0);
 
 Texture2D NormalTexture : register (t0);
-Texture2D DiffuseAlbedoTexture : register (t1);
-Texture2D SpecularAlbedoTexture : register (t2);
-Texture2D DepthTexture : register (t3);
+Texture2D BaseColorTexture : register (t1);
+Texture2D SmoothnessTexture : register (t2);
+Texture2D MetalMaskTexture : register (t3);
+Texture2D ReflectanceTexture : register (t4);
+Texture2D DepthTexture : register (t5);
 
 /*************** Functions *************************/
 // Helper function for extracting G-Buffer attributes
-void GetGBufferAttributes(in float2 screenPos, in float3 viewRayVS, out float3 normalVS, out float3 posVS, out float3 diffuseAlbedo, out float3 specularAlbedo, out float specularPower) {
+void GetGBufferAttributes(in float2 screenPos, in float3 viewRayVS, out float3 normalVS, out float3 posVS, out float3 baseColor) {
 	// Determine our indices for sampling the texture based on the current
 	// screen position
 	const int3 sampleIndices = int3(screenPos.xy, 0);
-	normalVS = Decode(NormalTexture.Load(sampleIndices).xy);
+	normalVS = NormalTexture.Load(sampleIndices).xyz;
 
 	const float depth = DepthTexture.Load(sampleIndices).x;
 	posVS = CameraPositionVS + depth * viewRayVS;
 
-	diffuseAlbedo = DiffuseAlbedoTexture.Load(sampleIndices).xyz;
-	const float4 spec = SpecularAlbedoTexture.Load(sampleIndices);
-	specularAlbedo = spec.xyz;
-	specularPower = spec.w * 255.0f;
+	baseColor = BaseColorTexture.Load(sampleIndices).rgb;
 }
 
 /********************* Shader *****************************/
 float4 main(const in PsInput IN) : SV_TARGET{
 	float3 normalVS;
 	float3 posVS;
-	float3 diffuseAlbedo;
-	float3 specularAlbedo;
-	float specularPower;
+	float3 baseColor;
 
 	// Sample the G-Buffer properties from the textures
-	GetGBufferAttributes(IN.PosCS.xy, IN.ViewRayVS, normalVS, posVS, diffuseAlbedo, specularAlbedo, specularPower);
+	GetGBufferAttributes(IN.PosCS.xy, IN.ViewRayVS, normalVS, posVS, baseColor);
 
-	PointLightContributionData data = (PointLightContributionData)0;
-	data.DiffuseColor = diffuseAlbedo;
-	data.SpecularColor = float4(specularAlbedo, specularPower);
-	data.Pos = posVS;
-	data.Normal = normalVS;
-	data.ViewDir = CameraPositionVS - posVS;
-	data.Light.Color = IN.LightColorAndRadius.xyz;
-	data.Light.Range = IN.LightColorAndRadius.w;
-	data.Light.Pos = IN.LightPosVS;
+	const float3 lightDir = IN.LightPosVS - posVS;
+	const float dist = length(lightDir);
+	const float attenuation = max(0.0f, 1.0f - (dist / IN.LightColorAndRadius.w));
 
-	float3 color = float3(0.0f, 0.0f, 0.0f);
-	computePointLightContribution(data, color);
+	const int3 sampleIndices = int3(IN.PosCS.xy, 0);
 
-	return float4(color, 1.0f);
+	const float3 metallic = 1.0f - MetalMaskTexture.Load(sampleIndices).x;
+
+	MaterialData data;
+	data.DiffuseColor = baseColor - baseColor * metallic;
+	data.SpecularColor = lerp(0.03f, baseColor, metallic);
+	data.Roughness = pow(1.0f - SmoothnessTexture.Load(sampleIndices).r, 2.0f);
+	data.ReflectanceAtNormalIncidence = ReflectanceTexture.Load(sampleIndices).x;
+	data.ReflectanceAtNormalIncidence *= data.ReflectanceAtNormalIncidence * 0.16f;
+	const float3 final = cook_torrance(normalVS, normalize(CameraPositionVS - posVS), normalize(lightDir), data) * IN.LightColorAndRadius.xyz * attenuation;
+	return float4(final, 1.0f);
 }

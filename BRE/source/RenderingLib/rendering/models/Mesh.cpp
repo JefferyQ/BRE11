@@ -37,16 +37,24 @@ namespace BRE {
 		
 
 		// Texture Coordinates
-		ASSERT_COND(mesh.GetNumUVChannels() == 1);
-		mTextureCoordinates.reserve(mesh.mNumVertices);
-		const aiVector3D* aiTextureCoordinates = mesh.mTextureCoords[0];
-		ASSERT_PTR(aiTextureCoordinates);
-		for (unsigned int j = 0; j < mesh.mNumVertices; j++) {
-			mTextureCoordinates.push_back(XMFLOAT3(reinterpret_cast<const float*>(&aiTextureCoordinates[j])));
+		if (mesh.HasTextureCoords(0)) {
+			ASSERT_COND(mesh.GetNumUVChannels() == 1);
+			mTextureCoordinates.reserve(mesh.mNumVertices);
+			const aiVector3D* aiTextureCoordinates = mesh.mTextureCoords[0];
+			ASSERT_PTR(aiTextureCoordinates);
+			for (unsigned int j = 0; j < mesh.mNumVertices; j++) {
+				mTextureCoordinates.push_back(XMFLOAT3(reinterpret_cast<const float*>(&aiTextureCoordinates[j])));
+			}
 		}
 
-		// No color support
-		ASSERT_COND(!mesh.GetNumColorChannels());
+		// Colors
+		if (mesh.HasVertexColors(0)) {
+			ASSERT_COND(mesh.GetNumColorChannels() == 1);
+			const aiColor4D* aiColors = mesh.mColors[0];
+			for (unsigned int j = 0; j < mesh.mNumVertices; j++) {
+				mColors.push_back(XMFLOAT4(reinterpret_cast<const float*>(&aiColors[j])));
+			}
+		}		
 
 		// We only allow triangles
 		ASSERT_COND(mesh.HasFaces());
@@ -70,9 +78,9 @@ namespace BRE {
 				mBiNormals.push_back(XMFLOAT3(reinterpret_cast<const float*>(&mesh.mBitangents[i])));
 			}
 		}
-		else {
+		/*else {
 			Utility::CalculateTangentArray(*this, mTangents);
-		}
+		}*/
 
 	}
 

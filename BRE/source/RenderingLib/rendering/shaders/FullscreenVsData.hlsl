@@ -16,6 +16,6 @@ cbuffer CBufferPerFrame : register (b0) {
 VS_OUTPUT main(const VS_INPUT IN) {
 	VS_OUTPUT OUT = (VS_OUTPUT)0;
 	OUT.PosCS = IN.PosCS;
-	OUT.ViewRayVS = float3(ScreenHeight * OUT.PosCS.x, ScreenWidth * OUT.PosCS.y, FarClipPlaneDistance);
+	OUT.ViewRayVS = float3((ScreenWidth /2.0f) * OUT.PosCS.x, (ScreenHeight / 2.0f) * OUT.PosCS.y, FarClipPlaneDistance);
 	return OUT;
 }

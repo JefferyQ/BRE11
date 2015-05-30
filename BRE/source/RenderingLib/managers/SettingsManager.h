@@ -15,7 +15,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include <utils/Assert.h>
-#include <utils/Utility.h>
+#include <utils/Hash.h>
 
 namespace BRE {
 	class SettingsManager {
@@ -54,9 +54,9 @@ namespace BRE {
 		ASSERT_PTR(attribute);
 
 		// Get hashes
-		const size_t fileHash = Utility::Hash(file);
-		const size_t categoryHash = Utility::Hash(category);
-		const size_t attrHash = Utility::Hash(attribute);
+		const size_t fileHash = Hash(file);
+		const size_t categoryHash = Hash(category);
+		const size_t attrHash = Hash(attribute);
 
 		// Get file
 		FileMap::const_iterator fileIt = mFileMap.find(fileHash);
@@ -87,9 +87,9 @@ namespace BRE {
 		ASSERT_PTR(attribute);
 
 		// Get hashes
-		const size_t fileHash = Utility::Hash(file);
-		const size_t categoryHash = Utility::Hash(category);
-		const size_t attrHash = Utility::Hash(attribute);
+		const size_t fileHash = Hash(file);
+		const size_t categoryHash = Hash(category);
+		const size_t attrHash = Hash(attribute);
 
 		// Get file
 		FileMap::const_iterator fileIt = mFileMap.find(fileHash);

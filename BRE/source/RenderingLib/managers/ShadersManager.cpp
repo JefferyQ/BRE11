@@ -5,7 +5,7 @@
 
 #include <utils/Assert.h>
 #include <utils/Memory.h>
-#include <utils/Utility.h>
+#include <utils/Hash.h>
 
 namespace BRE {
 	ShadersManager* ShadersManager::gInstance = nullptr;
@@ -43,7 +43,7 @@ namespace BRE {
 		ASSERT_PTR(filepath);
 		const bool createInputLayout = inputLayoutDesc != nullptr && descNumElems != nullptr;
 		ASSERT_COND(!createInputLayout || (createInputLayout && mInputLayouts.find(*filepath) == mInputLayouts.end()));
-		const size_t id = Utility::Hash(filepath);
+		const size_t id = Hash(filepath);
 		VertexShaders::const_iterator findIt = mVertexShaders.find(id);
 		if (findIt != mVertexShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -65,7 +65,7 @@ namespace BRE {
 
 	size_t ShadersManager::LoadPixelShader(const char* filepath, ID3D11PixelShader* *shader) {
 		ASSERT_PTR(filepath);
-		const size_t id = Utility::Hash(filepath);
+		const size_t id = Hash(filepath);
 		PixelShaders::const_iterator findIt = mPixelShaders.find(id);
 		if (findIt != mPixelShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -82,7 +82,7 @@ namespace BRE {
 
 	size_t ShadersManager::LoadHullShader(const char* filepath, ID3D11HullShader* *shader) {
 		ASSERT_PTR(filepath);
-		const size_t id = Utility::Hash(filepath);
+		const size_t id = Hash(filepath);
 		HullShaders::const_iterator findIt = mHullShaders.find(id);
 		if (findIt != mHullShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -99,7 +99,7 @@ namespace BRE {
 
 	size_t ShadersManager::LoadDomainShader(const char* filepath, ID3D11DomainShader* *shader) {
 		ASSERT_PTR(filepath);
-		const size_t id = Utility::Hash(filepath);
+		const size_t id = Hash(filepath);
 		DomainShaders::const_iterator findIt = mDomainShaders.find(id);
 		if (findIt != mDomainShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -116,7 +116,7 @@ namespace BRE {
 
 	size_t ShadersManager::LoadGeometryShader(const char* filepath, ID3D11GeometryShader* *shader) {
 		ASSERT_PTR(filepath);
-		const size_t id = Utility::Hash(filepath);
+		const size_t id = Hash(filepath);
 		GeometryShaders::const_iterator findIt = mGeometryShaders.find(id);
 		if (findIt != mGeometryShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -133,7 +133,7 @@ namespace BRE {
 
 	size_t ShadersManager::LoadComputeShader(const char* filepath, ID3D11ComputeShader* *shader) {
 		ASSERT_PTR(filepath);
-		const size_t id = Utility::Hash(filepath);
+		const size_t id = Hash(filepath);
 		ComputeShaders::const_iterator findIt = mComputeShaders.find(id);
 		if (findIt != mComputeShaders.end()) {
 			if (shader) *shader = findIt->second;

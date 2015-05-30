@@ -7,12 +7,12 @@
 #include <utils/Assert.h>
 
 namespace {
-	const char* sNormalDisplacementPS = "content\\shaders\\normalDisplacement\\NormalDisplacementPS.cso";
+	const char* shader = "content\\shaders\\normalDisplacement\\NormalDisplacementPS.cso";
 }
 
 namespace BRE {
 	NormalDisplacementPsData::NormalDisplacementPsData() {
-		ShadersManager::gInstance->LoadPixelShader(sNormalDisplacementPS, &mShader);
+		ShadersManager::gInstance->LoadPixelShader(shader, &mShader);
 		ASSERT_PTR(mShader);
 		InitializeCBuffers();
 	}

@@ -8,6 +8,7 @@
 #include <managers/ShadersManager.h>
 #include <managers/ShaderResourcesManager.h>
 #include <utils/Assert.h>
+#include <utils/Hash.h>
 
 using namespace DirectX;
 
@@ -44,7 +45,7 @@ namespace BRE {
 		ShadersManager::gInstance->LoadVertexShader(sShaderFile, inputElementDescriptions, &numElems, &mShader);
 		ASSERT_PTR(mShader);
 
-		mInputLayout = ShadersManager::gInstance->InputLayout(Utility::Hash(sShaderFile));
+		mInputLayout = ShadersManager::gInstance->InputLayout(Hash(sShaderFile));
 		ASSERT_PTR(mInputLayout);
 	}
 
@@ -67,9 +68,9 @@ namespace BRE {
 
 	void FullscreenVertexShaderData::InitializeGeometryBuffers() {
 		const char* vertexBufferName = "FullscreenVertexShaderData_vertex_buffer";
-		const size_t vertexBufferId = Utility::Hash(vertexBufferName);
+		const size_t vertexBufferId = Hash(vertexBufferName);
 		const char* indexBufferName = "FullscreenVertexShaderData_index_buffer";
-		const size_t indexBufferId = Utility::Hash(indexBufferName);
+		const size_t indexBufferId = Hash(indexBufferName);
 		mVertexBuffer = ShaderResourcesManager::gInstance->Buffer(vertexBufferId);
 		if (mVertexBuffer) {
 			mIndexBuffer = ShaderResourcesManager::gInstance->Buffer(indexBufferId);

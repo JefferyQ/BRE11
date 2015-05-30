@@ -130,17 +130,6 @@ namespace BRE {
 			return (random * range) + min;
 		}
 
-		size_t Hash(const char* str) {
-			ASSERT_PTR(str);
-
-			size_t hashValue = 0;
-			while (*str) {
-				hashValue = hashValue * 101 + static_cast<size_t> (*str++);
-			}
-
-			return hashValue;
-		}
-
 		void SaveTextureToFile(ID3D11DeviceContext1& device, ID3D11Texture2D* texture, const wchar_t* destFilename) {
 			ASSERT_PTR(texture);
 			ASSERT_PTR(destFilename);
