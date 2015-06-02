@@ -16,7 +16,7 @@ namespace BRE {
 	public:
 		DirLightPixelShaderData();
 
-		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[6]);
+		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* *geometryBuffersSRVs);
 		void PostDraw(ID3D11DeviceContext1& context);
 
 		DirectionalLightData& Light() { return mCBuffer.mData.mLight; }

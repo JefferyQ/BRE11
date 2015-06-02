@@ -160,9 +160,7 @@ namespace BRE {
 			BACK_BUFFER,
 			NORMAL,
 			BASE_COLOR,
-			SMOOTHNESS,
-			METAL_MASK,
-			REFLECTANCE
+			SMOOTHNESS_METALMASK_REFLECTANCE,
 		} renderMode = BACK_BUFFER;
 		if (Keyboard::gInstance->IsKeyDown(DIK_1)) {
 			renderMode = BACK_BUFFER;
@@ -174,13 +172,7 @@ namespace BRE {
 			renderMode = BASE_COLOR;
 		}
 		else if (Keyboard::gInstance->IsKeyDown(DIK_4)) {
-			renderMode = SMOOTHNESS;
-		}
-		else if (Keyboard::gInstance->IsKeyDown(DIK_5)) {
-			renderMode = METAL_MASK;
-		}
-		else if (Keyboard::gInstance->IsKeyDown(DIK_6)) {
-			renderMode = REFLECTANCE;
+			renderMode = SMOOTHNESS_METALMASK_REFLECTANCE;
 		}
 
 		RenderStateHelper::gInstance->SaveAll();
@@ -226,14 +218,8 @@ namespace BRE {
 			else if (renderMode == BASE_COLOR) {
 				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_base_color"));
 			}
-			else if (renderMode == SMOOTHNESS) {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_smoothness"));
-			}
-			else if (renderMode == METAL_MASK) {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_metal_mask"));
-			}
 			else {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_reflectance"));
+				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_smoothness_metalmask_reflectance"));
 			}
 
 			ASSERT_PTR(texture);
@@ -364,53 +350,29 @@ namespace BRE {
 		textureDesc[1].SampleDesc.Count = 1;
 		textureDesc[1].SampleDesc.Quality = 0;
 
-		// Smoothness texture desc
+		// Smoothness_MetalMask_Reflectance texture desc
 		ZeroMemory(&textureDesc[2], sizeof(textureDesc[2]));
 		textureDesc[2].Width = screenWidth;
 		textureDesc[2].Height = screenHeight;
 		textureDesc[2].MipLevels = 1;
 		textureDesc[2].ArraySize = 1;
-		textureDesc[2].Format = DXGI_FORMAT_R8_UNORM;
+		textureDesc[2].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		textureDesc[2].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[2].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[2].SampleDesc.Count = 1;
 		textureDesc[2].SampleDesc.Quality = 0;
 
-		// Metal mask texture desc
+		// Depth texture description
 		ZeroMemory(&textureDesc[3], sizeof(textureDesc[3]));
 		textureDesc[3].Width = screenWidth;
 		textureDesc[3].Height = screenHeight;
 		textureDesc[3].MipLevels = 1;
 		textureDesc[3].ArraySize = 1;
-		textureDesc[3].Format = DXGI_FORMAT_R8_UNORM;
+		textureDesc[3].Format = DXGI_FORMAT_R16_UNORM;
 		textureDesc[3].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[3].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[3].SampleDesc.Count = 1;
 		textureDesc[3].SampleDesc.Quality = 0;
-
-		// Reflectance texture desc
-		ZeroMemory(&textureDesc[4], sizeof(textureDesc[4]));
-		textureDesc[4].Width = screenWidth;
-		textureDesc[4].Height = screenHeight;
-		textureDesc[4].MipLevels = 1;
-		textureDesc[4].ArraySize = 1;
-		textureDesc[4].Format = DXGI_FORMAT_R8_UNORM;
-		textureDesc[4].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		textureDesc[4].Usage = D3D11_USAGE_DEFAULT;
-		textureDesc[4].SampleDesc.Count = 1;
-		textureDesc[4].SampleDesc.Quality = 0;
-
-		// Depth texture description
-		ZeroMemory(&textureDesc[5], sizeof(textureDesc[5]));
-		textureDesc[5].Width = screenWidth;
-		textureDesc[5].Height = screenHeight;
-		textureDesc[5].MipLevels = 1;
-		textureDesc[5].ArraySize = 1;
-		textureDesc[5].Format = DXGI_FORMAT_R16_UNORM;
-		textureDesc[5].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		textureDesc[5].Usage = D3D11_USAGE_DEFAULT;
-		textureDesc[5].SampleDesc.Count = 1;
-		textureDesc[5].SampleDesc.Quality = 0;
 
 		//
 		// Texture id's
@@ -418,9 +380,7 @@ namespace BRE {
 		const char* textureIds[numTextures] = {
 			"gbuffers_normal",
 			"gbuffers_base_color",
-			"gbuffers_smoothness",
-			"gbuffers_metal_mask",
-			"gbuffers_reflectance",
+			"gbuffers_smoothness_metalmask_reflectance",
 			"gbuffers_depth",
 		};
 

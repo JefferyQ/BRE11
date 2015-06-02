@@ -51,11 +51,9 @@ namespace BRE {
 		up = XMVector3Normalize(up);
 
 		XMVECTOR right = XMVector3Cross(up, direction);
-		right = XMVector3Normalize(right);
 		XMStoreFloat3(&mRight, right);
 
 		up = XMVector3Cross(direction, right);
-		up = XMVector3Normalize(up);
 		XMStoreFloat3(&mUp, up);
 	}
 

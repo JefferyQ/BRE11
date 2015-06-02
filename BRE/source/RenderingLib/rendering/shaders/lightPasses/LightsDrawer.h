@@ -33,7 +33,7 @@ namespace BRE {
 		std::vector<DirLightData>& DirLightDataVec() { return mDirLightDataVec; }
 		std::vector<PointLightData>& PointLightDataVec() { return mPointLightDataVec; }
 
-		void Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[6], const float farClipPlaneDistance, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj);
+		void Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* *geometryBuffersSRVs, const float farClipPlaneDistance, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj);
 
 	private:
 		void InitStates();

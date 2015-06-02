@@ -10,10 +10,8 @@ struct VS_OUTPUT {
 struct PS_OUTPUT {
 	float3 NormalVS : SV_Target0;
 	float3 BaseColor : SV_Target1;
-	float Smoothness : SV_Target2;
-	float MetalMask : SV_Target3;
-	float Reflectance : SV_Target4;
-	float DepthVS : SV_Target5;
+	float4 Smoothness_MetalMask_Reflectance : SV_Target2;
+	float DepthVS : SV_Target3;
 };
 
 cbuffer cbPerFrame : register (b0) {
@@ -34,9 +32,9 @@ PS_OUTPUT main(VS_OUTPUT IN) {
 
 	OUT.NormalVS = MapNormal(normalize(IN.NormalVS));
 	OUT.BaseColor = BaseColorTexture.Sample(TexSampler, float2(0.0f, 0.0f)).rgb;
-	OUT.Smoothness = SmoothnessTexture.Sample(TexSampler, float2(0.0f, 0.0f)).x;
-	OUT.MetalMask = MetalMaskTexture.Sample(TexSampler, float2(0.0f, 0.0f)).x;
-	OUT.Reflectance = ReflectanceTexture.Sample(TexSampler, float2(0.0f, 0.0f)).x;
+	OUT.Smoothness_MetalMask_Reflectance.x = SmoothnessTexture.Sample(TexSampler, float2(0.0f, 0.0f)).x;
+	OUT.Smoothness_MetalMask_Reflectance.y = MetalMaskTexture.Sample(TexSampler, float2(0.0f, 0.0f)).x;
+	OUT.Smoothness_MetalMask_Reflectance.z = ReflectanceTexture.Sample(TexSampler, float2(0.0f, 0.0f)).x;
 	OUT.DepthVS = IN.DepthVS / FarClipPlaneDistance;
 
 	return OUT;

@@ -17,7 +17,7 @@ namespace BRE {
 	public:
 		BasicPsData();
 
-		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[4]);
+		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs);
 		void PostDraw(ID3D11DeviceContext1& context);
 
 		float& FarClipPlaneDistance() { return mCBuffer.mData.mFarClipPlaneDistance; }

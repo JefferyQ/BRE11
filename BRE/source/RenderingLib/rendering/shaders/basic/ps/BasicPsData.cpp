@@ -9,6 +9,7 @@
 
 namespace {
 	const char* shader = "content\\shaders\\basic\\BasicPS.cso";
+	const size_t sNumGBuffers = 4;
 }
 
 namespace BRE {
@@ -48,15 +49,13 @@ namespace BRE {
 		ASSERT_PTR(mReflectanceSRV);
 	}
 
-	void BasicPsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[6]) {
-		// Set shader
+	void BasicPsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
 		ASSERT_PTR(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 		
 		ID3D11ShaderResourceView* const srvs[] = { mBaseColorSRV, mSmoothnessSRV, mMetalMaskSRV, mReflectanceSRV };
 		context.PSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
 
-		// Set constant buffers
 		mCBuffer.CopyDataToBuffer(device);
 		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
 		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
@@ -64,9 +63,8 @@ namespace BRE {
 		ID3D11SamplerState* const samplerStates[] = { mSampler };
 		context.PSSetSamplers(0, ARRAYSIZE(samplerStates), samplerStates);
 
-		// Set render targets
 		context.OMGetRenderTargets(1, &mDefaultRTV, &mDefaultDSV);
-		context.OMSetRenderTargets(6, geometryBuffersRTVs, mDefaultDSV);
+		context.OMSetRenderTargets(sNumGBuffers, geometryBuffersRTVs, mDefaultDSV);
 	}
 
 	void BasicPsData::PostDraw(ID3D11DeviceContext1& context) {
@@ -81,7 +79,7 @@ namespace BRE {
 		ID3D11SamplerState* const samplerStates[] = { nullptr };
 		context.PSSetSamplers(0, ARRAYSIZE(samplerStates), samplerStates);
 
-		ID3D11RenderTargetView* rtvs[6];
+		ID3D11RenderTargetView* rtvs[sNumGBuffers];
 		ZeroMemory(rtvs, sizeof(ID3D11RenderTargetView*) * ARRAYSIZE(rtvs));
 		rtvs[0] = mDefaultRTV;
 		context.OMSetRenderTargets(ARRAYSIZE(rtvs), rtvs, mDefaultDSV);

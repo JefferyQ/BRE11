@@ -13,7 +13,7 @@
 using namespace DirectX;
 
 namespace {
-	const XMFLOAT2 sLightRotationRate(XM_PI / 4.0f, XM_PI / 4.0f);
+	const XMFLOAT2 sLightRotationRate(XM_PI / 4.0f, XM_PI / 4.0f); 
 
 	const unsigned int sMaxShaderPointLights = 512;
 	const unsigned int sNumPointLightShaders = 8; 
@@ -37,23 +37,23 @@ void Scene::Update(const float elapsedTime) {
 	// Directional
 	std::vector<BRE::LightsDrawer::DirLightData>& dirLightDataVec = BRE::DrawManager::gInstance->DirLightDataVec();
 	for (BRE::LightsDrawer::DirLightData& data : dirLightDataVec) {
-		data.mPixelShaderData.Light().mDirection = mDirectionalLight.Direction();     
+		data.mPixelShaderData.Light().mDirection = mDirectionalLight.Direction();      
 	}  
 }
 
 void Scene::InitDirectionalLights() {  
-	std::vector<BRE::LightsDrawer::DirLightData>& dirLightDataVec = BRE::DrawManager::gInstance->DirLightDataVec(); 
-	dirLightDataVec.resize(1);
-	BRE::DirLightPixelShaderData& dirLightPsData = dirLightDataVec[0].mPixelShaderData;     
+	std::vector<BRE::LightsDrawer::DirLightData>& dirLightDataVec = BRE::DrawManager::gInstance->DirLightDataVec();       
+	dirLightDataVec.resize(1); 
+	BRE::DirLightPixelShaderData& dirLightPsData = dirLightDataVec[0].mPixelShaderData;        
 	 
 	mDirectionalLight.SetColor(3.0f, 3.0f, 3.0f);
-	mDirectionalLight.ApplyRotation(XMMatrixRotationX(XM_PI / -2.0f));    
+	mDirectionalLight.ApplyRotation(XMMatrixRotationX(XM_PI / -2.0f));       
 
 	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light();
 	dirLightData.mColor = mDirectionalLight.Color(); 
 	dirLightData.mDirection = mDirectionalLight.Direction();
 
-	dirLightPsData.SamplerState() = BRE::GlobalResources::gInstance->MinMagMipPointSampler();
+	dirLightPsData.SamplerState() = BRE::GlobalResources::gInstance->MinMagMipPointSampler(); 
 }
 
 void Scene::InitPointLights() {

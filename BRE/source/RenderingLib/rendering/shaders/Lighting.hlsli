@@ -109,7 +109,7 @@ float3 cook_torrance(const float3 N, const float3 V, const float3 L, const Mater
 
 	const float3 H = normalize(V + L);
 
-	const float dotNL = saturate(dot(N, L));
+	const float dotNL = abs(dot(N, L)) + 1e-5f;
 	const float dotNV = saturate(dot(N, V));
 	const float dotNH = saturate(dot(N, H));
 	const float dotLH = saturate(dot(L, H));
