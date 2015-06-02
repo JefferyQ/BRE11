@@ -1,7 +1,13 @@
 models:
   - renderType: Basic
     path: "content\\models\\bunny.obj"
-    translation: [0.0, 0.0, 0.0]
+    translation: [-200.0, 0.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
     scaling: [150.0, 150.0, 150.0]
     material: "gold"
+  - renderType: Basic
+    path: "content\\models\\bunny.obj"
+    translation: [200.0, 0.0, 0.0]
+    rotation: [0.0, 0.0, 0.0]
+    scaling: [150.0, 150.0, 150.0]
+    material: "aluminium"

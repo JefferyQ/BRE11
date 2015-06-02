@@ -19,7 +19,6 @@ namespace BRE {
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[6]);
 		void PostDraw(ID3D11DeviceContext1& context);
 
-		DirectX::XMFLOAT3& CameraPosVS() { return mCBuffer.mData.mCameraPosVS; }
 		DirectionalLightData& Light() { return mCBuffer.mData.mLight; }
 		ID3D11SamplerState* & SamplerState() { return mSampler; }
 
@@ -30,7 +29,6 @@ namespace BRE {
 
 		struct CBufferPerFrameData {
 			DirectionalLightData mLight;
-			DirectX::XMFLOAT3 mCameraPosVS;
 		};
 		Buffer<CBufferPerFrameData> mCBuffer;
 

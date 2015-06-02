@@ -11,15 +11,14 @@
 using namespace DirectX;
 
 namespace BRE {
-	void LightsDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[6], const unsigned int screenWidth, const unsigned int screenHeight, const float farClipPlaneDistance, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj, const DirectX::XMVECTOR cameraPos) {
+	void LightsDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* geometryBuffersSRVs[6], const float farClipPlaneDistance, const XMMATRIX& view, const XMMATRIX& proj) {
 		context.OMSetBlendState(mDefaultBS, nullptr, UINT32_MAX);
 		context.OMSetDepthStencilState(mDisableDepthTestDSS, UINT32_MAX);
 
+		const XMMATRIX invProj = XMMatrixInverse(nullptr, proj);
+
 		for (DirLightData& data : mDirLightDataVec) {
-			data.mVertexShaderData.ScreenWidth() = screenWidth;
-			data.mVertexShaderData.ScreenHeight() = screenHeight;
-			data.mVertexShaderData.FarClipPlaneDistance() = farClipPlaneDistance;
-			XMStoreFloat3(&data.mPixelShaderData.CameraPosVS(), XMVector3Transform(cameraPos, view));
+			XMStoreFloat4x4(&data.mVertexShaderData.InvProjMatrix(), invProj);
 			data.mVertexShaderData.PreDraw(device, context);
 			data.mPixelShaderData.PreDraw(device, context, geometryBuffersSRVs);
 			data.mVertexShaderData.DrawIndexed(context);
@@ -34,7 +33,6 @@ namespace BRE {
 			data.mPointLightGsData.FarClipPlaneDistance() = farClipPlaneDistance;
 
 			data.mPointLightPsData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
-			XMStoreFloat3(&data.mPointLightPsData.CameraPosVS(), XMVector3Transform(cameraPos, view));
 
 			data.mPointLightVsData.PreDraw(device, context);
 			data.mPointLightGsData.PreDraw(device, context);

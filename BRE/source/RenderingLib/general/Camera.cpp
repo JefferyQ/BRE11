@@ -50,10 +50,12 @@ namespace BRE {
 		up = XMVector3TransformNormal(up, transform);
 		up = XMVector3Normalize(up);
 
-		XMVECTOR right = XMVector3Cross(direction, up);
+		XMVECTOR right = XMVector3Cross(up, direction);
+		right = XMVector3Normalize(right);
 		XMStoreFloat3(&mRight, right);
 
-		up = XMVector3Cross(right, direction);
+		up = XMVector3Cross(direction, right);
+		up = XMVector3Normalize(up);
 		XMStoreFloat3(&mUp, up);
 	}
 
@@ -67,26 +69,25 @@ namespace BRE {
 			movementAmount.y = -movementFactor;
 		}
 		if (Keyboard::gInstance->IsKeyDown(DIK_A)) {
-			movementAmount.x = movementFactor;
+			movementAmount.x = -movementFactor;
 		}
 		if (Keyboard::gInstance->IsKeyDown(DIK_D)) {
-			movementAmount.x = -movementFactor;
+			movementAmount.x = movementFactor;
 		}
 
 		XMFLOAT2 rotationAmount = ZERO_VECTOR2;
 		if (Mouse::gInstance->IsButtonHeldDown(Mouse::MouseButtonsLeft)) {
 			const DIMOUSESTATE& mouseState = Mouse::gInstance->CurrentState();
 			rotationAmount.x = mouseState.lX * mMouseSensitivity;
-			rotationAmount.y = -mouseState.lY * mMouseSensitivity;
+			rotationAmount.y = mouseState.lY * mMouseSensitivity;
 		}
 		const XMVECTOR rotationVector = XMLoadFloat2(&rotationAmount) * mRotationRate * elapsedTime;
-		const XMVECTOR right = XMLoadFloat3(&mRight);
-		const XMMATRIX pitchMatrix = XMMatrixRotationAxis(right, XMVectorGetY(rotationVector));
+		const XMMATRIX pitchMatrix = XMMatrixRotationAxis(XMLoadFloat3(&mRight), XMVectorGetY(rotationVector));
 		const XMMATRIX yawMatrix = XMMatrixRotationY(XMVectorGetX(rotationVector));
 		ApplyRotation(XMMatrixMultiply(pitchMatrix, yawMatrix));
 		XMVECTOR position = XMLoadFloat3(&mPosition);
 		const XMVECTOR movement = XMLoadFloat2(&movementAmount) * mMovementRate * elapsedTime;
-		const XMVECTOR strafe = right * XMVectorGetX(movement);
+		const XMVECTOR strafe = XMLoadFloat3(&mRight) * XMVectorGetX(movement);
 		position += strafe;
 		const XMVECTOR forward = XMLoadFloat3(&mDirection) * XMVectorGetY(movement);
 		position += forward;

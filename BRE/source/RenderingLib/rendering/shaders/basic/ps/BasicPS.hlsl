@@ -3,21 +3,20 @@
 /*******************  Data  *************************/
 struct VS_OUTPUT {
 	float4 PosCS : SV_Position;
-	float3 NormalWS : NORMAL;
+	float3 NormalVS : NORMAL;
 	float DepthVS : DEPTH_VIEW_SPACE;
 };
 
 struct PS_OUTPUT {
 	float3 NormalVS : SV_Target0;
-	float4 BaseColor : SV_Target1;
-	float4 Smoothness : SV_Target2;
-	float4 MetalMask : SV_Target3;
-	float4 Reflectance : SV_Target4;
+	float3 BaseColor : SV_Target1;
+	float Smoothness : SV_Target2;
+	float MetalMask : SV_Target3;
+	float Reflectance : SV_Target4;
 	float DepthVS : SV_Target5;
 };
 
 cbuffer cbPerFrame : register (b0) {
-	float4x4 View;
 	float FarClipPlaneDistance;
 };
 
@@ -33,11 +32,11 @@ Texture2D ReflectanceTexture : register (t3);
 PS_OUTPUT main(VS_OUTPUT IN) {
 	PS_OUTPUT OUT = (PS_OUTPUT)0;
 
-	OUT.NormalVS = normalize(mul(float4(normalize(IN.NormalWS), 0.0f), View).xyz);
-	OUT.BaseColor = BaseColorTexture.Sample(TexSampler, float2(0.0f, 0.0f));
-	OUT.Smoothness = SmoothnessTexture.Sample(TexSampler, float2(0.0f, 0.0f));
-	OUT.MetalMask = MetalMaskTexture.Sample(TexSampler, float2(0.0f, 0.0f));
-	OUT.Reflectance = ReflectanceTexture.Sample(TexSampler, float2(0.0f, 0.0f));
+	OUT.NormalVS = MapNormal(normalize(IN.NormalVS));
+	OUT.BaseColor = BaseColorTexture.Sample(TexSampler, float2(0.0f, 0.0f)).rgb;
+	OUT.Smoothness = SmoothnessTexture.Sample(TexSampler, float2(0.0f, 0.0f)).x;
+	OUT.MetalMask = MetalMaskTexture.Sample(TexSampler, float2(0.0f, 0.0f)).x;
+	OUT.Reflectance = ReflectanceTexture.Sample(TexSampler, float2(0.0f, 0.0f)).x;
 	OUT.DepthVS = IN.DepthVS / FarClipPlaneDistance;
 
 	return OUT;

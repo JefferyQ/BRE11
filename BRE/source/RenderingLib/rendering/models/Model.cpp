@@ -19,11 +19,7 @@ namespace BRE {
 	{
 		ASSERT_PTR(filename);
 		Assimp::Importer importer;
-#if defined(DEBUG) || defined(_DEBUG)
-		const unsigned int flags = aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded;
-#else
 		const unsigned int flags = aiProcessPreset_TargetRealtime_Fast | aiProcess_ConvertToLeftHanded;
-#endif
 		const aiScene* scene = importer.ReadFile(filename, flags);
 		if (!scene) {
 			const char* errorMsg = importer.GetErrorString();

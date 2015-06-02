@@ -35,13 +35,6 @@ namespace BRE {
 	}
 
 	size_t MaterialManager::AddMaterial(const InputData& data, MaterialData* material) {
-		ASSERT_PTR(data.mName);
-		ASSERT_PTR(data.mNormalTexturePath);
-		ASSERT_PTR(data.mBaseColorTexturePath);
-		ASSERT_PTR(data.mSmoothnessTexturePath);
-		ASSERT_PTR(data.mMetalMaskTexturePath);
-		ASSERT_PTR(data.mReflectanceTexturePath);
-
 		const size_t id = Hash(data.mName.c_str());
 		ASSERT_COND(mMaterialDataIdById.find(id) == mMaterialDataIdById.end());
 		

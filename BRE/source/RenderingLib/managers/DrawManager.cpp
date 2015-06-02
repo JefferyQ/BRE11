@@ -155,7 +155,7 @@ namespace BRE {
 		}
 	}
 
-	void DrawManager::DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView, const unsigned int screenWidth, const unsigned int screenHeight) {
+	void DrawManager::DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView) {
 		static enum RenderMode {
 			BACK_BUFFER,
 			NORMAL,
@@ -214,7 +214,7 @@ namespace BRE {
 		}
 
 		if (renderMode == BACK_BUFFER) {
-			mLightsDrawer.Draw(device, context, mGBuffersSRVs, screenWidth, screenHeight, farClipPlaneDistance, view, proj, Camera::gInstance->PositionVector());
+			mLightsDrawer.Draw(device, context, mGBuffersSRVs, farClipPlaneDistance, view, proj);
 		}
 		else {
 			ID3D11Texture2D* texture;
@@ -370,7 +370,7 @@ namespace BRE {
 		textureDesc[2].Height = screenHeight;
 		textureDesc[2].MipLevels = 1;
 		textureDesc[2].ArraySize = 1;
-		textureDesc[2].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		textureDesc[2].Format = DXGI_FORMAT_R8_UNORM;
 		textureDesc[2].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[2].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[2].SampleDesc.Count = 1;
@@ -382,7 +382,7 @@ namespace BRE {
 		textureDesc[3].Height = screenHeight;
 		textureDesc[3].MipLevels = 1;
 		textureDesc[3].ArraySize = 1;
-		textureDesc[3].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		textureDesc[3].Format = DXGI_FORMAT_R8_UNORM;
 		textureDesc[3].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[3].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[3].SampleDesc.Count = 1;
@@ -394,7 +394,7 @@ namespace BRE {
 		textureDesc[4].Height = screenHeight;
 		textureDesc[4].MipLevels = 1;
 		textureDesc[4].ArraySize = 1;
-		textureDesc[4].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		textureDesc[4].Format = DXGI_FORMAT_R8_UNORM;
 		textureDesc[4].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[4].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[4].SampleDesc.Count = 1;

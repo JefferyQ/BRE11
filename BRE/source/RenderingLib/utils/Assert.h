@@ -7,6 +7,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include <cstdlib>
+#include <iostream>
 
 // Asserts for pointers (pointer != nullptr)
 // No effect in Release mode.
@@ -54,8 +55,19 @@
 
 // Assert to check HRESULT's
 // It keeps function call in Debug and Release modes
-#if defined(DEBUG) || defined(_DEBUG)
-#define ASSERT_HR(function) ASSERT_COND(FAILED(function) == false);
+#if defined(_DEBUG) || defined(DEBUG)
+#ifndef ASSERT_HR
+#define ASSERT_HR(x){																\
+		HRESULT hr = (x);														\
+		if(FAILED(hr)){															\
+			std::cout << "An error occured on line" << (DWORD)__LINE__ << " in the file " << __FILE__ << std::endl; \
+			std::cout << hr << std::endl; \
+			abort(); \
+		}																		\
+	}
+#endif
 #else
-#define ASSERT_HR(function) (function)
+#ifndef ASSERT_HR
+#define ASSERT_HR(x) (x)
+#endif
 #endif

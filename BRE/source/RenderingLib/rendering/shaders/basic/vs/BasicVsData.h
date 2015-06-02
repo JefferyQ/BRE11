@@ -22,7 +22,6 @@ namespace BRE {
 
 		DirectX::XMFLOAT4X4& WorldViewProjection() { return mCBuffer.mData.mWorldViewProjection; }
 		DirectX::XMFLOAT4X4& WorldView() { return mCBuffer.mData.mWorldView; }
-		DirectX::XMFLOAT4X4& World() { return mCBuffer.mData.mWorld; }
 
 		ID3D11Buffer* &VertexBuffer() { return mVertexBuffer; }
 		ID3D11Buffer* &IndexBuffer() { return mIndexBuffer; }
@@ -38,7 +37,6 @@ namespace BRE {
 		struct CBufferPerFrameData {
 			DirectX::XMFLOAT4X4 mWorldViewProjection;
 			DirectX::XMFLOAT4X4 mWorldView;
-			DirectX::XMFLOAT4X4 mWorld;
 		};
 		Buffer<CBufferPerFrameData> mCBuffer;
 

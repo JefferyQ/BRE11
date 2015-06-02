@@ -138,9 +138,6 @@
     <ClCompile Include="managers\DrawManager.cpp">
       <Filter>managers</Filter>
     </ClCompile>
-    <ClCompile Include="rendering\shaders\FullscreenVsData.cpp">
-      <Filter>rendering\shaders</Filter>
-    </ClCompile>
     <ClCompile Include="rendering\shaders\filters\FiltersVsData.cpp">
       <Filter>rendering\shaders\filters</Filter>
     </ClCompile>
@@ -237,6 +234,9 @@
     <ClCompile Include="utils\Hash.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="rendering\shaders\lightPasses\DirLightVsData.cpp">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input\Keyboard.h">
@@ -304,9 +304,6 @@
     </ClInclude>
     <ClInclude Include="managers\DrawManager.h">
       <Filter>managers</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\shaders\FullscreenVsData.h">
-      <Filter>rendering\shaders</Filter>
     </ClInclude>
     <ClInclude Include="rendering\shaders\filters\FiltersVsData.h">
       <Filter>rendering\shaders\filters</Filter>
@@ -404,6 +401,9 @@
     <ClInclude Include="utils\YamlUtils.h">
       <Filter>utils</Filter>
     </ClInclude>
+    <ClInclude Include="rendering\shaders\lightPasses\DirLightVsData.h">
+      <Filter>rendering\shaders\lightPasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="doc\LightingModels.txt">
@@ -439,9 +439,6 @@
     </FxCompile>
     <FxCompile Include="rendering\shaders\filters\sepia\SepiaFilterPS.hlsl">
       <Filter>rendering\shaders\filters\sepia</Filter>
-    </FxCompile>
-    <FxCompile Include="rendering\shaders\FullscreenVsData.hlsl">
-      <Filter>rendering\shaders</Filter>
     </FxCompile>
     <FxCompile Include="rendering\shaders\filters\FiltersVS.hlsl">
       <Filter>rendering\shaders\filters</Filter>
@@ -487,6 +484,9 @@
     </FxCompile>
     <FxCompile Include="rendering\shaders\basic\vs\BasicVS.hlsl">
       <Filter>rendering\shaders\basic\vs</Filter>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\lightPasses\DirLightVS.hlsl">
+      <Filter>rendering\shaders\lightPasses</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
