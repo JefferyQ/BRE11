@@ -2,6 +2,7 @@
 
 #include <DirectXMath.h>
 
+#include <rendering/shaders/Buffer.h>
 #include <utils/Assert.h>
 
 struct ID3D11Buffer;
@@ -22,12 +23,19 @@ namespace BRE {
 		ID3D11Buffer* &VertexBuffer() { return mVertexBuffer; }
 		ID3D11Buffer* &IndexBuffer() { return mIndexBuffer; }
 		void SetIndexCount(const unsigned int indexCount) { ASSERT_COND(indexCount > 0); mIndexCount = indexCount; }
+		float& TextureScaleFactor() { return mCBuffer.mData.mTextureScaleFactor; }
 
 	private:
 		void InitializeShader();
+		void InitializeCBuffers();
 
 		ID3D11InputLayout* mInputLayout;
 		ID3D11VertexShader* mShader;
+
+		struct CBufferPerFrameData {
+			float mTextureScaleFactor;
+		};
+		Buffer<CBufferPerFrameData> mCBuffer;
 
 		ID3D11Buffer* mVertexBuffer;
 		ID3D11Buffer* mIndexBuffer;

@@ -26,6 +26,7 @@ private:
 	void InitPointLights();
 
 	void UpdateDirectionalLight(const float elapsedTime);
+	void UpdatePointLights(const float elapsedTime);
 
 	BRE::DirectionalLight mDirectionalLight;
 	BRE::PositionUpdater mPosUpdater;

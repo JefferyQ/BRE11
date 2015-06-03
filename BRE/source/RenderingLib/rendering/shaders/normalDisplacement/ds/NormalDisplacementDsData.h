@@ -18,9 +18,8 @@ namespace BRE {
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context);
 		void PostDraw(ID3D11DeviceContext1& context);
 
-		DirectX::XMFLOAT4X4& ViewProjection() { return mCBuffer.mData.mViewProjection; }
-		DirectX::XMFLOAT4X4& View() { return mCBuffer.mData.mView; }
-		DirectX::XMFLOAT4X4& World() { return mCBuffer.mData.mWorld; }
+		DirectX::XMFLOAT4X4& Projection() { return mCBuffer.mData.mProj; }
+		DirectX::XMFLOAT4X4& WorldView() { return mCBuffer.mData.mWorldView; }
 		float& DisplacementScale() { return mCBuffer.mData.mDisplacementScale; }
 		ID3D11ShaderResourceView* &DisplacementMapSRV() { return mDisplacementMapSRV; }
 		ID3D11SamplerState* &SamplerState() { return mSampler; }
@@ -31,9 +30,8 @@ namespace BRE {
 		ID3D11DomainShader* mShader;
 
 		struct CBufferPerFrameData {
-			DirectX::XMFLOAT4X4 mViewProjection;
-			DirectX::XMFLOAT4X4 mView;
-			DirectX::XMFLOAT4X4 mWorld;
+			DirectX::XMFLOAT4X4 mProj;
+			DirectX::XMFLOAT4X4 mWorldView;
 			float mDisplacementScale;
 		};
 		Buffer<CBufferPerFrameData> mCBuffer;

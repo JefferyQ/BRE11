@@ -15,18 +15,17 @@ struct HS_OUTPUT {
 
 struct DS_OUTPUT {
 	float4 PosCS : SV_Position;
-	float3 NormalWS : NORMAL;
+	float3 NormalVS : NORMAL;
 	float DepthVS : DEPTH_VIEW_SPACE;
 	float2 TexCoord : TEXCOORD0;
-	float3 TangentWS : TANGENT;
-	float3 BinormalWS : BINORMAL;
+	float3 TangentVS : TANGENT;
+	float3 BinormalVS : BINORMAL;
 };
 
 /*******************  Resources  *************************/
 cbuffer CBufferPerFrame : register (b0) {
-	float4x4 ViewProj;
-	float4x4 View;
-	float4x4 World;
+	float4x4 Proj;
+	float4x4 WorldView;
 	float DisplacementScale;
 }
 
@@ -39,23 +38,22 @@ Texture2D DisplacementMap : register (t0);
 DS_OUTPUT main(const HS_CONSTANT_OUTPUT IN, const float3 uvw : SV_DomainLocation, const OutputPatch <HS_OUTPUT, NUM_PATCH_POINTS> patch) {
 	DS_OUTPUT OUT = (DS_OUTPUT)0;
 
-	// Compute tex coordinate
 	OUT.TexCoord = uvw.x * patch[0].TexCoord + uvw.y * patch[1].TexCoord + uvw.z * patch[2].TexCoord;
 
-	// Compute world normal
 	const float3 normalOS = normalize(uvw.x * patch[0].NormalOS + uvw.y * patch[1].NormalOS + uvw.z * patch[2].NormalOS);
-	OUT.NormalWS = normalize(mul(float4(normalOS, 0), World).xyz);
+	OUT.NormalVS = normalize(mul(float4(normalOS, 0.0f), WorldView).xyz);
 
 	// Compute SV_Position by displacing object position in y coordinate
-	float4 posWS = mul(uvw.x * patch[0].PosOS + uvw.y * patch[1].PosOS + uvw.z * patch[2].PosOS, World);
-	posWS += float4(OUT.NormalWS * (2 * DisplacementMap.SampleLevel(TexSampler, OUT.TexCoord, 0).x - 1) * DisplacementScale, 0.0f);
-	OUT.PosCS = mul(posWS, ViewProj);
+	float4 posVS = mul(uvw.x * patch[0].PosOS + uvw.y * patch[1].PosOS + uvw.z * patch[2].PosOS, WorldView);
+	const float displacement = DisplacementMap.SampleLevel(TexSampler, OUT.TexCoord, 0).x * DisplacementScale;
+	posVS += float4(OUT.NormalVS * displacement, 0.0f);
+	OUT.PosCS = mul(posVS, Proj);
 
 	// Compute world tangent and binormal
-	OUT.TangentWS = normalize(uvw.x * patch[0].TangentOS + uvw.y * patch[1].TangentOS + uvw.z * patch[2].TangentOS);
-	OUT.TangentWS = normalize(mul(float4(OUT.TangentWS, 0), World).xyz);
-	OUT.BinormalWS = normalize(cross(OUT.NormalWS, OUT.TangentWS));
-	OUT.DepthVS = mul(posWS, View).z;
+	OUT.TangentVS = normalize(uvw.x * patch[0].TangentOS + uvw.y * patch[1].TangentOS + uvw.z * patch[2].TangentOS);
+	OUT.TangentVS = normalize(mul(float4(OUT.TangentVS, 0.0f), WorldView).xyz);
+	OUT.BinormalVS = normalize(cross(OUT.NormalVS, OUT.TangentVS));
+	OUT.DepthVS = posVS.z;
 
 	return OUT;
 }

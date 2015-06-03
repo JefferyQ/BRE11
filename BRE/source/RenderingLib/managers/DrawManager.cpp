@@ -80,23 +80,22 @@ namespace BRE {
 				ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
 				renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer());
 				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[0]->Indices().size()));
+				renderer.VertexShaderData().TextureScaleFactor() = YamlUtils::GetScalar<float>(node, "textureScaleFactor");
 
 				// Build world matrix
 				XMStoreFloat4x4(&renderer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
 
 				// Initialize pixel shader data
-				ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
-				const std::string diffuseMapTexture = YamlUtils::GetScalar<std::string>(node, "diffuseMapTexture");
-				shaderResourcesMgr.AddTextureFromFileSRV(diffuseMapTexture.c_str(), &renderer.PixelShaderData().DiffuseTextureSRV());
-				ASSERT_PTR(renderer.PixelShaderData().DiffuseTextureSRV());
-				const std::string normalMapTexture = YamlUtils::GetScalar<std::string>(node, "normalMapTexture");
-				shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &renderer.PixelShaderData().NormalMapTextureSRV());
-				ASSERT_PTR(renderer.PixelShaderData().NormalMapTextureSRV());
-				const std::string specularMapTexture = YamlUtils::GetScalar<std::string>(node, "specularMapTexture");
-				shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str(), &renderer.PixelShaderData().SpecularMapTextureSRV());
-				ASSERT_PTR(renderer.PixelShaderData().SpecularMapTextureSRV());
-				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
-				renderer.VertexShaderData().TextureScaleFactor() = YamlUtils::GetScalar<float>(node, "textureScaleFactor");
+				const std::string material = YamlUtils::GetScalar<std::string>(node, "material");
+				const size_t matId = Hash(material.c_str());
+				renderer.PixelShaderData().SetMaterial(matId);
+				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();	
+				
+				if (YamlUtils::IsDefined(node, "normalMapTexture")) {
+					ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
+					const std::string normalMapTexture = YamlUtils::GetScalar<std::string>(node, "normalMapTexture");
+					shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &renderer.PixelShaderData().NormalSRV());
+				}
 				
 				NormalMappingDrawerVec().push_back(renderer);
 			}
@@ -106,6 +105,7 @@ namespace BRE {
 				ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
 				renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer());
 				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[0]->Indices().size()));
+				renderer.VertexShaderData().TextureScaleFactor() = YamlUtils::GetScalar<float>(node, "textureScaleFactor");
 				
 				// Build world matrix
 				XMStoreFloat4x4(&renderer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
@@ -123,16 +123,15 @@ namespace BRE {
 				renderer.DomainShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 
 				// Initialize pixel shader data
-				const std::string diffuseMapTexture = YamlUtils::GetScalar<std::string>(node, "diffuseMapTexture");
-				shaderResourcesMgr.AddTextureFromFileSRV(diffuseMapTexture.c_str(), &renderer.PixelShaderData().DiffuseTextureSRV());
-				ASSERT_PTR(renderer.PixelShaderData().DiffuseTextureSRV());
-				const std::string normalMapTexture = YamlUtils::GetScalar<std::string>(node, "normalMapTexture");
-				shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &renderer.PixelShaderData().NormalMapTextureSRV());
-				ASSERT_PTR(renderer.PixelShaderData().NormalMapTextureSRV());
-				const std::string specularMapTexture = YamlUtils::GetScalar<std::string>(node, "specularMapTexture");
-				shaderResourcesMgr.AddTextureFromFileSRV(specularMapTexture.c_str(), &renderer.PixelShaderData().SpecularMapTextureSRV());
-				ASSERT_PTR(renderer.PixelShaderData().SpecularMapTextureSRV());
+				const std::string material = YamlUtils::GetScalar<std::string>(node, "material");
+				const size_t matId = Hash(material.c_str());
+				renderer.PixelShaderData().SetMaterial(matId);
 				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+
+				if (YamlUtils::IsDefined(node, "normalMapTexture")) {
+					const std::string normalMapTexture = YamlUtils::GetScalar<std::string>(node, "normalMapTexture");
+					shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &renderer.PixelShaderData().NormalSRV());
+				}
 
 				NormalDisplacementDrawerVec().push_back(renderer);
 			}
@@ -183,7 +182,7 @@ namespace BRE {
 		context.ClearDepthStencilView(&depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 		const size_t numGeometryBuffersRTVs = ARRAYSIZE(mGeometryBuffersRTVs);
 		for (size_t i = 0; i < numGeometryBuffersRTVs; ++i) {
-			context.ClearRenderTargetView(mGeometryBuffersRTVs[i], reinterpret_cast<const float*>(&Colors::Black));
+			context.ClearRenderTargetView(mGeometryBuffersRTVs[i], reinterpret_cast<const float*>(&Colors::Black)); 
 		}
 
 		for (size_t i = 0; i < ARRAYSIZE(mGBuffersSRVs); ++i) {
@@ -196,10 +195,10 @@ namespace BRE {
 		const XMMATRIX proj = Camera::gInstance->ProjectionMatrix();
 		const float farClipPlaneDistance = Camera::gInstance->FarPlaneDistance();
 		for (NormalDisplacementDrawer& elem : mNormalDisplacementDrawer) {
-			elem.Draw(device, context, mGeometryBuffersRTVs, view, proj, farClipPlaneDistance);
+			elem.Draw(device, context, mGBuffersRTVs, view, proj, farClipPlaneDistance);
 		}
 		for (NormalMappingDrawer& elem : mNormalMappingDrawer) {
-			elem.Draw(device, context, mGeometryBuffersRTVs, view, proj, farClipPlaneDistance);
+			elem.Draw(device, context, mGBuffersRTVs, view, proj, farClipPlaneDistance);
 		}
 		for (BasicDrawer& elem : mBasicDrawer) {
 			elem.Draw(device, context, mGBuffersRTVs, view, proj, farClipPlaneDistance);

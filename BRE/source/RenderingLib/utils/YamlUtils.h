@@ -9,6 +9,13 @@
 namespace BRE {
 	class YamlUtils {
 	public:
+		static bool IsDefined(const YAML::Node& node, const char* key) {
+			ASSERT_PTR(key);
+
+			YAML::Node attr = node[key];
+			return attr.IsDefined();
+		}
+
 		template<typename T>
 		static T GetScalar(const YAML::Node& node, const char* key) {
 			ASSERT_PTR(key);

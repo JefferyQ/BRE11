@@ -3,13 +3,11 @@
 using namespace DirectX;
 
 namespace BRE {
-	void NormalDisplacementDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[4], const XMMATRIX& view, const XMMATRIX& proj, const float farClipPlaneDistance) {
+	void NormalDisplacementDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs, const XMMATRIX& view, const XMMATRIX& proj, const float farClipPlaneDistance) {
 		const XMMATRIX world = XMLoadFloat4x4(&mWorld);
-		XMStoreFloat4x4(&mDsData.World(), XMMatrixTranspose(world));
-		XMStoreFloat4x4(&mDsData.View(), XMMatrixTranspose(view));
-		XMStoreFloat4x4(&mDsData.ViewProjection(), XMMatrixTranspose(view * proj));
+		XMStoreFloat4x4(&mDsData.WorldView(), XMMatrixTranspose(world * view));
+		XMStoreFloat4x4(&mDsData.Projection(), XMMatrixTranspose(proj));
 
-		XMStoreFloat4x4(&mPsData.ViewMatrix(), XMMatrixTranspose(view));
 		mPsData.FarClipPlaneDistance() = farClipPlaneDistance;
 
 		mVsData.PreDraw(device, context);

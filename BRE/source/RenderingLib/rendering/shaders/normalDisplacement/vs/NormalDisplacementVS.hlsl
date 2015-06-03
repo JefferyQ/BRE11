@@ -12,12 +12,17 @@ struct VS_OUTPUT {
 	float3 TangentOS : TANGENT;
 };
 
+/*******************  Resources  *************************/
+cbuffer CBufferPerFrame : register (b0) {
+	float TextureScaleFactor;
+}
+
 VS_OUTPUT main(const VS_INPUT IN) {
 	VS_OUTPUT OUT = (VS_OUTPUT)0;
 
 	OUT.PosOS = IN.PosOS;
 	OUT.NormalOS = IN.NormalOS;
-	OUT.TexCoord = IN.TexCoord;
+	OUT.TexCoord = IN.TexCoord * TextureScaleFactor;
 	OUT.TangentOS = IN.TangentOS;
 
 	return OUT;

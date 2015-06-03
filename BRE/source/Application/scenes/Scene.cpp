@@ -16,7 +16,7 @@ namespace {
 	const XMFLOAT2 sLightRotationRate(XM_PI / 4.0f, XM_PI / 4.0f); 
 
 	const unsigned int sMaxShaderPointLights = 512;
-	const unsigned int sNumPointLightShaders = 8; 
+	const unsigned int sNumPointLightShaders = 4; 
 
 	const char* sMaterialsFile = "content\\configs\\fullyDeferred\\materials.yml";
 	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";
@@ -34,6 +34,8 @@ void Scene::Update(const float elapsedTime) {
 	UpdateDirectionalLight(elapsedTime); 
 	mPosUpdater.Update(elapsedTime);
 
+	UpdatePointLights(elapsedTime);
+
 	// Directional
 	std::vector<BRE::LightsDrawer::DirLightData>& dirLightDataVec = BRE::DrawManager::gInstance->DirLightDataVec();
 	for (BRE::LightsDrawer::DirLightData& data : dirLightDataVec) {
@@ -46,7 +48,7 @@ void Scene::InitDirectionalLights() {
 	dirLightDataVec.resize(1); 
 	BRE::DirLightPixelShaderData& dirLightPsData = dirLightDataVec[0].mPixelShaderData;        
 	 
-	mDirectionalLight.SetColor(3.0f, 3.0f, 3.0f);
+	mDirectionalLight.SetColor(0.01f, 0.01f, 0.01f);
 	mDirectionalLight.ApplyRotation(XMMatrixRotationX(XM_PI / -2.0f));       
 
 	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light();
@@ -66,8 +68,8 @@ void Scene::InitPointLights() {
 			data.mPointLightVsData.LightPosAndRadius(iLight).x = BRE::Utility::RandomFloat(-factor, factor);
 			data.mPointLightVsData.LightPosAndRadius(iLight).y = BRE::Utility::RandomFloat(-factor, factor);
 			data.mPointLightVsData.LightPosAndRadius(iLight).z = BRE::Utility::RandomFloat(-factor, factor);
-			data.mPointLightVsData.LightPosAndRadius(iLight).w = 60; 
-			const float c = BRE::Utility::RandomFloat(0.5f, 1.0f);
+			data.mPointLightVsData.LightPosAndRadius(iLight).w = 40; 
+			const float c = BRE::Utility::RandomFloat(10.0f, 11.0f);
 			DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(c, c, c, 0.0f);
 			data.mPointLightVsData.LightColor(iLight) = color;
 
@@ -107,5 +109,53 @@ void Scene::UpdateDirectionalLight(const float elapsedTime) {
 
 	if (rotationAmount.x != 0.0f || rotationAmount.y != 0.0f) {
 		mDirectionalLight.ApplyRotation(lightRotationMatrix);
+	}
+}
+
+void Scene::UpdatePointLights(const float elapsedTime) {
+	const float radiusFactor = 30.0f;
+	if (BRE::Keyboard::gInstance->IsKeyDown(DIK_I)) {
+		std::vector<BRE::LightsDrawer::PointLightData>& quadCulledPointLightDataVec = BRE::DrawManager::gInstance->PointLightDataVec();
+		unsigned int lightIndex = 0;
+		for (BRE::LightsDrawer::PointLightData& data : quadCulledPointLightDataVec) {
+			for (unsigned int iLight = 0; iLight < sMaxShaderPointLights; ++iLight, ++lightIndex) {
+				data.mPointLightVsData.LightPosAndRadius(iLight).w += radiusFactor * elapsedTime;				
+			}
+		}
+	}
+
+	if (BRE::Keyboard::gInstance->IsKeyDown(DIK_K)) {
+		std::vector<BRE::LightsDrawer::PointLightData>& quadCulledPointLightDataVec = BRE::DrawManager::gInstance->PointLightDataVec();
+		unsigned int lightIndex = 0;
+		for (BRE::LightsDrawer::PointLightData& data : quadCulledPointLightDataVec) {
+			for (unsigned int iLight = 0; iLight < sMaxShaderPointLights; ++iLight, ++lightIndex) {
+				data.mPointLightVsData.LightPosAndRadius(iLight).w -= radiusFactor * elapsedTime;
+			}
+		}
+	}
+
+	const float intensityFactor = 5.0f;
+	if (BRE::Keyboard::gInstance->IsKeyDown(DIK_O)) {
+		std::vector<BRE::LightsDrawer::PointLightData>& quadCulledPointLightDataVec = BRE::DrawManager::gInstance->PointLightDataVec();
+		unsigned int lightIndex = 0;
+		for (BRE::LightsDrawer::PointLightData& data : quadCulledPointLightDataVec) {
+			for (unsigned int iLight = 0; iLight < sMaxShaderPointLights; ++iLight, ++lightIndex) {
+				data.mPointLightVsData.LightColor(iLight).x += intensityFactor * elapsedTime;
+				data.mPointLightVsData.LightColor(iLight).y += intensityFactor * elapsedTime;
+				data.mPointLightVsData.LightColor(iLight).z += intensityFactor * elapsedTime;
+			}
+		}
+	}
+
+	if (BRE::Keyboard::gInstance->IsKeyDown(DIK_L)) {
+		std::vector<BRE::LightsDrawer::PointLightData>& quadCulledPointLightDataVec = BRE::DrawManager::gInstance->PointLightDataVec();
+		unsigned int lightIndex = 0;
+		for (BRE::LightsDrawer::PointLightData& data : quadCulledPointLightDataVec) {
+			for (unsigned int iLight = 0; iLight < sMaxShaderPointLights; ++iLight, ++lightIndex) {
+				data.mPointLightVsData.LightColor(iLight).x -= intensityFactor * elapsedTime;
+				data.mPointLightVsData.LightColor(iLight).y -= intensityFactor * elapsedTime;
+				data.mPointLightVsData.LightColor(iLight).z -= intensityFactor * elapsedTime;
+			}
+		}
 	}
 }

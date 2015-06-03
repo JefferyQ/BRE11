@@ -3,11 +3,13 @@
 #include <d3d11_1.h>
 #include <sstream>
 
+#include <managers/MaterialManager.h>
 #include <managers/ShadersManager.h>
 #include <utils/Assert.h>
 
 namespace {
 	const char* shader = "content\\shaders\\normalDisplacement\\NormalDisplacementPS.cso";
+	const size_t sNumGBuffers = 4;
 }
 
 namespace BRE {
@@ -34,14 +36,31 @@ namespace BRE {
 		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
-	void NormalDisplacementPsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* geometryBuffersRTVs[4]) {
+	void NormalDisplacementPsData::SetMaterial(const size_t matId) {
+		MaterialManager::MaterialData matData;
+		MaterialManager::gInstance->GetMaterial(matId, matData);
+		mNormalSRV = matData.mNormalSRV;
+		ASSERT_PTR(mNormalSRV);
+		mBaseColorSRV = matData.mBaseColorSRV;
+		ASSERT_PTR(mBaseColorSRV);
+		mSmoothnessSRV = matData.mSmoothnessSRV;
+		ASSERT_PTR(mSmoothnessSRV);
+		mMetalMaskSRV = matData.mMetalMaskSRV;
+		ASSERT_PTR(mMetalMaskSRV);
+		mReflectanceSRV = matData.mReflectanceSRV;
+		ASSERT_PTR(mReflectanceSRV);
+	}
+
+	void NormalDisplacementPsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
 		ASSERT_PTR(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 
-		ASSERT_PTR(mDiffuseTextureSRV);
-		ASSERT_PTR(mNormalMapTextureSRV);
-		ASSERT_PTR(mSpecularMapTextureSRV);
-		ID3D11ShaderResourceView* const srvs[] = { mDiffuseTextureSRV, mNormalMapTextureSRV, mSpecularMapTextureSRV };
+		ASSERT_PTR(mNormalSRV);
+		ASSERT_PTR(mBaseColorSRV);
+		ASSERT_PTR(mSmoothnessSRV);
+		ASSERT_PTR(mMetalMaskSRV);
+		ASSERT_PTR(mReflectanceSRV);
+		ID3D11ShaderResourceView* const srvs[] = { mNormalSRV, mBaseColorSRV, mSmoothnessSRV, mMetalMaskSRV, mReflectanceSRV };
 		context.PSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
 
 		mCBuffer.CopyDataToBuffer(device);
@@ -52,13 +71,13 @@ namespace BRE {
 		context.PSSetSamplers(0, ARRAYSIZE(samplerStates), samplerStates);
 
 		context.OMGetRenderTargets(1, &mDefaultRTV, &mDefaultDSV);
-		context.OMSetRenderTargets(4, geometryBuffersRTVs, mDefaultDSV);
+		context.OMSetRenderTargets(sNumGBuffers, geometryBuffersRTVs, mDefaultDSV);
 	}
 
 	void NormalDisplacementPsData::PostDraw(ID3D11DeviceContext1& context) {
 		context.PSSetShader(nullptr, nullptr, 0);
 
-		ID3D11ShaderResourceView* const srvs[] = { nullptr, nullptr, nullptr };
+		ID3D11ShaderResourceView* const srvs[] = { nullptr, nullptr, nullptr, nullptr, nullptr };
 		context.PSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
 
 		ID3D11Buffer* const cBuffers[] = { nullptr };
@@ -67,7 +86,7 @@ namespace BRE {
 		ID3D11SamplerState* const samplerStates[] = { nullptr };
 		context.PSSetSamplers(0, ARRAYSIZE(samplerStates), samplerStates);
 
-		ID3D11RenderTargetView* rtvs[4];
+		ID3D11RenderTargetView* rtvs[sNumGBuffers];
 		ZeroMemory(rtvs, sizeof(ID3D11RenderTargetView*) * ARRAYSIZE(rtvs));
 		rtvs[0] = mDefaultRTV;
 		context.OMSetRenderTargets(ARRAYSIZE(rtvs), rtvs, mDefaultDSV);

@@ -1,6 +1,7 @@
 #include "NormalDisplacementVsData.h"
 
 #include <d3d11_1.h>
+#include <sstream>
 #include <memory>
 
 #include <managers/ShadersManager.h>
@@ -16,6 +17,7 @@ namespace {
 namespace BRE {
 	NormalDisplacementVsData::NormalDisplacementVsData() {
 		InitializeShader();
+		InitializeCBuffers();
 	}
 
 	void NormalDisplacementVsData::InitializeShader() {
@@ -34,7 +36,23 @@ namespace BRE {
 		ASSERT_PTR(mInputLayout);
 	}
 
-	void NormalDisplacementVsData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context) {
+	void NormalDisplacementVsData::InitializeCBuffers() {
+		D3D11_BUFFER_DESC bufferDesc;
+		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
+		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bufferDesc.ByteWidth = sizeof(CBufferPerFrameData);
+		bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		bufferDesc.MiscFlags = 0;
+		bufferDesc.StructureByteStride = 0;
+		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+
+		std::stringstream str;
+		str << "NormalDisplacementVsData";
+		str << rand();
+		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
+	}
+
+	void NormalDisplacementVsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
 		ASSERT_PTR(mInputLayout);
 		ASSERT_PTR(mShader);
 		ASSERT_PTR(mVertexBuffer);
@@ -48,6 +66,10 @@ namespace BRE {
 		const unsigned int offset = 0;
 		context.IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 		context.IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
+		mCBuffer.CopyDataToBuffer(device);
+		context.VSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 	}
 
 	void NormalDisplacementVsData::DrawIndexed(ID3D11DeviceContext1& context) {
@@ -67,5 +89,8 @@ namespace BRE {
 		const unsigned int offset[] = { 0 };
 		context.IASetVertexBuffers(0, 1, vertexBuffers, stride, offset);
 		context.IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0);
+
+		ID3D11Buffer* const cBuffers[] = { nullptr };
+		context.VSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 	}
 }
