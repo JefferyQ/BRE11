@@ -165,7 +165,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="managers\DrawManager.cpp" />
     <ClCompile Include="managers\MaterialManager.cpp" />
     <ClCompile Include="managers\ModelManager.cpp" />
-    <ClCompile Include="managers\SettingsManager.cpp" />
     <ClCompile Include="managers\ShaderResourcesManager.cpp" />
     <ClCompile Include="managers\ShadersManager.cpp" />
     <ClCompile Include="rendering\GlobalResources.cpp" />
@@ -216,7 +215,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="managers\DrawManager.h" />
     <ClInclude Include="managers\MaterialManager.h" />
     <ClInclude Include="managers\ModelManager.h" />
-    <ClInclude Include="managers\SettingsManager.h" />
     <ClInclude Include="managers\ShaderResourcesManager.h" />
     <ClInclude Include="managers\ShadersManager.h" />
     <ClInclude Include="rendering\GlobalResources.h" />

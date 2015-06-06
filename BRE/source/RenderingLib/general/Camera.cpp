@@ -13,29 +13,20 @@ using namespace DirectX;
 namespace BRE {
 	Camera* Camera::gInstance = nullptr;
 
-	Camera::Camera(
-		const XMFLOAT3& position,
-		const XMFLOAT3& rotation,
-		const float fieldOfView,
-		const float nearPlaneDistance,
-		const float farPlaneDistance,
-		const float aspectRatio,
-		const float mouseSensibility,
-		const float rotationRate,
-		const float movementRate)
-		: mPosition(position)
+	Camera::Camera(const Camera::InputData& data)
+		: mPosition(data.mPos)
 		, mDirection(FORWARD_VECTOR3)
 		, mUp(UP_VECTOR3)
 		, mRight(RIGHT_VECTOR3)
-		, mFieldOfView(fieldOfView)
-		, mAspectRatio(aspectRatio)
-		, mNearPlaneDistance(nearPlaneDistance)
-		, mFarPlaneDistance(farPlaneDistance)
-		, mMouseSensitivity(mouseSensibility)
-		, mRotationRate(rotationRate)
-		, mMovementRate(movementRate)
+		, mFieldOfView(data.mFieldOfView)
+		, mAspectRatio(data.mAspectRatio)
+		, mNearPlaneDistance(data.mNearPlaneDistance)
+		, mFarPlaneDistance(data.mFarPlaneDistance)
+		, mMouseSensitivity(data.mMouseSensitivity)
+		, mRotationRate(data.mRotationRate)
+		, mMovementRate(data.mMovementRate)
 	{
-		ApplyRotation(XMMatrixRotationX(rotation.x) * XMMatrixRotationY(rotation.y) * XMMatrixRotationZ(rotation.z));
+		ApplyRotation(XMMatrixRotationX(data.mRotation.x) * XMMatrixRotationY(data.mRotation.y) * XMMatrixRotationZ(data.mRotation.z));
 		UpdateProjectionMatrix();
 		UpdateViewMatrix();
 	}

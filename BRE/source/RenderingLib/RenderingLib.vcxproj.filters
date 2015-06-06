@@ -93,9 +93,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="managers\SettingsManager.cpp">
-      <Filter>managers</Filter>
-    </ClCompile>
     <ClCompile Include="managers\ShaderResourcesManager.cpp">
       <Filter>managers</Filter>
     </ClCompile>
@@ -244,9 +241,6 @@
     </ClInclude>
     <ClInclude Include="input\Mouse.h">
       <Filter>input</Filter>
-    </ClInclude>
-    <ClInclude Include="managers\SettingsManager.h">
-      <Filter>managers</Filter>
     </ClInclude>
     <ClInclude Include="managers\ShaderResourcesManager.h">
       <Filter>managers</Filter>

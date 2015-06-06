@@ -1,8 +1,6 @@
 #include "DrawManager.h"
 
-#include <boost/lexical_cast.hpp>
 #include <d3d11_1.h>
-#include <unordered_map>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
@@ -34,7 +32,6 @@ namespace BRE {
 	DrawManager::DrawManager(ID3D11Device1& device, ID3D11DeviceContext1& context, const unsigned int screenWidth, const unsigned int screenHeight)
 		: mFrameRateDrawer(device, context)
 	{
-		InitResources(screenWidth, screenHeight);
 		InitPostProcessResources(screenWidth, screenHeight);
 		InitGBuffers(screenWidth, screenHeight);
 	}
@@ -180,11 +177,6 @@ namespace BRE {
 		ID3D11RenderTargetView* backBuffer = &backBufferRTV;
 		context.ClearRenderTargetView(&backBufferRTV, reinterpret_cast<const float*>(&Colors::Black));
 		context.ClearDepthStencilView(&depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-		const size_t numGeometryBuffersRTVs = ARRAYSIZE(mGeometryBuffersRTVs);
-		for (size_t i = 0; i < numGeometryBuffersRTVs; ++i) {
-			context.ClearRenderTargetView(mGeometryBuffersRTVs[i], reinterpret_cast<const float*>(&Colors::Black)); 
-		}
-
 		for (size_t i = 0; i < ARRAYSIZE(mGBuffersSRVs); ++i) {
 			context.ClearRenderTargetView(mGBuffersRTVs[i], reinterpret_cast<const float*>(&Colors::Black));
 		}
@@ -230,91 +222,6 @@ namespace BRE {
 		ASSERT_HR(swapChain.Present(0, 0));
 
 		RenderStateHelper::gInstance->RestoreAll();
-	}
-
-	void DrawManager::InitResources(const unsigned int screenWidth, const unsigned int screenHeight) {
-		const size_t numTextures = ARRAYSIZE(mGeometryBuffersRTVs);
-
-		//
-		// Texture descriptions
-		//
-		D3D11_TEXTURE2D_DESC textureDesc[numTextures];
-
-		// Normal texture desc
-		ZeroMemory(&textureDesc[0], sizeof(textureDesc[0]));
-		textureDesc[0].Width = screenWidth;
-		textureDesc[0].Height = screenHeight;
-		textureDesc[0].MipLevels = 1;
-		textureDesc[0].ArraySize = 1;
-		textureDesc[0].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		textureDesc[0].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		textureDesc[0].Usage = D3D11_USAGE_DEFAULT;
-		textureDesc[0].SampleDesc.Count = 1;
-		textureDesc[0].SampleDesc.Quality = 0;
-
-		// Diffuse albedo texture desc
-		ZeroMemory(&textureDesc[1], sizeof(textureDesc[1]));
-		textureDesc[1].Width = screenWidth;
-		textureDesc[1].Height = screenHeight;
-		textureDesc[1].MipLevels = 1;
-		textureDesc[1].ArraySize = 1;
-		textureDesc[1].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-		textureDesc[1].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		textureDesc[1].Usage = D3D11_USAGE_DEFAULT;
-		textureDesc[1].SampleDesc.Count = 1;
-		textureDesc[1].SampleDesc.Quality = 0;
-
-		// Specular albedo texture desc
-		ZeroMemory(&textureDesc[2], sizeof(textureDesc[2]));
-		textureDesc[2].Width = screenWidth;
-		textureDesc[2].Height = screenHeight;
-		textureDesc[2].MipLevels = 1;
-		textureDesc[2].ArraySize = 1;
-		textureDesc[2].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-		textureDesc[2].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		textureDesc[2].Usage = D3D11_USAGE_DEFAULT;
-		textureDesc[2].SampleDesc.Count = 1;
-		textureDesc[2].SampleDesc.Quality = 0;
-
-		// Depth texture description
-		ZeroMemory(&textureDesc[3], sizeof(textureDesc[3]));
-		textureDesc[3].Width = screenWidth;
-		textureDesc[3].Height = screenHeight;
-		textureDesc[3].MipLevels = 1;
-		textureDesc[3].ArraySize = 1;
-		textureDesc[3].Format = DXGI_FORMAT_R16_UNORM;
-		textureDesc[3].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		textureDesc[3].Usage = D3D11_USAGE_DEFAULT;
-		textureDesc[3].SampleDesc.Count = 1;
-		textureDesc[3].SampleDesc.Quality = 0;
-
-		//
-		// Texture id's
-		//
-		const char* textureIds[numTextures] = {
-			"deferred_rendering_texture2d_normals",
-			"deferred_rendering_texture2d_diffuse_albedo",
-			"deferred_rendering_texture2d_specular_albedo",
-			"deferred_rendering_texture2d_depth",
-		};
-
-		//
-		// Create texture 2D, shader resource view and render target view
-		//
-		ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
-		for (size_t iTex = 0; iTex < numTextures; ++iTex) {
-			ID3D11Texture2D* texture;
-			shaderResourcesMgr.AddTexture2D(textureIds[iTex], textureDesc[iTex], nullptr, &texture);
-			ASSERT_PTR(texture);
-
-			ASSERT_COND(mGeometryBuffersRTVs[iTex] == nullptr);
-			shaderResourcesMgr.AddRenderTargetView(textureIds[iTex], *texture, nullptr, &mGeometryBuffersRTVs[iTex]);
-			ASSERT_PTR(mGeometryBuffersRTVs[iTex]);
-
-			ASSERT_COND(mGeometryBuffersSRVs[iTex] == nullptr);
-			shaderResourcesMgr.AddResourceSRV(textureIds[iTex], *texture, nullptr, &mGeometryBuffersSRVs[iTex]);
-			ASSERT_PTR(mGeometryBuffersSRVs[iTex]);
-		}
 	}
 
 	void DrawManager::InitGBuffers(const unsigned int screenWidth, const unsigned int screenHeight) {

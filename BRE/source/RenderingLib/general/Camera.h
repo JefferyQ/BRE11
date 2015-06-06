@@ -21,16 +21,19 @@ namespace BRE {
 		// Global instance
 		static Camera* gInstance;
 
-		Camera(
-			const DirectX::XMFLOAT3& position,
-			const DirectX::XMFLOAT3& rotation,
-			const float fieldOfView,
-			const float nearPlaneDistance,
-			const float farPlaneDistance,
-			const float aspectRatio,
-			const float mouseSensibility,
-			const float rotationRate,
-			const float movementRate);
+		struct InputData {
+			DirectX::XMFLOAT3 mPos;
+			DirectX::XMFLOAT3 mRotation;
+			float mFieldOfView;
+			float mNearPlaneDistance;				
+			float mFarPlaneDistance;
+			float mAspectRatio;
+			float mMouseSensitivity;
+			float mRotationRate;
+			float mMovementRate;
+		};
+
+		Camera(const InputData& data);
 
 		const DirectX::XMFLOAT3& Position() const { return mPosition; }
 		DirectX::XMVECTOR PositionVector() const { return DirectX::XMLoadFloat3(&mPosition); }

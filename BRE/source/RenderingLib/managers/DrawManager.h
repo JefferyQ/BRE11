@@ -18,7 +18,7 @@ struct IDXGISwapChain1;
 namespace BRE {
 	class PointLightVertexShaderData;
 	class PointLightGeometryShaderData;
-	class dPointLightPixelShaderData;
+	class PointLightPixelShaderData;
 
 	class DrawManager {
 	public:
@@ -38,18 +38,8 @@ namespace BRE {
 		StringDrawer& FrameRateDrawer() { return mFrameRateDrawer; }
 
 	private:
-		void InitResources(const unsigned int screenWidth, const unsigned int screenHeight);
 		void InitPostProcessResources(const unsigned int screenWidth, const unsigned int screenHeight);
 		void InitGBuffers(const unsigned int screenWidth, const unsigned int screenHeight);
-
-		// Render target views and shader resources views
-		// for fully deferred rendering purposes
-		// [0] -> Normal
-		// [1] -> Diffuse albedo
-		// [2] -> Specular albedo
-		// [3] -> Depth
-		ID3D11RenderTargetView* mGeometryBuffersRTVs[4];
-		ID3D11ShaderResourceView* mGeometryBuffersSRVs[4];
 
 		// Render target views and shader resources views
 		// for fully deferred rendering purposes

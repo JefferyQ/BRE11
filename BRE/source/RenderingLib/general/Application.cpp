@@ -3,6 +3,7 @@
 #include <d3d11_1.h>
 #include <dinput.h>
 #include <sstream>
+#include <yaml-cpp/yaml.h>
 
 #include <general/Camera.h>
 #include <general/Component.h>
@@ -11,13 +12,13 @@
 #include <managers/DrawManager.h>
 #include <managers/MaterialManager.h>
 #include <managers/ModelManager.h>
-#include <managers/SettingsManager.h>
 #include <managers/ShadersManager.h>
 #include <managers/ShaderResourcesManager.h>
 #include <rendering/GlobalResources.h>
 #include <rendering/RenderStateHelper.h>
 #include <utils/Memory.h>
 #include <utils/Utility.h>
+#include <utils/YamlUtils.h>
 
 using namespace DirectX;
 
@@ -183,19 +184,24 @@ namespace {
 }
 
 namespace BRE {
-	Application::Application(const HINSTANCE& instance, const int showCommand) {
+	Application::Application(const HINSTANCE& instance, const int showCommand) { 
 		srand(static_cast<unsigned int>(time(reinterpret_cast<time_t*>(0))));
 
-		const char* appConfigFile = "content/configs/application.yml";
-		SettingsManager::gInstance = new SettingsManager();
-		SettingsManager::gInstance->LoadFile(appConfigFile);
-		mScreenWidth = SettingsManager::gInstance->GetScalarAttribute<unsigned int>(appConfigFile, "application", "screenWidth");
-		mScreenHeight = SettingsManager::gInstance->GetScalarAttribute<unsigned int>(appConfigFile, "application", "screenHeight");
+		const char* appConfigFile = "content/configs/settings.yml";
+
+		const YAML::Node yamlFile = YAML::LoadFile(appConfigFile);
+		ASSERT_COND(yamlFile.IsDefined());
+		const YAML::Node settingsNode = yamlFile["settings"];
+		ASSERT_COND(settingsNode.IsDefined());
+		ASSERT_COND(settingsNode.IsMap());
+			
+		mScreenWidth = YamlUtils::GetScalar<unsigned int>(settingsNode, "screenWidth");
+		mScreenHeight = YamlUtils::GetScalar<unsigned int>(settingsNode, "screenHeight");
 
 		InitWindow(instance, showCommand, mScreenWidth, mScreenHeight, mWindowClass, mWindowHandle, WndProc);
 
-		const unsigned multisamplingCount = SettingsManager::gInstance->GetScalarAttribute<unsigned int>(appConfigFile, "application", "multiSamplingCount");
-		const unsigned int frameRate = SettingsManager::gInstance->GetScalarAttribute<unsigned int>(appConfigFile, "application", "frameRate");
+		const unsigned multisamplingCount = YamlUtils::GetScalar<unsigned int>(settingsNode, "multiSamplingCount");
+		const unsigned int frameRate = YamlUtils::GetScalar<unsigned int>(settingsNode, "frameRate");
 		InitDirectX(multisamplingCount, mScreenWidth, mScreenHeight, frameRate, mWindowHandle, mDevice, mContext, mSwapChain, mBackBufferRTV, mPrimaryDSV);
 
 		ShadersManager::gInstance = new ShadersManager(*mDevice);
@@ -212,28 +218,26 @@ namespace BRE {
 		GlobalResources::gInstance = new GlobalResources();
 
 		// Init camera
-		const char* category = "camera";
-		const std::vector<float> position = SettingsManager::gInstance->GetSequenceAttribute<float>(appConfigFile, category, "translation");
-		ASSERT_COND(position.size() == 3);
-		const XMFLOAT3 pos(position[0], position[1], position[2]);
-		const std::vector<float> rotation = SettingsManager::gInstance->GetSequenceAttribute<float>(appConfigFile, category, "rotation");
-		ASSERT_COND(rotation.size() == 3);
-		const XMFLOAT3 rot(rotation[0], rotation[1], rotation[2]);
-		const float fieldOfView = SettingsManager::gInstance->GetScalarAttribute<float>(appConfigFile, category, "fieldOfView");
-		const float nearPlaneDistance = SettingsManager::gInstance->GetScalarAttribute<float>(appConfigFile, category, "nearPlaneDistance");
-		const float farPlaneDistance = SettingsManager::gInstance->GetScalarAttribute<float>(appConfigFile, category, "farPlaneDistance");
-		const float mouseSensibility = SettingsManager::gInstance->GetScalarAttribute<float>(appConfigFile, category, "mouseSensibility");
-		const float rotationRate = SettingsManager::gInstance->GetScalarAttribute<float>(appConfigFile, category, "rotationRate");
-		const float movementRate = SettingsManager::gInstance->GetScalarAttribute<float>(appConfigFile, category, "movementRate");
-		const float aspectRatio = static_cast<float> (mScreenWidth) / mScreenHeight;
-		Camera::gInstance = new BRE::Camera(pos, rot, fieldOfView, nearPlaneDistance, farPlaneDistance, aspectRatio, mouseSensibility, rotationRate, movementRate);
+		Camera::InputData camData;
+		float sequence[3];
+		YamlUtils::GetSequence<float>(settingsNode, "translation", sequence, ARRAYSIZE(sequence));
+		camData.mPos = XMFLOAT3(sequence[0], sequence[1], sequence[2]);
+		YamlUtils::GetSequence<float>(settingsNode, "rotation", sequence, ARRAYSIZE(sequence));
+		camData.mRotation = XMFLOAT3(sequence[0], sequence[1], sequence[2]);
+		camData.mFieldOfView = YamlUtils::GetScalar<float>(settingsNode, "fieldOfView");
+		camData.mNearPlaneDistance = YamlUtils::GetScalar<float>(settingsNode, "nearPlaneDistance");
+		camData.mFarPlaneDistance = YamlUtils::GetScalar<float>(settingsNode, "farPlaneDistance");
+		camData.mMouseSensitivity = YamlUtils::GetScalar<float>(settingsNode, "mouseSensitivity");
+		camData.mRotationRate = YamlUtils::GetScalar<float>(settingsNode, "rotationRate");
+		camData.mMovementRate = YamlUtils::GetScalar<float>(settingsNode, "movementRate");
+		camData.mAspectRatio = static_cast<float> (mScreenWidth) / mScreenHeight;
+		Camera::gInstance = new BRE::Camera(camData);
 	}
 
 	Application::~Application() {
 		for (Component* component : mComponents) {
 			DELETE_OBJECT(component);
 		}
-		delete SettingsManager::gInstance;
 		delete ShaderResourcesManager::gInstance;
 		delete ShadersManager::gInstance;
 		delete DrawManager::gInstance;

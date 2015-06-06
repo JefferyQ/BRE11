@@ -157,6 +157,83 @@ IF EXIST  "$(SolutionDir)\external\assimp-3.1.1-win-binaries\bin64\assimp.dll" x
   <ItemGroup>
     <ClInclude Include="scenes\Scene.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="content\configs\fullyDeferred\materials.yml" />
+    <None Include="content\configs\fullyDeferred\models.yml" />
+    <None Include="content\configs\settings.yml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="content\models\bunny.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="content\models\cylinder.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="content\models\dragon.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="content\models\mitsuba.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="content\models\plane.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="content\models\sphere.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="content\models\teapot.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="content\models\torusKnot.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="content\textures\aluminium\aluminium_base_color.dds" />
+    <Image Include="content\textures\aluminium\aluminium_metal_mask.dds" />
+    <Image Include="content\textures\aluminium\aluminium_normal.dds" />
+    <Image Include="content\textures\aluminium\aluminium_reflectance.dds" />
+    <Image Include="content\textures\aluminium\aluminium_smoothness.dds" />
+    <Image Include="content\textures\gold\gold_base_color.dds" />
+    <Image Include="content\textures\gold\gold_metal_mask.dds" />
+    <Image Include="content\textures\gold\gold_normal.dds" />
+    <Image Include="content\textures\gold\gold_reflectance.dds" />
+    <Image Include="content\textures\gold\gold_smoothness.dds" />
+    <Image Include="content\textures\mossy_stone\mossy_stone_base_color.dds" />
+    <Image Include="content\textures\mossy_stone\mossy_stone_height.dds" />
+    <Image Include="content\textures\mossy_stone\mossy_stone_metal_mask.dds" />
+    <Image Include="content\textures\mossy_stone\mossy_stone_normal.dds" />
+    <Image Include="content\textures\mossy_stone\mossy_stone_reflectance.dds" />
+    <Image Include="content\textures\mossy_stone\mossy_stone_smoothness.dds" />
+    <Image Include="content\textures\platinum\platinum_base_color.dds" />
+    <Image Include="content\textures\platinum\platinum_metal_mask.dds" />
+    <Image Include="content\textures\platinum\platinum_normal.dds" />
+    <Image Include="content\textures\platinum\platinum_reflectance.dds" />
+    <Image Include="content\textures\platinum\platinum_smoothness.dds" />
+    <Image Include="content\textures\rock1_diffuse.dds" />
+    <Image Include="content\textures\rock1_height.dds" />
+    <Image Include="content\textures\rock1_normal.dds" />
+    <Image Include="content\textures\rock1_specular.dds" />
+    <Image Include="content\textures\silver\silver_base_color.dds" />
+    <Image Include="content\textures\silver\silver_metal_mask.dds" />
+    <Image Include="content\textures\silver\silver_normal.dds" />
+    <Image Include="content\textures\silver\silver_reflectance.dds" />
+    <Image Include="content\textures\silver\silver_smoothness.dds" />
+    <Image Include="content\textures\terracota\terracota_base_color.dds" />
+    <Image Include="content\textures\terracota\terracota_metal_mask.dds" />
+    <Image Include="content\textures\terracota\terracota_normal.dds" />
+    <Image Include="content\textures\terracota\terracota_reflectance.dds" />
+    <Image Include="content\textures\terracota\terracota_smoothness.dds" />
+    <Image Include="content\textures\torusKnot_normal.dds" />
+    <Image Include="content\textures\torusKnot_specular.dds" />
+    <Image Include="content\textures\white_diffuse.dds" />
+    <Image Include="content\textures\wood1\wood1_base_color.dds" />
+    <Image Include="content\textures\wood1\wood1_height.dds" />
+    <Image Include="content\textures\wood1\wood1_metal_mask.dds" />
+    <Image Include="content\textures\wood1\wood1_normal.dds" />
+    <Image Include="content\textures\wood1\wood1_reflectance.dds" />
+    <Image Include="content\textures\wood1\wood1_smoothness.dds" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
