@@ -21,9 +21,7 @@ namespace BRE {
 	struct DirectionalLightData {
 		DirectionalLightData()
 			: mColor(0.0f, 0.0f, 0.0f)
-			, mPad1(0.0f)
 			, mDirection(0.0f, 0.0f, 0.0f)
-			, mPad2(0.0f)
 		{
 		}
 

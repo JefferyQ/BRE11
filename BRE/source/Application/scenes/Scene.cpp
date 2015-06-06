@@ -18,8 +18,8 @@ namespace {
 	const unsigned int sMaxShaderPointLights = 512;
 	const unsigned int sNumPointLightShaders = 4; 
 
-	const char* sMaterialsFile = "content\\configs\\fullyDeferred\\materials.yml";
-	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";
+	const char* sMaterialsFile = "content\\configs\\fullyDeferred\\materials.yml"; 
+	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";  
 }
 
 Scene::Scene() {
@@ -38,8 +38,14 @@ void Scene::Update(const float elapsedTime) {
 
 	// Directional
 	std::vector<BRE::LightsDrawer::DirLightData>& dirLightDataVec = BRE::DrawManager::gInstance->DirLightDataVec();
+	const XMMATRIX viewMatrix = BRE::Camera::gInstance->ViewMatrix();
+	const XMFLOAT4 lightDir = XMFLOAT4(mDirectionalLight.Direction().x, mDirectionalLight.Direction().y, mDirectionalLight.Direction().z, 0.0f);
 	for (BRE::LightsDrawer::DirLightData& data : dirLightDataVec) {
-		data.mPixelShaderData.Light().mDirection = mDirectionalLight.Direction();      
+		XMFLOAT4 s;
+		XMStoreFloat4(&s, XMVector4Transform(XMLoadFloat4(&lightDir), viewMatrix));
+		data.mPixelShaderData.Light().mDirection.x = s.x;
+		data.mPixelShaderData.Light().mDirection.y = s.y;
+		data.mPixelShaderData.Light().mDirection.z = s.z;
 	}  
 }
 
@@ -48,7 +54,7 @@ void Scene::InitDirectionalLights() {
 	dirLightDataVec.resize(1); 
 	BRE::DirLightPixelShaderData& dirLightPsData = dirLightDataVec[0].mPixelShaderData;        
 	 
-	mDirectionalLight.SetColor(0.01f, 0.01f, 0.01f);
+	mDirectionalLight.SetColor(2.0f, 2.0f, 2.0f);
 	mDirectionalLight.ApplyRotation(XMMatrixRotationX(XM_PI / -2.0f));       
 
 	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light();

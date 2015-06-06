@@ -4,7 +4,7 @@
 
 using namespace DirectX;
 
-#define FORWARD_VECTOR3 DirectX::XMFLOAT3(0.0f, 0.0f, -1.0f)
+#define FORWARD_VECTOR3 DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f)
 #define UP_VECTOR3 DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f)
 #define RIGHT_VECTOR3 DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f)
 
@@ -27,8 +27,8 @@ namespace BRE {
 		up = XMVector3TransformNormal(up, transform);
 		up = XMVector3Normalize(up);
 
-		const XMVECTOR right = XMVector3Cross(direction, up);
-		up = XMVector3Cross(right, direction);
+		const XMVECTOR right = XMVector3Cross(up, direction);
+		up = XMVector3Cross(direction, right);
 
 		XMStoreFloat3(&mDirection, direction);
 		XMStoreFloat3(&mUp, up);

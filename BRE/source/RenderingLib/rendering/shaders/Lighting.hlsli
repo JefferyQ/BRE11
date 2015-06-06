@@ -83,11 +83,11 @@ float D_GGX(float dotNH, float roughness) {
 }
 
 float3 brdf(const float3 N, const float3 V, const float3 L, const MaterialData data) {
+	const float dotNV = abs(dot(N, V)) + 1e-5f; // avoid artifacts
 	const float3 H = normalize(V + L);
-	const float dotNL = saturate(dot(N, L)); // avoid artifacts
-	const float dotNV = saturate(dot(N, V));
-	const float dotNH = saturate(dot(N, H));
 	const float dotLH = saturate(dot(L, H));
+	const float dotNH = saturate(dot(N, H));
+	const float dotNL = saturate(dot(N, L)); 	
 	
 	// Specular BRDF
 	const float F = F_Schlick(data.ReflectanceAtNormalIncidence, 1.0f, dotLH);
@@ -109,7 +109,7 @@ float3 cook_torrance(const float3 N, const float3 V, const float3 L, const Mater
 
 	const float3 H = normalize(V + L);
 
-	const float dotNL = abs(dot(N, L)) + 1e-5f;
+	const float dotNL = saturate(dot(N, L));
 	const float dotNV = saturate(dot(N, V));
 	const float dotNH = saturate(dot(N, H));
 	const float dotLH = saturate(dot(L, H));
