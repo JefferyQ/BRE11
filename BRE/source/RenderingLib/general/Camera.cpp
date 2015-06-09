@@ -49,21 +49,7 @@ namespace BRE {
 	}
 
 	void Camera::Update(const float elapsedTime) {
-		XMFLOAT2 movementAmount = ZERO_VECTOR2;
-		const float movementFactor = 4.0f;
-		if (Keyboard::gInstance->IsKeyDown(DIK_W)) {
-			movementAmount.y = movementFactor;
-		}
-		if (Keyboard::gInstance->IsKeyDown(DIK_S)) {
-			movementAmount.y = -movementFactor;
-		}
-		if (Keyboard::gInstance->IsKeyDown(DIK_A)) {
-			movementAmount.x = -movementFactor;
-		}
-		if (Keyboard::gInstance->IsKeyDown(DIK_D)) {
-			movementAmount.x = movementFactor;
-		}
-
+		// Update rotation
 		XMFLOAT2 rotationAmount = ZERO_VECTOR2;
 		if (Mouse::gInstance->IsButtonHeldDown(Mouse::MouseButtonsLeft)) {
 			const DIMOUSESTATE& mouseState = Mouse::gInstance->CurrentState();
@@ -74,6 +60,21 @@ namespace BRE {
 		const XMMATRIX pitchMatrix = XMMatrixRotationAxis(XMLoadFloat3(&mRight), XMVectorGetY(rotationVector));
 		const XMMATRIX yawMatrix = XMMatrixRotationY(XMVectorGetX(rotationVector));
 		ApplyRotation(XMMatrixMultiply(pitchMatrix, yawMatrix));
+		
+		// Update position
+		XMFLOAT2 movementAmount = ZERO_VECTOR2;
+		if (Keyboard::gInstance->IsKeyDown(DIK_W)) {
+			++movementAmount.y;
+		}
+		if (Keyboard::gInstance->IsKeyDown(DIK_S)) {
+			--movementAmount.y;
+		}
+		if (Keyboard::gInstance->IsKeyDown(DIK_A)) {
+			--movementAmount.x;
+		}
+		if (Keyboard::gInstance->IsKeyDown(DIK_D)) {
+			++movementAmount.x;
+		}
 		XMVECTOR position = XMLoadFloat3(&mPosition);
 		const XMVECTOR movement = XMLoadFloat2(&movementAmount) * mMovementRate * elapsedTime;
 		const XMVECTOR strafe = XMLoadFloat3(&mRight) * XMVectorGetX(movement);
@@ -81,6 +82,7 @@ namespace BRE {
 		const XMVECTOR forward = XMLoadFloat3(&mDirection) * XMVectorGetY(movement);
 		position += forward;
 		XMStoreFloat3(&mPosition, position);
+
 		UpdateViewMatrix();
 	}
 }

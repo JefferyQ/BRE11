@@ -19,12 +19,6 @@
 
 namespace BRE {
 	struct DirectionalLightData {
-		DirectionalLightData()
-			: mColor(0.0f, 0.0f, 0.0f)
-			, mDirection(0.0f, 0.0f, 0.0f)
-		{
-		}
-
 		DirectX::XMFLOAT3 mColor;
 		float mPad1;
 		DirectX::XMFLOAT3 mDirection;
@@ -32,14 +26,6 @@ namespace BRE {
 	};
 
 	struct PointLightData {
-		PointLightData()
-			: mColor(0.0f, 0.0f, 0.0f)
-			, mPad1(0.0f)
-			, mPosition(0.0f, 0.0f, 0.0f)
-			, mRange(0.0f)
-		{
-		}
-
 		// Packed into 4D vector: (Color, Pad)
 		DirectX::XMFLOAT3 mColor;
 		float mPad1;
@@ -50,16 +36,6 @@ namespace BRE {
 	};
 
 	struct SpotLightData {
-		SpotLightData()
-			: mColor(0.0f, 0.0f, 0.0f)
-			, mInnerAngle(0.0f)
-			, mPosition(0.0f, 0.0f, 0.0f)
-			, mOuterAngle(0.0f)
-			, mDirection(0.0f, 0.0f, 0.0f)
-			, mRange(0.0f)
-		{
-		}
-
 		// Packed into 4D vector: (Color, Inner Angle)
 		DirectX::XMFLOAT3 mColor;
 		float mInnerAngle;

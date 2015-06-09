@@ -177,9 +177,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="rendering\shaders\basic\BasicDrawer.cpp" />
     <ClCompile Include="rendering\shaders\basic\ps\BasicPsData.cpp" />
     <ClCompile Include="rendering\shaders\basic\vs\BasicVsData.cpp" />
-    <ClCompile Include="rendering\shaders\color\ColorDrawer.cpp" />
-    <ClCompile Include="rendering\shaders\color\ps\ColorPsData.cpp" />
-    <ClCompile Include="rendering\shaders\color\vs\ColorVsData.cpp" />
     <ClCompile Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPsData.cpp" />
     <ClCompile Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.cpp" />
     <ClCompile Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.cpp" />
@@ -229,9 +226,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\shaders\basic\ps\BasicPsData.h" />
     <ClInclude Include="rendering\shaders\basic\vs\BasicVsData.h" />
     <ClInclude Include="rendering\shaders\Buffer.h" />
-    <ClInclude Include="rendering\shaders\color\ColorDrawer.h" />
-    <ClInclude Include="rendering\shaders\color\ps\ColorPsData.h" />
-    <ClInclude Include="rendering\shaders\color\vs\ColorVsData.h" />
     <ClInclude Include="rendering\shaders\filters\gaussianBlur\GaussianBlurFilterPsData.h" />
     <ClInclude Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.h" />
     <ClInclude Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.h" />
@@ -265,7 +259,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <Text Include="doc\LightingModels.txt" />
     <Text Include="doc\LightTypes.txt" />
     <Text Include="doc\Mappings.txt" />
-    <Text Include="rendering\shaders\normalDisplacement\Explanation.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="rendering\shaders\Lighting.hlsli" />
@@ -289,26 +282,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\basic\%(Filename).cso</ObjectFileOutput>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
-    </FxCompile>
-    <FxCompile Include="rendering\shaders\color\ps\ColorPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\color\%(Filename).cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\color\%(Filename).cso</ObjectFileOutput>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
-    </FxCompile>
-    <FxCompile Include="rendering\shaders\color\vs\ColorVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\color\%(Filename).cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\color\%(Filename).cso</ObjectFileOutput>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\source\RenderingLib</AdditionalIncludeDirectories>
     </FxCompile>

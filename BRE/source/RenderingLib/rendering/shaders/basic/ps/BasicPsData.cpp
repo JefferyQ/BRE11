@@ -9,7 +9,7 @@
 
 namespace {
 	const char* shader = "content\\shaders\\basic\\BasicPS.cso";
-	const size_t sNumGBuffers = 4;
+	const size_t sNumGBuffers = 5;
 }
 
 namespace BRE {

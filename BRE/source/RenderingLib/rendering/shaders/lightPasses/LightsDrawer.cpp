@@ -11,22 +11,22 @@
 using namespace DirectX;
 
 namespace BRE {
-	void LightsDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* *geometryBuffersSRVs, const float /*farClipPlaneDistance*/, const XMMATRIX& /*view*/, const XMMATRIX& proj) {
+	void LightsDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* *geometryBuffersSRVs, const float farClipPlaneDistance, const XMMATRIX& view, const XMMATRIX& proj) {
 		context.OMSetBlendState(mDefaultBS, nullptr, UINT32_MAX);
 		context.OMSetDepthStencilState(mDisableDepthTestDSS, UINT32_MAX);
 
-		const XMMATRIX invProj = XMMatrixInverse(nullptr, proj); 
+		//const XMMATRIX invProj = XMMatrixInverse(nullptr, proj); 
 
-		for (DirLightData& data : mDirLightDataVec) {
+		/*for (DirLightData& data : mDirLightDataVec) {
 			XMStoreFloat4x4(&data.mVertexShaderData.InvProjMatrix(), invProj);
 			data.mVertexShaderData.PreDraw(device, context);
 			data.mPixelShaderData.PreDraw(device, context, geometryBuffersSRVs);
 			data.mVertexShaderData.DrawIndexed(context);
 			data.mPixelShaderData.PostDraw(context);
 			data.mVertexShaderData.PostDraw(context);
-		}
+		}*/
 
-		/*for (PointLightData& data : mPointLightDataVec) {
+		for (PointLightData& data : mPointLightDataVec) {
 			XMStoreFloat4x4(&data.mPointLightVsData.ViewMatrix(), XMMatrixTranspose(view));
 
 			XMStoreFloat4x4(&data.mPointLightGsData.ProjectionMatrix(), XMMatrixTranspose(proj));
@@ -41,7 +41,7 @@ namespace BRE {
 			data.mPointLightVsData.PostDraw(context);
 			data.mPointLightGsData.PostDraw(context);
 			data.mPointLightPsData.PostDraw(context);
-		}*/
+		}
 	}
 
 	void LightsDrawer::InitStates() {

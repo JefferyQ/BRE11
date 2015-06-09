@@ -68,85 +68,115 @@ namespace BRE {
 			YamlUtils::GetSequence<float>(node, "scaling", scaling, ARRAYSIZE(scaling));
 			const XMMATRIX scalingMatrix = XMMatrixScaling(scaling[0], scaling[1], scaling[2]);
 
+			const XMMATRIX worldMatrix = scalingMatrix * rotationMatrix * translationMatrix;
+
+			const std::string material = YamlUtils::GetScalar<std::string>(node, "material");
+			const size_t matId = Hash(material.c_str());
+
 			const Model* model;
 			const size_t modelId = ModelManager::gInstance->LoadModel(modelFilePath.c_str(), &model);			
 			ASSERT_COND(model);
-			if (renderType == "Normal") {
-				NormalMappingDrawer renderer;
-				renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId));
-				ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
-				renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer());
-				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[0]->Indices().size()));
-				renderer.VertexShaderData().TextureScaleFactor() = YamlUtils::GetScalar<float>(node, "textureScaleFactor");
-
-				// Build world matrix
-				XMStoreFloat4x4(&renderer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
-
-				// Initialize pixel shader data
-				const std::string material = YamlUtils::GetScalar<std::string>(node, "material");
-				const size_t matId = Hash(material.c_str());
-				renderer.PixelShaderData().SetMaterial(matId);
-				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();	
-				
+			const std::vector<BRE::Mesh*>& meshes = model->Meshes();
+			const size_t numMeshes = meshes.size();
+			ASSERT_COND(numMeshes > 0);
+			if (renderType == "Normal") {	
+				const float textureScaleFactor = YamlUtils::GetScalar<float>(node, "textureScaleFactor");
+				ID3D11ShaderResourceView* normalMapSRV = nullptr;
 				if (YamlUtils::IsDefined(node, "normalMapTexture")) {
 					ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
 					const std::string normalMapTexture = YamlUtils::GetScalar<std::string>(node, "normalMapTexture");
-					shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &renderer.PixelShaderData().NormalSRV());
+					shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &normalMapSRV);
 				}
 				
-				NormalMappingDrawerVec().push_back(renderer);
+				for (size_t iMeshIndex = 0; iMeshIndex < numMeshes; ++iMeshIndex) {
+					NormalMappingDrawer renderer;
+					renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId, iMeshIndex));
+					ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
+					renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer(iMeshIndex));
+					renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(meshes[iMeshIndex]->Indices().size()));
+					renderer.VertexShaderData().TextureScaleFactor() = textureScaleFactor;
+
+					XMStoreFloat4x4(&renderer.WorldMatrix(), worldMatrix);
+					
+					renderer.PixelShaderData().SetMaterial(matId);
+					renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+
+					if (normalMapSRV) {
+						renderer.PixelShaderData().NormalSRV() = normalMapSRV;
+					}					
+
+					NormalMappingDrawerVec().push_back(renderer);
+				}
 			}
 			else if (renderType == "Normal_Displacement") {
-				NormalDisplacementDrawer renderer;
-				renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId));
-				ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
-				renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer());
-				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[0]->Indices().size()));
-				renderer.VertexShaderData().TextureScaleFactor() = YamlUtils::GetScalar<float>(node, "textureScaleFactor");
-				
-				// Build world matrix
-				XMStoreFloat4x4(&renderer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
+				const float textureScaleFactor = YamlUtils::GetScalar<float>(node, "textureScaleFactor");
+				float edgeTesselationFactors[3];
+				YamlUtils::GetSequence<float>(node, "edgeTessellationFactors", edgeTesselationFactors, ARRAYSIZE(edgeTesselationFactors));
+				const float insideTessellationFactor = YamlUtils::GetScalar<float>(node, "insideTessellationFactors");
+				const float displacementScale = YamlUtils::GetScalar<float>(node, "displacementScale");
 
-				// Initialize hull shader data
-				YamlUtils::GetSequence<float>(node, "edgeTesselationFactors", renderer.HullShaderData().TessellationFactors(), 3);
-				renderer.HullShaderData().TessellationFactors()[3] = YamlUtils::GetScalar<float>(node, "insideTessellationFactors");
-
-				// Initialize domain shader data
-				renderer.DomainShaderData().DisplacementScale() = YamlUtils::GetScalar<float>(node, "displacementScale");
-				ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
-				const std::string displacementMapTexture = YamlUtils::GetScalar<std::string>(node, "displacementMapTexture");
-				shaderResourcesMgr.AddTextureFromFileSRV(displacementMapTexture.c_str(), &renderer.DomainShaderData().DisplacementMapSRV());
-				ASSERT_PTR(renderer.DomainShaderData().DisplacementMapSRV());
-				renderer.DomainShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
-
-				// Initialize pixel shader data
-				const std::string material = YamlUtils::GetScalar<std::string>(node, "material");
-				const size_t matId = Hash(material.c_str());
-				renderer.PixelShaderData().SetMaterial(matId);
-				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
-
+				ID3D11ShaderResourceView* displacementSRV;
+				{
+					ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
+					const std::string displacementMapTexture = YamlUtils::GetScalar<std::string>(node, "displacementMapTexture");
+					shaderResourcesMgr.AddTextureFromFileSRV(displacementMapTexture.c_str(), &displacementSRV);
+					ASSERT_PTR(displacementSRV);
+				}
+				ID3D11ShaderResourceView* normalMapSRV = nullptr;				
 				if (YamlUtils::IsDefined(node, "normalMapTexture")) {
+					ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
 					const std::string normalMapTexture = YamlUtils::GetScalar<std::string>(node, "normalMapTexture");
-					shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &renderer.PixelShaderData().NormalSRV());
+					shaderResourcesMgr.AddTextureFromFileSRV(normalMapTexture.c_str(), &normalMapSRV);
 				}
 
-				NormalDisplacementDrawerVec().push_back(renderer);
+				for (size_t iMeshIndex = 0; iMeshIndex < numMeshes; ++iMeshIndex) {
+					NormalDisplacementDrawer renderer;
+					renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId, iMeshIndex));
+					ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
+					renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer(iMeshIndex));
+					renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[iMeshIndex]->Indices().size()));
+					renderer.VertexShaderData().TextureScaleFactor() = textureScaleFactor;
+
+					// Build world matrix
+					XMStoreFloat4x4(&renderer.WorldMatrix(), worldMatrix);
+
+					// Initialize hull shader data
+					for (size_t iTessFactor = 0; iTessFactor < ARRAYSIZE(edgeTesselationFactors); ++iTessFactor) {
+						renderer.HullShaderData().TessellationFactors()[iTessFactor] = edgeTesselationFactors[iTessFactor];
+					}
+					renderer.HullShaderData().TessellationFactors()[3] = insideTessellationFactor;
+
+					// Initialize domain shader data
+					renderer.DomainShaderData().DisplacementScale() = displacementScale;
+					renderer.DomainShaderData().DisplacementMapSRV() = displacementSRV;
+					renderer.DomainShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+
+					// Initialize pixel shader data
+					renderer.PixelShaderData().SetMaterial(matId);
+					renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+
+					if (normalMapSRV) {
+						renderer.PixelShaderData().NormalSRV() = normalMapSRV;
+					}
+
+					NormalDisplacementDrawerVec().push_back(renderer);
+				}
 			}
 			else if (renderType == "Basic") {
-				BasicDrawer renderer;
-				renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(BasicVertexData::CreateVertexBuffer(modelId));
-				ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
-				renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer());
-				renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[0]->Indices().size()));
+				for (size_t iMeshIndex = 0; iMeshIndex < numMeshes; ++iMeshIndex) {
+					BasicDrawer renderer;
+					renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(BasicVertexData::CreateVertexBuffer(modelId, iMeshIndex));
+					ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
+					renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer(iMeshIndex));
+					renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[iMeshIndex]->Indices().size()));
 
-				XMStoreFloat4x4(&renderer.WorldMatrix(), scalingMatrix * rotationMatrix * translationMatrix);
+					XMStoreFloat4x4(&renderer.WorldMatrix(), worldMatrix);
 
-				const std::string material = YamlUtils::GetScalar<std::string>(node, "material");
-				const size_t matId = Hash(material.c_str());
-				renderer.PixelShaderData().SetMaterial(matId);
-				renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+					renderer.PixelShaderData().SetMaterial(matId);
+					renderer.PixelShaderData().SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 
-				BasicDrawerVec().push_back(renderer);
+					BasicDrawerVec().push_back(renderer);
+				}
 			}
 		}
 	}
@@ -156,7 +186,8 @@ namespace BRE {
 			BACK_BUFFER,
 			NORMAL,
 			BASE_COLOR,
-			SMOOTHNESS_METALMASK_REFLECTANCE,
+			SMOOTHNESS_METALMASK,
+			REFLECTANCE,
 		} renderMode = BACK_BUFFER;
 		if (Keyboard::gInstance->IsKeyDown(DIK_1)) {
 			renderMode = BACK_BUFFER;
@@ -168,7 +199,10 @@ namespace BRE {
 			renderMode = BASE_COLOR;
 		}
 		else if (Keyboard::gInstance->IsKeyDown(DIK_4)) {
-			renderMode = SMOOTHNESS_METALMASK_REFLECTANCE;
+			renderMode = SMOOTHNESS_METALMASK;
+		}
+		else if (Keyboard::gInstance->IsKeyDown(DIK_5)) {
+			renderMode = REFLECTANCE;
 		}
 
 		RenderStateHelper::gInstance->SaveAll();
@@ -209,8 +243,11 @@ namespace BRE {
 			else if (renderMode == BASE_COLOR) {
 				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_base_color"));
 			}
+			else if (renderMode == SMOOTHNESS_METALMASK) {
+				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_smoothness_metalmask"));
+			}
 			else {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_smoothness_metalmask_reflectance"));
+				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_reflectance"));
 			}
 
 			ASSERT_PTR(texture);
@@ -256,7 +293,7 @@ namespace BRE {
 		textureDesc[1].SampleDesc.Count = 1;
 		textureDesc[1].SampleDesc.Quality = 0;
 
-		// Smoothness_MetalMask_Reflectance texture desc
+		// Smoothness_MetalMask texture desc
 		ZeroMemory(&textureDesc[2], sizeof(textureDesc[2]));
 		textureDesc[2].Width = screenWidth;
 		textureDesc[2].Height = screenHeight;
@@ -268,17 +305,29 @@ namespace BRE {
 		textureDesc[2].SampleDesc.Count = 1;
 		textureDesc[2].SampleDesc.Quality = 0;
 
-		// Depth texture description
+		// Reflectance texture desc
 		ZeroMemory(&textureDesc[3], sizeof(textureDesc[3]));
 		textureDesc[3].Width = screenWidth;
 		textureDesc[3].Height = screenHeight;
 		textureDesc[3].MipLevels = 1;
 		textureDesc[3].ArraySize = 1;
-		textureDesc[3].Format = DXGI_FORMAT_R16_UNORM;
+		textureDesc[3].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 		textureDesc[3].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[3].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[3].SampleDesc.Count = 1;
 		textureDesc[3].SampleDesc.Quality = 0;
+
+		// Depth texture description
+		ZeroMemory(&textureDesc[4], sizeof(textureDesc[4]));
+		textureDesc[4].Width = screenWidth;
+		textureDesc[4].Height = screenHeight;
+		textureDesc[4].MipLevels = 1;
+		textureDesc[4].ArraySize = 1;
+		textureDesc[4].Format = DXGI_FORMAT_R16_UNORM;
+		textureDesc[4].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc[4].Usage = D3D11_USAGE_DEFAULT;
+		textureDesc[4].SampleDesc.Count = 1;
+		textureDesc[4].SampleDesc.Quality = 0;
 
 		//
 		// Texture id's
@@ -286,7 +335,8 @@ namespace BRE {
 		const char* textureIds[numTextures] = {
 			"gbuffers_normal",
 			"gbuffers_base_color",
-			"gbuffers_smoothness_metalmask_reflectance",
+			"gbuffers_smoothness_metalmask",
+			"gbuffers_reflectance",
 			"gbuffers_depth",
 		};
 

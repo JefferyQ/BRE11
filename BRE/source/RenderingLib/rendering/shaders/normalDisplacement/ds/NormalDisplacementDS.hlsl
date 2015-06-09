@@ -1,4 +1,3 @@
-/*******************  Data  *************************/
 #define NUM_PATCH_POINTS 3
 
 struct HS_CONSTANT_OUTPUT {
@@ -22,7 +21,6 @@ struct DS_OUTPUT {
 	float3 BinormalVS : BINORMAL;
 };
 
-/*******************  Resources  *************************/
 cbuffer CBufferPerFrame : register (b0) {
 	float4x4 Proj;
 	float4x4 WorldView;
@@ -33,7 +31,6 @@ SamplerState TexSampler : register (s0);
 
 Texture2D DisplacementMap : register (t0);
 
-/*******************  Shader  *************************/
 [domain("tri")]
 DS_OUTPUT main(const HS_CONSTANT_OUTPUT IN, const float3 uvw : SV_DomainLocation, const OutputPatch <HS_OUTPUT, NUM_PATCH_POINTS> patch) {
 	DS_OUTPUT OUT = (DS_OUTPUT)0;

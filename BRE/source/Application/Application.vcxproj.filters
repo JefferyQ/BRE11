@@ -22,29 +22,32 @@
     <Filter Include="content\models">
       <UniqueIdentifier>{f6c82e98-f6b5-4bd9-9710-0dfe02bc095c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="content\configs\textures">
+    <Filter Include="content\textures">
       <UniqueIdentifier>{d53e492c-8bd8-4f8e-b653-eb62d0f5c37b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="content\configs\textures\aluminium">
+    <Filter Include="content\textures\aluminium">
       <UniqueIdentifier>{def240ca-7d9a-4488-81d4-1bcba83b3e61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="content\configs\textures\gold">
+    <Filter Include="content\textures\gold">
       <UniqueIdentifier>{f19ba2c5-3ecb-4903-b86d-d7adc8086573}</UniqueIdentifier>
     </Filter>
-    <Filter Include="content\configs\textures\mossy_stone">
+    <Filter Include="content\textures\mossy_stone">
       <UniqueIdentifier>{109087e8-b971-4ebc-b797-469aff0a8c4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="content\configs\textures\platinum">
+    <Filter Include="content\textures\platinum">
       <UniqueIdentifier>{9e38b461-72ed-4032-ac37-8109420c5c77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="content\configs\textures\silver">
+    <Filter Include="content\textures\silver">
       <UniqueIdentifier>{10933565-181c-4eae-90f2-b077720cf6a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="content\configs\textures\terracota">
+    <Filter Include="content\textures\terracota">
       <UniqueIdentifier>{dc9201a6-5ff4-439c-a944-fe00ace2d1b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="content\configs\textures\wood1">
+    <Filter Include="content\textures\wood1">
       <UniqueIdentifier>{20ea7bee-2260-4c7c-87fa-fe40cc1179b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content\textures\muddy_dirt">
+      <UniqueIdentifier>{83d500b2-20bc-446b-9cb9-8cd28fe7ced2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,171 +59,195 @@
     <None Include="content\configs\settings.yml">
       <Filter>content\configs</Filter>
     </None>
-    <None Include="content\configs\fullyDeferred\materials.yml">
-      <Filter>content\configs\fullyDeferred</Filter>
-    </None>
     <None Include="content\configs\fullyDeferred\models.yml">
       <Filter>content\configs\fullyDeferred</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="content\models\bunny.obj">
+    <None Include="content\configs\materials.yml">
+      <Filter>content\configs</Filter>
+    </None>
+    <None Include="content\models\buddha.obj">
       <Filter>content\models</Filter>
-    </Object>
-    <Object Include="content\models\cylinder.obj">
+    </None>
+    <None Include="content\models\bunny.obj">
       <Filter>content\models</Filter>
-    </Object>
-    <Object Include="content\models\dragon.obj">
+    </None>
+    <None Include="content\models\cylinder.obj">
       <Filter>content\models</Filter>
-    </Object>
-    <Object Include="content\models\mitsuba.obj">
+    </None>
+    <None Include="content\models\dragon.obj">
       <Filter>content\models</Filter>
-    </Object>
-    <Object Include="content\models\plane.obj">
+    </None>
+    <None Include="content\models\mitsuba.obj">
       <Filter>content\models</Filter>
-    </Object>
-    <Object Include="content\models\sphere.obj">
+    </None>
+    <None Include="content\models\plane.obj">
       <Filter>content\models</Filter>
-    </Object>
-    <Object Include="content\models\teapot.obj">
+    </None>
+    <None Include="content\models\sphere.obj">
       <Filter>content\models</Filter>
-    </Object>
-    <Object Include="content\models\torusKnot.obj">
+    </None>
+    <None Include="content\models\teapot.obj">
       <Filter>content\models</Filter>
-    </Object>
+    </None>
+    <None Include="content\models\torusKnot.obj">
+      <Filter>content\models</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="content\textures\aluminium\aluminium_base_color.dds">
-      <Filter>content\configs\textures\aluminium</Filter>
+      <Filter>content\textures\aluminium</Filter>
     </Image>
     <Image Include="content\textures\aluminium\aluminium_metal_mask.dds">
-      <Filter>content\configs\textures\aluminium</Filter>
+      <Filter>content\textures\aluminium</Filter>
     </Image>
     <Image Include="content\textures\aluminium\aluminium_normal.dds">
-      <Filter>content\configs\textures\aluminium</Filter>
+      <Filter>content\textures\aluminium</Filter>
     </Image>
     <Image Include="content\textures\aluminium\aluminium_reflectance.dds">
-      <Filter>content\configs\textures\aluminium</Filter>
+      <Filter>content\textures\aluminium</Filter>
     </Image>
     <Image Include="content\textures\aluminium\aluminium_smoothness.dds">
-      <Filter>content\configs\textures\aluminium</Filter>
+      <Filter>content\textures\aluminium</Filter>
     </Image>
     <Image Include="content\textures\gold\gold_base_color.dds">
-      <Filter>content\configs\textures\gold</Filter>
+      <Filter>content\textures\gold</Filter>
     </Image>
     <Image Include="content\textures\gold\gold_metal_mask.dds">
-      <Filter>content\configs\textures\gold</Filter>
+      <Filter>content\textures\gold</Filter>
     </Image>
     <Image Include="content\textures\gold\gold_normal.dds">
-      <Filter>content\configs\textures\gold</Filter>
+      <Filter>content\textures\gold</Filter>
     </Image>
     <Image Include="content\textures\gold\gold_reflectance.dds">
-      <Filter>content\configs\textures\gold</Filter>
+      <Filter>content\textures\gold</Filter>
     </Image>
     <Image Include="content\textures\gold\gold_smoothness.dds">
-      <Filter>content\configs\textures\gold</Filter>
+      <Filter>content\textures\gold</Filter>
     </Image>
     <Image Include="content\textures\mossy_stone\mossy_stone_base_color.dds">
-      <Filter>content\configs\textures\mossy_stone</Filter>
+      <Filter>content\textures\mossy_stone</Filter>
     </Image>
     <Image Include="content\textures\mossy_stone\mossy_stone_height.dds">
-      <Filter>content\configs\textures\mossy_stone</Filter>
+      <Filter>content\textures\mossy_stone</Filter>
     </Image>
     <Image Include="content\textures\mossy_stone\mossy_stone_metal_mask.dds">
-      <Filter>content\configs\textures\mossy_stone</Filter>
+      <Filter>content\textures\mossy_stone</Filter>
     </Image>
     <Image Include="content\textures\mossy_stone\mossy_stone_normal.dds">
-      <Filter>content\configs\textures\mossy_stone</Filter>
+      <Filter>content\textures\mossy_stone</Filter>
     </Image>
     <Image Include="content\textures\mossy_stone\mossy_stone_reflectance.dds">
-      <Filter>content\configs\textures\mossy_stone</Filter>
+      <Filter>content\textures\mossy_stone</Filter>
     </Image>
     <Image Include="content\textures\mossy_stone\mossy_stone_smoothness.dds">
-      <Filter>content\configs\textures\mossy_stone</Filter>
+      <Filter>content\textures\mossy_stone</Filter>
     </Image>
     <Image Include="content\textures\wood1\wood1_base_color.dds">
-      <Filter>content\configs\textures\wood1</Filter>
+      <Filter>content\textures\wood1</Filter>
     </Image>
     <Image Include="content\textures\wood1\wood1_height.dds">
-      <Filter>content\configs\textures\wood1</Filter>
+      <Filter>content\textures\wood1</Filter>
     </Image>
     <Image Include="content\textures\wood1\wood1_metal_mask.dds">
-      <Filter>content\configs\textures\wood1</Filter>
+      <Filter>content\textures\wood1</Filter>
     </Image>
     <Image Include="content\textures\wood1\wood1_normal.dds">
-      <Filter>content\configs\textures\wood1</Filter>
+      <Filter>content\textures\wood1</Filter>
     </Image>
     <Image Include="content\textures\wood1\wood1_reflectance.dds">
-      <Filter>content\configs\textures\wood1</Filter>
+      <Filter>content\textures\wood1</Filter>
     </Image>
     <Image Include="content\textures\wood1\wood1_smoothness.dds">
-      <Filter>content\configs\textures\wood1</Filter>
+      <Filter>content\textures\wood1</Filter>
     </Image>
     <Image Include="content\textures\terracota\terracota_base_color.dds">
-      <Filter>content\configs\textures\terracota</Filter>
+      <Filter>content\textures\terracota</Filter>
     </Image>
     <Image Include="content\textures\terracota\terracota_metal_mask.dds">
-      <Filter>content\configs\textures\terracota</Filter>
+      <Filter>content\textures\terracota</Filter>
     </Image>
     <Image Include="content\textures\terracota\terracota_normal.dds">
-      <Filter>content\configs\textures\terracota</Filter>
+      <Filter>content\textures\terracota</Filter>
     </Image>
     <Image Include="content\textures\terracota\terracota_reflectance.dds">
-      <Filter>content\configs\textures\terracota</Filter>
+      <Filter>content\textures\terracota</Filter>
     </Image>
     <Image Include="content\textures\terracota\terracota_smoothness.dds">
-      <Filter>content\configs\textures\terracota</Filter>
+      <Filter>content\textures\terracota</Filter>
     </Image>
     <Image Include="content\textures\silver\silver_base_color.dds">
-      <Filter>content\configs\textures\silver</Filter>
+      <Filter>content\textures\silver</Filter>
     </Image>
     <Image Include="content\textures\silver\silver_metal_mask.dds">
-      <Filter>content\configs\textures\silver</Filter>
+      <Filter>content\textures\silver</Filter>
     </Image>
     <Image Include="content\textures\silver\silver_normal.dds">
-      <Filter>content\configs\textures\silver</Filter>
+      <Filter>content\textures\silver</Filter>
     </Image>
     <Image Include="content\textures\silver\silver_reflectance.dds">
-      <Filter>content\configs\textures\silver</Filter>
+      <Filter>content\textures\silver</Filter>
     </Image>
     <Image Include="content\textures\silver\silver_smoothness.dds">
-      <Filter>content\configs\textures\silver</Filter>
+      <Filter>content\textures\silver</Filter>
     </Image>
     <Image Include="content\textures\platinum\platinum_base_color.dds">
-      <Filter>content\configs\textures\platinum</Filter>
+      <Filter>content\textures\platinum</Filter>
     </Image>
     <Image Include="content\textures\platinum\platinum_metal_mask.dds">
-      <Filter>content\configs\textures\platinum</Filter>
+      <Filter>content\textures\platinum</Filter>
     </Image>
     <Image Include="content\textures\platinum\platinum_normal.dds">
-      <Filter>content\configs\textures\platinum</Filter>
+      <Filter>content\textures\platinum</Filter>
     </Image>
     <Image Include="content\textures\platinum\platinum_reflectance.dds">
-      <Filter>content\configs\textures\platinum</Filter>
+      <Filter>content\textures\platinum</Filter>
     </Image>
     <Image Include="content\textures\platinum\platinum_smoothness.dds">
-      <Filter>content\configs\textures\platinum</Filter>
+      <Filter>content\textures\platinum</Filter>
     </Image>
     <Image Include="content\textures\rock1_diffuse.dds">
-      <Filter>content\configs\textures</Filter>
+      <Filter>content\textures</Filter>
     </Image>
     <Image Include="content\textures\rock1_height.dds">
-      <Filter>content\configs\textures</Filter>
+      <Filter>content\textures</Filter>
     </Image>
     <Image Include="content\textures\rock1_normal.dds">
-      <Filter>content\configs\textures</Filter>
+      <Filter>content\textures</Filter>
     </Image>
     <Image Include="content\textures\rock1_specular.dds">
-      <Filter>content\configs\textures</Filter>
+      <Filter>content\textures</Filter>
     </Image>
     <Image Include="content\textures\torusKnot_normal.dds">
-      <Filter>content\configs\textures</Filter>
+      <Filter>content\textures</Filter>
     </Image>
     <Image Include="content\textures\torusKnot_specular.dds">
-      <Filter>content\configs\textures</Filter>
+      <Filter>content\textures</Filter>
     </Image>
     <Image Include="content\textures\white_diffuse.dds">
-      <Filter>content\configs\textures</Filter>
+      <Filter>content\textures</Filter>
     </Image>
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_base_color.dds">
+      <Filter>content\textures\muddy_dirt</Filter>
+    </Image>
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_height.dds">
+      <Filter>content\textures\muddy_dirt</Filter>
+    </Image>
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_metal_mask.dds">
+      <Filter>content\textures\muddy_dirt</Filter>
+    </Image>
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_normal.dds">
+      <Filter>content\textures\muddy_dirt</Filter>
+    </Image>
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_reflectance.dds">
+      <Filter>content\textures\muddy_dirt</Filter>
+    </Image>
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_smoothness.dds">
+      <Filter>content\textures\muddy_dirt</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="content\models\mitsuba-sphere.obj">
+      <Filter>content\models</Filter>
+    </Object>
   </ItemGroup>
 </Project>

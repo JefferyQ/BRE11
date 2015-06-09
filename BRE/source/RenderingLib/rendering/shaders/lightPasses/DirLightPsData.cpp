@@ -11,7 +11,7 @@ using namespace DirectX;
 
 namespace {
 	const char* sShaderFile = "content\\shaders\\lightPasses\\DirLightPS.cso";
-	const size_t sNumGBuffers = 4;
+	const size_t sNumGBuffers = 5;
 }
 
 namespace BRE {

@@ -5,7 +5,6 @@
 namespace BRE {
 	class Keyboard {
 	public:
-		// Global instance
 		static Keyboard* gInstance;
 
 		const Keyboard& operator=(const Keyboard& rhs) = delete;

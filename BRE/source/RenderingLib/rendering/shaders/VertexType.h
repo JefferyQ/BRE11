@@ -14,18 +14,7 @@ namespace BRE {
 		NormalMappingVertexData();
 		NormalMappingVertexData(const DirectX::XMFLOAT4& posL, const DirectX::XMFLOAT2& texC, const DirectX::XMFLOAT3& normalL, const DirectX::XMFLOAT3& tangentL);
 
-		static size_t CreateVertexBuffer(const size_t modelId);
-	};
-
-	struct ColorVertexData {
-		DirectX::XMFLOAT4 mPosL;
-		DirectX::XMFLOAT4 mColor;
-		DirectX::XMFLOAT3 mNormalL;
-
-		ColorVertexData();
-		ColorVertexData(const DirectX::XMFLOAT4& posL, const DirectX::XMFLOAT4& color, const DirectX::XMFLOAT3& normalL);
-
-		static size_t CreateVertexBuffer(const size_t modelId);
+		static size_t CreateVertexBuffer(const size_t modelId, const size_t meshIndex);
 	};
 
 	struct BasicVertexData {
@@ -35,6 +24,6 @@ namespace BRE {
 		BasicVertexData();
 		BasicVertexData(const DirectX::XMFLOAT4& posL, const DirectX::XMFLOAT3& normalL);
 
-		static size_t CreateVertexBuffer(const size_t modelId);
+		static size_t CreateVertexBuffer(const size_t modelId, const size_t meshIndex);
 	};
 }

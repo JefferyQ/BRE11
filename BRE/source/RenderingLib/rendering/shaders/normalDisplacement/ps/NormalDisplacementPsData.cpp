@@ -9,7 +9,7 @@
 
 namespace {
 	const char* shader = "content\\shaders\\normalDisplacement\\NormalDisplacementPS.cso";
-	const size_t sNumGBuffers = 4;
+	const size_t sNumGBuffers = 5;
 }
 
 namespace BRE {

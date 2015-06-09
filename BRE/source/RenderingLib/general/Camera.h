@@ -54,24 +54,16 @@ namespace BRE {
 		float FieldOfView() const { return mFieldOfView; }
 		float NearPlaneDistance() const { return mNearPlaneDistance; }
 		float FarPlaneDistance() const { return mFarPlaneDistance; }
-
-		DirectX::XMMATRIX ViewMatrix() const { return DirectX::XMLoadFloat4x4(&mViewMatrix); }
-		DirectX::XMMATRIX ProjectionMatrix() const { return DirectX::XMLoadFloat4x4(&mProjectionMatrix); }
-		DirectX::XMMATRIX ViewProjectionMatrix() const {
-			return DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&mViewMatrix), DirectX::XMLoadFloat4x4(&mProjectionMatrix));
-		}
-
-		void UpdateViewMatrix() {
-			DirectX::XMStoreFloat4x4(&mViewMatrix, DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&mPosition), DirectX::XMLoadFloat3(&mDirection), DirectX::XMLoadFloat3(&mUp)));
-		}
-
-		void UpdateProjectionMatrix() {
-			DirectX::XMStoreFloat4x4(&mProjectionMatrix, DirectX::XMMatrixPerspectiveFovLH(mFieldOfView, mAspectRatio, mNearPlaneDistance, mFarPlaneDistance));
-		}
-
 		float& MouseSensitivity() { return mMouseSensitivity; }
 		float& RotationRate() { return mRotationRate; }
 		float& MovementRate() { return mMovementRate; }
+
+		DirectX::XMMATRIX ViewMatrix() const { return DirectX::XMLoadFloat4x4(&mViewMatrix); }
+		DirectX::XMMATRIX ProjectionMatrix() const { return DirectX::XMLoadFloat4x4(&mProjectionMatrix); }
+		DirectX::XMMATRIX ViewProjectionMatrix() const { return DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&mViewMatrix), DirectX::XMLoadFloat4x4(&mProjectionMatrix)); }
+
+		void UpdateViewMatrix() { DirectX::XMStoreFloat4x4(&mViewMatrix, DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&mPosition), DirectX::XMLoadFloat3(&mDirection), DirectX::XMLoadFloat3(&mUp))); }
+		void UpdateProjectionMatrix() { DirectX::XMStoreFloat4x4(&mProjectionMatrix, DirectX::XMMatrixPerspectiveFovLH(mFieldOfView, mAspectRatio, mNearPlaneDistance, mFarPlaneDistance)); }
 
 		void ApplyRotation(const DirectX::XMFLOAT4X4& transform) { ApplyRotation(DirectX::XMLoadFloat4x4(&transform)); }
 		void ApplyRotation(DirectX::CXMMATRIX transform);

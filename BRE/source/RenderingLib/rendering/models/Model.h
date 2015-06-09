@@ -22,7 +22,7 @@ namespace BRE {
 		const std::vector<Mesh*>& Meshes() const { return mMeshes; }
 		const std::vector<ModelMaterial*>& Materials() const { return mMaterials; }
 
-		size_t CreateIndexBuffer(ID3D11Buffer* *buffer = nullptr) const;
+		size_t CreateIndexBuffer(const size_t meshIndex, ID3D11Buffer* *buffer = nullptr) const;
 
 	private:
 		std::string mFilename;

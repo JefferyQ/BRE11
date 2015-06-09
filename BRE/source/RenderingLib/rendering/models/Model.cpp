@@ -5,6 +5,7 @@
 #include <assimp/scene.h>
 #include <d3d11_1.h>
 #include <iostream>
+#include <sstream>
 
 #include <managers/ShaderResourcesManager.h>
 #include <rendering/models/ModelMaterial.h>
@@ -49,9 +50,13 @@ namespace BRE {
 		}
 	}
 
-	size_t Model::CreateIndexBuffer(ID3D11Buffer* *buffer) const {
+	size_t Model::CreateIndexBuffer(const size_t meshIndex, ID3D11Buffer* *buffer) const {
+		ASSERT_COND(meshIndex < mMeshes.size());
+
 		// Check if there is already a buffer for current model
-		const std::string bufferName = mFilename + std::string("_indexBuffer");
+		std::stringstream stream;
+		stream << meshIndex;
+		const std::string bufferName = mFilename + std::string("_indexBuffer_") + stream.str();
 		const size_t bufferId = Hash(bufferName.c_str());
 		ID3D11Buffer* elem = ShaderResourcesManager::gInstance->Buffer(bufferId);
 		if (elem) {
@@ -60,8 +65,7 @@ namespace BRE {
 		}
 
 		// Create buffer
-		ASSERT_COND(Meshes().size() == 1);
-		BRE::Mesh& mesh = *Meshes()[0];
+		BRE::Mesh& mesh = *Meshes()[meshIndex];
 		ASSERT_COND(!mesh.Indices().empty());
 		std::vector<unsigned int> indices;
 		indices.insert(indices.end(), mesh.Indices().begin(), mesh.Indices().end());

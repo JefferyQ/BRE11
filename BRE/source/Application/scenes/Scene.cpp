@@ -5,7 +5,7 @@
 #include <managers/DrawManager.h>
 #include <managers/MaterialManager.h>
 #include <rendering/GlobalResources.h>
-#include <rendering/shaders/lightPasses/DirLightPsData.h>
+#include <rendering/shaders/lightPasses/DirLightPsData.h> 
 #include <utils/Assert.h>
 #include <utils/Memory.h>
 #include <utils/Utility.h>
@@ -16,18 +16,18 @@ namespace {
 	const XMFLOAT2 sLightRotationRate(XM_PI / 4.0f, XM_PI / 4.0f); 
 
 	const unsigned int sMaxShaderPointLights = 512;
-	const unsigned int sNumPointLightShaders = 4; 
+	const unsigned int sNumPointLightShaders = 2; 
 
-	const char* sMaterialsFile = "content\\configs\\fullyDeferred\\materials.yml"; 
+	const char* sMaterialsFile = "content\\configs\\materials.yml"; 
 	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";  
 }
 
-Scene::Scene() {
+Scene::Scene() { 
 	InitDirectionalLights();  
 	InitPointLights();
 
 	BRE::MaterialManager::gInstance->LoadMaterials(sMaterialsFile);     
-	BRE::DrawManager::gInstance->LoadModels(sSceneModelsFile); 
+	BRE::DrawManager::gInstance->LoadModels(sSceneModelsFile);  
 }
 
 void Scene::Update(const float elapsedTime) { 
@@ -54,9 +54,7 @@ void Scene::InitDirectionalLights() {
 	dirLightDataVec.resize(1); 
 	BRE::DirLightPixelShaderData& dirLightPsData = dirLightDataVec[0].mPixelShaderData;        
 	 
-	mDirectionalLight.SetColor(2.0f, 2.0f, 2.0f);
-	mDirectionalLight.ApplyRotation(XMMatrixRotationX(XM_PI / -2.0f));       
-
+	mDirectionalLight.SetColor(0.5f, 0.5f, 0.5f);
 	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light();
 	dirLightData.mColor = mDirectionalLight.Color(); 
 	dirLightData.mDirection = mDirectionalLight.Direction();
@@ -75,7 +73,7 @@ void Scene::InitPointLights() {
 			data.mPointLightVsData.LightPosAndRadius(iLight).y = BRE::Utility::RandomFloat(-factor, factor);
 			data.mPointLightVsData.LightPosAndRadius(iLight).z = BRE::Utility::RandomFloat(-factor, factor);
 			data.mPointLightVsData.LightPosAndRadius(iLight).w = 40; 
-			const float c = BRE::Utility::RandomFloat(10.0f, 11.0f);
+			const float c = BRE::Utility::RandomFloat(0.5f, 1.0f);
 			DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(c, c, c, 0.0f);
 			data.mPointLightVsData.LightColor(iLight) = color;
 
@@ -97,9 +95,9 @@ void Scene::UpdateDirectionalLight(const float elapsedTime) {
 		rotationAmount.x -= sLightRotationRate.x * elapsedTime;
 	}
 	if (BRE::Keyboard::gInstance->IsKeyDown(DIK_UPARROW)) {
-		rotationAmount.y += sLightRotationRate.y * elapsedTime;
+		rotationAmount.y += sLightRotationRate.y * elapsedTime;  
 	}
-	if (BRE::Keyboard::gInstance->IsKeyDown(DIK_DOWNARROW)) {
+	if (BRE::Keyboard::gInstance->IsKeyDown(DIK_DOWNARROW)) { 
 		rotationAmount.y -= sLightRotationRate.y * elapsedTime;
 	}
 
@@ -114,7 +112,7 @@ void Scene::UpdateDirectionalLight(const float elapsedTime) {
 	}
 
 	if (rotationAmount.x != 0.0f || rotationAmount.y != 0.0f) {
-		mDirectionalLight.ApplyRotation(lightRotationMatrix);
+		mDirectionalLight.ApplyRotation(lightRotationMatrix); 
 	}
 }
 

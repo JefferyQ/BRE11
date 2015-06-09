@@ -158,9 +158,11 @@ IF EXIST  "$(SolutionDir)\external\assimp-3.1.1-win-binaries\bin64\assimp.dll" x
     <ClInclude Include="scenes\Scene.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="content\configs\fullyDeferred\materials.yml" />
     <None Include="content\configs\fullyDeferred\models.yml" />
-    <None Include="content\configs\settings.yml" />
+    <None Include="content\configs\settings.yml">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="content\configs\materials.yml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="content\models\bunny.obj">
@@ -205,6 +207,12 @@ IF EXIST  "$(SolutionDir)\external\assimp-3.1.1-win-binaries\bin64\assimp.dll" x
     <Image Include="content\textures\mossy_stone\mossy_stone_normal.dds" />
     <Image Include="content\textures\mossy_stone\mossy_stone_reflectance.dds" />
     <Image Include="content\textures\mossy_stone\mossy_stone_smoothness.dds" />
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_base_color.dds" />
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_height.dds" />
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_metal_mask.dds" />
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_normal.dds" />
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_reflectance.dds" />
+    <Image Include="content\textures\muddy_dirt\muddy_dirt_smoothness.dds" />
     <Image Include="content\textures\platinum\platinum_base_color.dds" />
     <Image Include="content\textures\platinum\platinum_metal_mask.dds" />
     <Image Include="content\textures\platinum\platinum_normal.dds" />
@@ -233,6 +241,14 @@ IF EXIST  "$(SolutionDir)\external\assimp-3.1.1-win-binaries\bin64\assimp.dll" x
     <Image Include="content\textures\wood1\wood1_normal.dds" />
     <Image Include="content\textures\wood1\wood1_reflectance.dds" />
     <Image Include="content\textures\wood1\wood1_smoothness.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="content\models\buddha.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="content\models\mitsuba-sphere.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
