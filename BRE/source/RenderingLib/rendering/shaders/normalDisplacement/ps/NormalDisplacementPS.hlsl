@@ -10,7 +10,7 @@ struct DS_OUTPUT {
 };
 
 struct PS_OUTPUT {
-	float3 NormalVS : SV_Target0;
+	float2 NormalVS : SV_Target0;
 	float3 BaseColor : SV_Target1;
 	float4 Smoothness_MetalMask : SV_Target2;
 	float3 Reflectance : SV_Target3;
@@ -33,7 +33,7 @@ PS_OUTPUT main(DS_OUTPUT IN) {
 	PS_OUTPUT OUT = (PS_OUTPUT)0;
 	const float3 sampledNormal = normalize(UnmapNormal(NormalTexture.Sample(TexSampler, IN.TexCoord).xyz));
 	const float3x3 tbn = float3x3(normalize(IN.TangentVS), normalize(IN.BinormalVS), normalize(IN.NormalVS));
-	OUT.NormalVS = MapNormal(mul(sampledNormal, tbn));
+	OUT.NormalVS = OctEncode(mul(sampledNormal, tbn));
 	OUT.BaseColor = BaseColorTexture.Sample(TexSampler, IN.TexCoord).rgb;
 	OUT.Smoothness_MetalMask.x = SmoothnessTexture.Sample(TexSampler, IN.TexCoord).x;
 	OUT.Smoothness_MetalMask.y = MetalMaskTexture.Sample(TexSampler, IN.TexCoord).x;

@@ -35,7 +35,7 @@ float4 main(const in PsInput IN) : SV_TARGET{
 	const int3 sampleIndices = int3(IN.PosCS.xy, 0);
 	const float depth = DepthTexture.Load(sampleIndices).x;
 	const float3 posVS = IN.ViewRayVS * depth;
-	const float3 normalVS = UnmapNormal(NormalTexture.Load(sampleIndices).xyz);
+	const float3 normalVS = OctDecode(NormalTexture.Load(sampleIndices).xy);
 	const float3 lightDir = IN.LightPosVS - posVS;
 	const float dist = length(lightDir);
 	const float attenuation = max(0.0f, 1.0f - (dist / IN.LightColorAndRadius.w));

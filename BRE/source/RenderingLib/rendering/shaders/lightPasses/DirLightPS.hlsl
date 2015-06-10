@@ -24,7 +24,7 @@ float4 main(const in VS_OUTPUT IN) : SV_TARGET {
 	const int3 sampleIndices = int3(IN.PosCS.xy, 0);
 	const float depth = DepthTexture.Load(sampleIndices).x;
 	const float3 posVS = IN.ViewRayVS * depth;
-	const float3 normalVS = UnmapNormal(NormalTexture.Load(sampleIndices).xyz);
+	const float3 normalVS = OctDecode(NormalTexture.Load(sampleIndices).xy);
 
 	MaterialData data;
 	data.BaseColor = BaseColorTexture.Load(sampleIndices).xyz;

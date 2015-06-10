@@ -248,7 +248,9 @@ IF EXIST  "$(SolutionDir)\external\assimp-3.1.1-win-binaries\bin64\assimp.dll" x
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Object Include="content\models\mitsuba-sphere.obj" />
+    <None Include="content\models\mitsuba-sphere.obj">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

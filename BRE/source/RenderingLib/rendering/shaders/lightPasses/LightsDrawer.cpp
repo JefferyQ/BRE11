@@ -15,9 +15,9 @@ namespace BRE {
 		context.OMSetBlendState(mDefaultBS, nullptr, UINT32_MAX);
 		context.OMSetDepthStencilState(mDisableDepthTestDSS, UINT32_MAX);
 
-		//const XMMATRIX invProj = XMMatrixInverse(nullptr, proj); 
+		/*const XMMATRIX invProj = XMMatrixInverse(nullptr, proj); 
 
-		/*for (DirLightData& data : mDirLightDataVec) {
+		for (DirLightData& data : mDirLightDataVec) {
 			XMStoreFloat4x4(&data.mVertexShaderData.InvProjMatrix(), invProj);
 			data.mVertexShaderData.PreDraw(device, context);
 			data.mPixelShaderData.PreDraw(device, context, geometryBuffersSRVs);

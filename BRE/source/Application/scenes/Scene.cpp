@@ -1,16 +1,16 @@
 #include "Scene.h"
 
 #include <general/Camera.h>
-#include <input/Keyboard.h>
+#include <input/Keyboard.h> 
 #include <managers/DrawManager.h>
-#include <managers/MaterialManager.h>
-#include <rendering/GlobalResources.h>
-#include <rendering/shaders/lightPasses/DirLightPsData.h> 
+#include <managers/MaterialManager.h>  
+#include <rendering/GlobalResources.h> 
+#include <rendering/shaders/lightPasses/DirLightPsData.h>     
 #include <utils/Assert.h>
 #include <utils/Memory.h>
-#include <utils/Utility.h>
+#include <utils/Utility.h>  
 
-using namespace DirectX;
+using namespace DirectX;  
 
 namespace {
 	const XMFLOAT2 sLightRotationRate(XM_PI / 4.0f, XM_PI / 4.0f); 
@@ -18,21 +18,21 @@ namespace {
 	const unsigned int sMaxShaderPointLights = 512;
 	const unsigned int sNumPointLightShaders = 2; 
 
-	const char* sMaterialsFile = "content\\configs\\materials.yml"; 
+	const char* sMaterialsFile = "content\\configs\\materials.yml";  
 	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";  
 }
 
-Scene::Scene() { 
-	InitDirectionalLights();  
+Scene::Scene() {  
+	InitDirectionalLights();   
 	InitPointLights();
 
 	BRE::MaterialManager::gInstance->LoadMaterials(sMaterialsFile);     
-	BRE::DrawManager::gInstance->LoadModels(sSceneModelsFile);  
+	BRE::DrawManager::gInstance->LoadModels(sSceneModelsFile);    
 }
 
-void Scene::Update(const float elapsedTime) { 
+void Scene::Update(const float elapsedTime) {   
 	UpdateDirectionalLight(elapsedTime); 
-	mPosUpdater.Update(elapsedTime);
+	mPosUpdater.Update(elapsedTime); 
 
 	UpdatePointLights(elapsedTime);
 
@@ -54,7 +54,7 @@ void Scene::InitDirectionalLights() {
 	dirLightDataVec.resize(1); 
 	BRE::DirLightPixelShaderData& dirLightPsData = dirLightDataVec[0].mPixelShaderData;        
 	 
-	mDirectionalLight.SetColor(0.5f, 0.5f, 0.5f);
+	mDirectionalLight.SetColor(1.5f, 1.5f, 1.5f);
 	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light();
 	dirLightData.mColor = mDirectionalLight.Color(); 
 	dirLightData.mDirection = mDirectionalLight.Direction();

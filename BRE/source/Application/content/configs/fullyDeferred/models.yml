@@ -59,21 +59,21 @@ models:
     translation: [0.0, 0.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
     scaling: [80.0, 80.0, 80.0]
-    material: "gold"
+    material: "platinum"
   - renderType: Basic
     path: "content\\models\\mitsuba-sphere.obj"
     translation: [250.0, 0.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
     scaling: [80.0, 80.0, 80.0]
-    material: "bronze"
+    material: "silver"
   - renderType: Normal_Displacement
     path: "content\\models\\mitsuba-sphere.obj"
     translation: [-250.0, 0.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
     scaling: [80.0, 80.0, 80.0]
     textureScaleFactor: 1.0
-    material: "muddy_dirt"
-    displacementMapTexture: "content\\textures\\muddy_dirt\\muddy_dirt_height.dds"
+    material: "old_brick"
+    displacementMapTexture: "content\\textures\\old_brick\\old_brick_height.dds"
     edgeTessellationFactors: [1.0, 1.0, 1.0]
     insideTessellationFactors: 1.0
     displacementScale: 5.0

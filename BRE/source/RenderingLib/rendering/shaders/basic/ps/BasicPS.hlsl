@@ -6,7 +6,7 @@ struct VS_OUTPUT {
 };
 
 struct PS_OUTPUT {
-	float3 NormalVS : SV_Target0;
+	float2 NormalVS : SV_Target0;
 	float3 BaseColor : SV_Target1;
 	float2 Smoothness_MetalMask : SV_Target2;
 	float3 Reflectance : SV_Target3;
@@ -26,7 +26,7 @@ Texture2D ReflectanceTexture : register (t3);
 
 PS_OUTPUT main(VS_OUTPUT IN) {
 	PS_OUTPUT OUT = (PS_OUTPUT)0;
-	OUT.NormalVS = MapNormal(normalize(IN.NormalVS));
+	OUT.NormalVS = OctEncode(normalize(IN.NormalVS));
 	const float2 texCoord = float2(0.0f, 0.0f);
 	OUT.BaseColor = BaseColorTexture.Sample(TexSampler, texCoord).rgb;
 	OUT.Smoothness_MetalMask.x = SmoothnessTexture.Sample(TexSampler, texCoord).x;

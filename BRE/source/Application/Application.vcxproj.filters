@@ -92,6 +92,9 @@
     <None Include="content\models\torusKnot.obj">
       <Filter>content\models</Filter>
     </None>
+    <None Include="content\models\mitsuba-sphere.obj">
+      <Filter>content\models</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="content\textures\aluminium\aluminium_base_color.dds">
@@ -244,10 +247,5 @@
     <Image Include="content\textures\muddy_dirt\muddy_dirt_smoothness.dds">
       <Filter>content\textures\muddy_dirt</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="content\models\mitsuba-sphere.obj">
-      <Filter>content\models</Filter>
-    </Object>
   </ItemGroup>
 </Project>
