@@ -4,11 +4,11 @@ models:
     translation: [0.0, -500.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
     scaling: [1100.0, 1100.0, 1100.0]
-    textureScaleFactor: 2.0	
-    material: "muddy_dirt"
-    displacementMapTexture: "content\\textures\\muddy_dirt\\muddy_dirt_height.dds"
-    edgeTessellationFactors: [64.0, 64.0, 64.0]
-    insideTessellationFactors: 64.0
+    textureScaleFactor: 2.0
+    material: "rock1"
+    displacementMapTexture: "content\\textures\\rock1\\rock1_height.dds"
+    edgeTessellationFactors: [10.0, 10.0, 10.0]
+    insideTessellationFactors: 10.0
     displacementScale: 20.0
   - renderType: Normal_Displacement
     path: "content\\models\\plane.obj"
@@ -16,10 +16,10 @@ models:
     rotation: [3.14, 0.0, 0.0]
     scaling: [1100.0, 1100.0, 1100.0]
     textureScaleFactor: 2.0
-    material: "old_brick"
-    displacementMapTexture: "content\\textures\\old_brick\\old_brick_height.dds"
-    edgeTessellationFactors: [64.0, 64.0, 64.0]
-    insideTessellationFactors: 64.0
+    material: "rock1"
+    displacementMapTexture: "content\\textures\\rock1\\rock1_height.dds"
+    edgeTessellationFactors: [10.0, 10.0, 10.0]
+    insideTessellationFactors: 10.0
     displacementScale: 20.0
   - renderType: Normal_Displacement
     path: "content\\models\\plane.obj"
@@ -27,10 +27,10 @@ models:
     rotation: [-1.57, 0.0, 0.0]
     scaling: [1100.0, 1100.0, 1100.0]
     textureScaleFactor: 2.0
-    material: "old_brick"
-    displacementMapTexture: "content\\textures\\old_brick\\old_brick_height.dds"
-    edgeTessellationFactors: [64.0, 64.0, 64.0]
-    insideTessellationFactors: 64.0
+    material: "rock1"
+    displacementMapTexture: "content\\textures\\rock1\\rock1_height.dds"
+    edgeTessellationFactors: [10.0, 10.0, 10.0]
+    insideTessellationFactors: 10.0
     displacementScale: 20.0
   - renderType: Normal_Displacement
     path: "content\\models\\plane.obj"
@@ -38,10 +38,10 @@ models:
     rotation: [1.57, -1.57, 0.0]
     scaling: [1100.0, 1100.0, 1100.0]   
     textureScaleFactor: 2.0
-    material: "old_brick"
-    displacementMapTexture: "content\\textures\\old_brick\\old_brick_height.dds"
-    edgeTessellationFactors: [64.0, 64.0, 64.0]
-    insideTessellationFactors: 64.0
+    material: "rock1"
+    displacementMapTexture: "content\\textures\\rock1\\rock1_height.dds"
+    edgeTessellationFactors: [10.0, 10.0, 10.0]
+    insideTessellationFactors: 10.0
     displacementScale: 20.0
   - renderType: Normal_Displacement
     path: "content\\models\\plane.obj"
@@ -49,10 +49,10 @@ models:
     rotation: [1.57, 1.57, 0.0]
     scaling: [1100.0, 1100.0, 1100.0] 
     textureScaleFactor: 2.0
-    material: "old_brick"
-    displacementMapTexture: "content\\textures\\old_brick\\old_brick_height.dds"
-    edgeTessellationFactors: [64.0, 64.0, 64.0]
-    insideTessellationFactors: 64.0
+    material: "rock1" 
+    displacementMapTexture: "content\\textures\\rock1\\rock1_height.dds"
+    edgeTessellationFactors: [10.0, 10.0, 10.0]
+    insideTessellationFactors: 10.0
     displacementScale: 20.0
   - renderType: Basic
     path: "content\\models\\mitsuba-sphere.obj"
@@ -65,15 +65,15 @@ models:
     translation: [250.0, 0.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
     scaling: [80.0, 80.0, 80.0]
-    material: "silver"
+    material: "gold"
   - renderType: Normal_Displacement
     path: "content\\models\\mitsuba-sphere.obj"
     translation: [-250.0, 0.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
     scaling: [80.0, 80.0, 80.0]
     textureScaleFactor: 1.0
-    material: "old_brick"
-    displacementMapTexture: "content\\textures\\old_brick\\old_brick_height.dds"
-    edgeTessellationFactors: [1.0, 1.0, 1.0]
-    insideTessellationFactors: 1.0
-    displacementScale: 5.0
+    material: "rock1"
+    displacementMapTexture: "content\\textures\\rock1\\rock1_height.dds"
+    edgeTessellationFactors: [4.0, 4.0, 4.0]
+    insideTessellationFactors: 4.0
+    displacementScale: 8.0

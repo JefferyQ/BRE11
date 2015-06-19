@@ -3,30 +3,30 @@
 #include <general/Camera.h>
 #include <input/Keyboard.h> 
 #include <managers/DrawManager.h>
-#include <managers/MaterialManager.h>  
+#include <managers/MaterialManager.h>   
 #include <rendering/GlobalResources.h> 
-#include <rendering/shaders/lightPasses/DirLightPsData.h>     
+#include <rendering/shaders/lightPasses/DirLightPsData.h>      
 #include <utils/Assert.h>
 #include <utils/Memory.h>
-#include <utils/Utility.h>  
+#include <utils/Utility.h>   
 
-using namespace DirectX;  
+using namespace DirectX;    
 
-namespace {
+namespace { 
 	const XMFLOAT2 sLightRotationRate(XM_PI / 4.0f, XM_PI / 4.0f); 
 
 	const unsigned int sMaxShaderPointLights = 512;
-	const unsigned int sNumPointLightShaders = 2; 
+	const unsigned int sNumPointLightShaders = 1; 
 
-	const char* sMaterialsFile = "content\\configs\\materials.yml";  
+	const char* sMaterialsFile = "content\\configs\\materials.yml";   
 	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";  
 }
 
 Scene::Scene() {  
-	InitDirectionalLights();   
-	InitPointLights();
+	InitDirectionalLights();    
+	InitPointLights(); 
 
-	BRE::MaterialManager::gInstance->LoadMaterials(sMaterialsFile);     
+	BRE::MaterialManager::gInstance->LoadMaterials(sMaterialsFile);        
 	BRE::DrawManager::gInstance->LoadModels(sSceneModelsFile);    
 }
 
@@ -44,27 +44,27 @@ void Scene::Update(const float elapsedTime) {
 		XMFLOAT4 s;
 		XMStoreFloat4(&s, XMVector4Transform(XMLoadFloat4(&lightDir), viewMatrix));
 		data.mPixelShaderData.Light().mDirection.x = s.x;
-		data.mPixelShaderData.Light().mDirection.y = s.y;
-		data.mPixelShaderData.Light().mDirection.z = s.z;
+		data.mPixelShaderData.Light().mDirection.y = s.y;  
+		data.mPixelShaderData.Light().mDirection.z = s.z;       
 	}  
 }
-
-void Scene::InitDirectionalLights() {  
+  
+void Scene::InitDirectionalLights() {   
 	std::vector<BRE::LightsDrawer::DirLightData>& dirLightDataVec = BRE::DrawManager::gInstance->DirLightDataVec();       
 	dirLightDataVec.resize(1); 
-	BRE::DirLightPixelShaderData& dirLightPsData = dirLightDataVec[0].mPixelShaderData;        
+	BRE::DirLightPixelShaderData& dirLightPsData = dirLightDataVec[0].mPixelShaderData;          
 	 
-	mDirectionalLight.SetColor(1.5f, 1.5f, 1.5f);
-	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light();
-	dirLightData.mColor = mDirectionalLight.Color(); 
-	dirLightData.mDirection = mDirectionalLight.Direction();
+	mDirectionalLight.SetColor(0.5f, 0.5f, 0.5f);
+	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light();        
+	dirLightData.mColor = mDirectionalLight.Color();  
+	dirLightData.mDirection = mDirectionalLight.Direction();      
 
-	dirLightPsData.SamplerState() = BRE::GlobalResources::gInstance->MinMagMipPointSampler(); 
+	dirLightPsData.SamplerState() = BRE::GlobalResources::gInstance->MinMagMipPointSampler();   
 }
 
-void Scene::InitPointLights() {
+void Scene::InitPointLights() {  
 	std::vector<BRE::LightsDrawer::PointLightData>& quadCulledPointLightDataVec = BRE::DrawManager::gInstance->PointLightDataVec();
-	quadCulledPointLightDataVec.resize(sNumPointLightShaders);
+	quadCulledPointLightDataVec.resize(sNumPointLightShaders); 
 	unsigned int lightIndex = 0;
 	const float factor = 500.0f;
 	for (BRE::LightsDrawer::PointLightData& data : quadCulledPointLightDataVec) {
@@ -72,10 +72,10 @@ void Scene::InitPointLights() {
 			data.mPointLightVsData.LightPosAndRadius(iLight).x = BRE::Utility::RandomFloat(-factor, factor);
 			data.mPointLightVsData.LightPosAndRadius(iLight).y = BRE::Utility::RandomFloat(-factor, factor);
 			data.mPointLightVsData.LightPosAndRadius(iLight).z = BRE::Utility::RandomFloat(-factor, factor);
-			data.mPointLightVsData.LightPosAndRadius(iLight).w = 40; 
+			data.mPointLightVsData.LightPosAndRadius(iLight).w = 100; 
 			const float c = BRE::Utility::RandomFloat(0.5f, 1.0f);
-			DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(c, c, c, 0.0f);
-			data.mPointLightVsData.LightColor(iLight) = color;
+			DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(c, c, c, 0.0f); 
+			data.mPointLightVsData.LightColor(iLight) = color; 
 
 			const float f5 = BRE::Utility::RandomFloat(25.0f, 30.0f) * ((rand() % 2) ? 1.0f : -1.0f);  
 			const float f6 = BRE::Utility::RandomFloat(25.0f, 30.0f) * ((rand() % 2) ? 1.0f : -1.0f); 

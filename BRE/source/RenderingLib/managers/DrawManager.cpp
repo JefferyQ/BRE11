@@ -30,7 +30,8 @@ namespace BRE {
 	DrawManager* DrawManager::gInstance = nullptr;
 
 	DrawManager::DrawManager(ID3D11Device1& device, ID3D11DeviceContext1& context, const unsigned int screenWidth, const unsigned int screenHeight)
-		: mFrameRateDrawer(device, context)
+		: mPostProcessDrawer(device)
+		, mFrameRateDrawer(device, context)
 	{
 		InitPostProcessResources(screenWidth, screenHeight);
 		InitGBuffers(screenWidth, screenHeight);
@@ -215,6 +216,9 @@ namespace BRE {
 			context.ClearRenderTargetView(mGBuffersRTVs[i], reinterpret_cast<const float*>(&Colors::Black));
 		}
 
+		context.ClearRenderTargetView(mPostprocess1RTV, reinterpret_cast<const float*>(&Colors::Black));
+		context.ClearRenderTargetView(mPostprocess2RTV, reinterpret_cast<const float*>(&Colors::Black));
+
 		context.OMSetRenderTargets(1, &backBuffer, &depthStencilView);
 
 		const XMMATRIX view = Camera::gInstance->ViewMatrix();
@@ -231,7 +235,10 @@ namespace BRE {
 		}
 
 		if (renderMode == BACK_BUFFER) {
+			context.OMSetRenderTargets(1, &mPostprocess1RTV, &depthStencilView);
 			mLightsDrawer.Draw(device, context, mGBuffersSRVs, farClipPlaneDistance, view, proj);
+			context.OMSetRenderTargets(1, &backBuffer, &depthStencilView);
+			mPostProcessDrawer.Draw(device, context, mPostprocess1SRV);	 		
 		}
 		else {
 			ID3D11Texture2D* texture;
@@ -252,9 +259,9 @@ namespace BRE {
 
 			ASSERT_PTR(texture);
 			context.CopyResource(backBufferTexture, texture);
-		}
+		} 
 
-		mFrameRateDrawer.Draw();
+		//mFrameRateDrawer.Draw();
 
 		ASSERT_HR(swapChain.Present(0, 0));
 
@@ -273,9 +280,9 @@ namespace BRE {
 		ZeroMemory(&textureDesc[0], sizeof(textureDesc[0]));
 		textureDesc[0].Width = screenWidth;
 		textureDesc[0].Height = screenHeight;
-		textureDesc[0].MipLevels = 1;
+		textureDesc[0].MipLevels = 1; 
 		textureDesc[0].ArraySize = 1;
-		textureDesc[0].Format = DXGI_FORMAT_R32G32_FLOAT;
+		textureDesc[0].Format = DXGI_FORMAT_R16G16_FLOAT;
 		textureDesc[0].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[0].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[0].SampleDesc.Count = 1;
@@ -367,7 +374,7 @@ namespace BRE {
 		textureDesc.Height = screenHeight;
 		textureDesc.MipLevels = 1;
 		textureDesc.ArraySize = 1;
-		textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		textureDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 		textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc.Usage = D3D11_USAGE_DEFAULT;
 		textureDesc.SampleDesc.Count = 1;

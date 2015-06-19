@@ -49,6 +49,9 @@
     <Filter Include="content\textures\muddy_dirt">
       <UniqueIdentifier>{83d500b2-20bc-446b-9cb9-8cd28fe7ced2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="content\textures\rock1">
+      <UniqueIdentifier>{154b9e01-79f7-402c-be51-2a75bea7c3f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scenes\Scene.h">
@@ -246,6 +249,24 @@
     </Image>
     <Image Include="content\textures\muddy_dirt\muddy_dirt_smoothness.dds">
       <Filter>content\textures\muddy_dirt</Filter>
+    </Image>
+    <Image Include="content\textures\rock1\rock1_base_color.dds">
+      <Filter>content\textures\rock1</Filter>
+    </Image>
+    <Image Include="content\textures\rock1\rock1_height.dds">
+      <Filter>content\textures\rock1</Filter>
+    </Image>
+    <Image Include="content\textures\rock1\rock1_metal_mask.dds">
+      <Filter>content\textures\rock1</Filter>
+    </Image>
+    <Image Include="content\textures\rock1\rock1_normal.dds">
+      <Filter>content\textures\rock1</Filter>
+    </Image>
+    <Image Include="content\textures\rock1\rock1_reflectance.dds">
+      <Filter>content\textures\rock1</Filter>
+    </Image>
+    <Image Include="content\textures\rock1\rock1_smoothness.dds">
+      <Filter>content\textures\rock1</Filter>
     </Image>
   </ItemGroup>
 </Project>

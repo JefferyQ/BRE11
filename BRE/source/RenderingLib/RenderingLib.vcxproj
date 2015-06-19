@@ -181,7 +181,9 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.cpp" />
     <ClCompile Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.cpp" />
     <ClCompile Include="rendering\shaders\filters\FiltersVsData.cpp" />
+    <ClCompile Include="rendering\shaders\filters\PostProcessDrawer.cpp" />
     <ClCompile Include="rendering\shaders\filters\sepia\SepiaFilterPsData.cpp" />
+    <ClCompile Include="rendering\shaders\filters\toneMapping\ToneMappingPsData.cpp" />
     <ClCompile Include="rendering\shaders\lightPasses\DirLightPsData.cpp" />
     <ClCompile Include="rendering\shaders\lightPasses\DirLightVsData.cpp" />
     <ClCompile Include="rendering\shaders\lightPasses\LightsDrawer.cpp" />
@@ -230,7 +232,9 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\shaders\filters\grayscale\GrayscaleFilterPsData.h" />
     <ClInclude Include="rendering\shaders\filters\inverseColor\InverseColorFilterPsData.h" />
     <ClInclude Include="rendering\shaders\filters\FiltersVsData.h" />
+    <ClInclude Include="rendering\shaders\filters\PostProcessDrawer.h" />
     <ClInclude Include="rendering\shaders\filters\sepia\SepiaFilterPsData.h" />
+    <ClInclude Include="rendering\shaders\filters\toneMapping\ToneMappingPsData.h" />
     <ClInclude Include="rendering\shaders\lightPasses\DirLightPsData.h" />
     <ClInclude Include="rendering\shaders\lightPasses\DirLightVsData.h" />
     <ClInclude Include="rendering\shaders\lightPasses\LightsDrawer.h" />
@@ -330,6 +334,14 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\filters\sepia\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="rendering\shaders\filters\toneMapping\ToneMappingPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)content\shaders\filters\toneMapping\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)content\shaders\filters\toneMapping\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="rendering\shaders\lightPasses\DirLightPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

@@ -218,6 +218,12 @@ IF EXIST  "$(SolutionDir)\external\assimp-3.1.1-win-binaries\bin64\assimp.dll" x
     <Image Include="content\textures\platinum\platinum_normal.dds" />
     <Image Include="content\textures\platinum\platinum_reflectance.dds" />
     <Image Include="content\textures\platinum\platinum_smoothness.dds" />
+    <Image Include="content\textures\rock1\rock1_base_color.dds" />
+    <Image Include="content\textures\rock1\rock1_height.dds" />
+    <Image Include="content\textures\rock1\rock1_metal_mask.dds" />
+    <Image Include="content\textures\rock1\rock1_normal.dds" />
+    <Image Include="content\textures\rock1\rock1_reflectance.dds" />
+    <Image Include="content\textures\rock1\rock1_smoothness.dds" />
     <Image Include="content\textures\rock1_diffuse.dds" />
     <Image Include="content\textures\rock1_height.dds" />
     <Image Include="content\textures\rock1_normal.dds" />

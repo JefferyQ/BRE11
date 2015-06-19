@@ -5,6 +5,7 @@
 
 #include <rendering/StringDrawer.h>
 #include <rendering/shaders/basic/BasicDrawer.h>
+#include <rendering/shaders/filters/PostProcessDrawer.h>
 #include <rendering/shaders/lightPasses/LightsDrawer.h>
 #include <rendering/shaders/normalDisplacement/NormalDisplacementDrawer.h>
 #include <rendering/shaders/normalMapping/NormalMappingDrawer.h>
@@ -62,6 +63,7 @@ namespace BRE {
 		std::vector<NormalMappingDrawer> mNormalMappingDrawer;
 		std::vector<BasicDrawer> mBasicDrawer;
 		LightsDrawer mLightsDrawer;
-		StringDrawer mFrameRateDrawer;
+		PostProcessDrawer mPostProcessDrawer;
+		StringDrawer mFrameRateDrawer;		
 	};
 }

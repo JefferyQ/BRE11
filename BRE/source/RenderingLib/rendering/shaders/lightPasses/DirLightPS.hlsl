@@ -25,11 +25,12 @@ float4 main(const in VS_OUTPUT IN) : SV_TARGET {
 	const float depth = DepthTexture.Load(sampleIndices).x;
 	const float3 posVS = IN.ViewRayVS * depth;
 	const float3 normalVS = OctDecode(NormalTexture.Load(sampleIndices).xy);
-
+	
 	MaterialData data;
 	data.BaseColor = BaseColorTexture.Load(sampleIndices).xyz;
-	data.MetalMask = Smoothness_MetalMask_Texture.Load(sampleIndices).y;
-	data.Smoothness = Smoothness_MetalMask_Texture.Load(sampleIndices).x;
+	const float2 smoothness_metalMask = Smoothness_MetalMask_Texture.Load(sampleIndices).xy;
+	data.MetalMask = smoothness_metalMask.y;
+	data.Smoothness = smoothness_metalMask.x;
 	data.Reflectance = Reflectance_Texture.Load(sampleIndices).rgb;
 	const float3 final = brdf(normalVS, normalize(-posVS), -normalize(Light.Direction), data) * Light.Color;
 	return float4(final, 1.0f);

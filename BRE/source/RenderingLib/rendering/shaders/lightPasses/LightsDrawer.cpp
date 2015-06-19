@@ -6,7 +6,7 @@
 #include <managers/ShaderResourcesManager.h>
 #include <utils/Assert.h>
 
-#include <rendering/GlobalResources.h>
+#include <rendering/GlobalResources.h> 
 
 using namespace DirectX;
 

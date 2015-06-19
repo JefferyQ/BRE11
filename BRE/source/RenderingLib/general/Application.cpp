@@ -110,7 +110,7 @@ namespace {
 			ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 			swapChainDesc.Width = screenWidth;
 			swapChainDesc.Height = screenHeight;
-			swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 			swapChainDesc.SampleDesc.Count = multisamplingCount;
 			swapChainDesc.SampleDesc.Quality = multisamplingQualityLevels - 1;
 

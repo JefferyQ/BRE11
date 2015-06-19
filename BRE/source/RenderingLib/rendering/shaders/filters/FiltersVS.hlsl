@@ -10,10 +10,7 @@ struct VS_OUTPUT {
 
 VS_OUTPUT main(const VS_INPUT IN) {
 	VS_OUTPUT OUT = (VS_OUTPUT)0;
-
-	// Pass through
 	OUT.PositionH = IN.PositionH;
 	OUT.TexCoord = IN.TexCoord;
-
 	return OUT;
 }
