@@ -3,12 +3,9 @@
 //////////////////////////////////////////////////////////////////////////
 //
 // Implementation of a first person camera.
-// The W and S keys move the camera forward and backward along its
-// direction vector.
-// The A and D keys "strafe" (move the camera horizontally)
-// along the right vector.
-// The mouse controls the yaw and pitch of the camera: You move the mouse
-// vertically to pitch, and horizontally to yaw.
+// The W and S keys move the camera forward and backward along its direction vector.
+// The A and D keys "strafe" (move the camera horizontally) along the right vector.
+// The mouse controls the yaw and pitch of the camera: You move the mouse vertically to pitch, and horizontally to yaw.
 // We do not support roll.
 //
 //////////////////////////////////////////////////////////////////////////
@@ -18,7 +15,6 @@
 namespace BRE {
 	class Camera {
 	public:
-		// Global instance
 		static Camera* gInstance;
 
 		struct InputData {
@@ -32,14 +28,13 @@ namespace BRE {
 			float mRotationRate;
 			float mMovementRate;
 		};
-
 		Camera(const InputData& data);
 
 		const DirectX::XMFLOAT3& Position() const { return mPosition; }
 		DirectX::XMVECTOR PositionVector() const { return DirectX::XMLoadFloat3(&mPosition); }
 		void SetPosition(const float x, const float y, const float z) { SetPosition(DirectX::XMVectorSet(x, y, z, 1.0f)); }
-		void SetPosition(DirectX::FXMVECTOR position) { DirectX::XMStoreFloat3(&mPosition, position); }
-		void SetPosition(const DirectX::XMFLOAT3& position) { mPosition = position; }
+		void SetPosition(DirectX::FXMVECTOR p) { DirectX::XMStoreFloat3(&mPosition, p); }
+		void SetPosition(const DirectX::XMFLOAT3& p) { mPosition = p; }
 
 		const DirectX::XMFLOAT3& Direction() const { return mDirection; }
 		DirectX::XMVECTOR DirectionVector() const { return DirectX::XMLoadFloat3(&mDirection); }
@@ -75,10 +70,8 @@ namespace BRE {
 		DirectX::XMFLOAT3 mDirection;
 		DirectX::XMFLOAT3 mUp;
 		DirectX::XMFLOAT3 mRight;
-
 		DirectX::XMFLOAT4X4 mViewMatrix;
 		DirectX::XMFLOAT4X4 mProjectionMatrix;
-
 		float mFieldOfView;
 		float mAspectRatio;
 		float mNearPlaneDistance;

@@ -3,11 +3,13 @@
 
 struct VS_OUTPUT {
 	float4 PosCS : SV_Position;
-	float3 ViewRayVS : VIEW_RAY;
+	float3 ViewRay : VIEW_RAY;
 };
 
 cbuffer CBufferPerFrame : register (b0) {
 	DirectionalLight Light;
+	float ProjectionA; // Far clip distance / (Far clip distance / near clip distance)
+	float ProjectionB; // (- Far clip distance * Near clip distance) / (Far clip distance - near clip distance)
 }
 
 SamplerState TexSampler : register (s0);
@@ -23,7 +25,8 @@ float4 main(const in VS_OUTPUT IN) : SV_TARGET {
 	// screen position
 	const int3 sampleIndices = int3(IN.PosCS.xy, 0);
 	const float depth = DepthTexture.Load(sampleIndices).x;
-	const float3 posVS = IN.ViewRayVS * depth;
+	const float linearDepth = ProjectionB / (depth - ProjectionA);
+	const float3 posVS = IN.ViewRay * linearDepth;	
 	const float3 normalVS = OctDecode(NormalTexture.Load(sampleIndices).xy);
 	
 	MaterialData data;
@@ -32,6 +35,6 @@ float4 main(const in VS_OUTPUT IN) : SV_TARGET {
 	data.MetalMask = smoothness_metalMask.y;
 	data.Smoothness = smoothness_metalMask.x;
 	data.Reflectance = Reflectance_Texture.Load(sampleIndices).rgb;
-	const float3 final = brdf(normalVS, normalize(-posVS), -normalize(Light.Direction), data) * Light.Color;
+	const float3 final = data.BaseColor * 0.015f + brdf(normalVS, normalize(-posVS), -normalize(Light.Direction), data) * Light.Color;
 	return float4(final, 1.0f);
 }

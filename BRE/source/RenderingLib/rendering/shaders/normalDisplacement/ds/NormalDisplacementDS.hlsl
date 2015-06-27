@@ -15,7 +15,6 @@ struct HS_OUTPUT {
 struct DS_OUTPUT {
 	float4 PosCS : SV_Position;
 	float3 NormalVS : NORMAL;
-	float DepthVS : DEPTH_VIEW_SPACE;
 	float2 TexCoord : TEXCOORD0;
 	float3 TangentVS : TANGENT;
 	float3 BinormalVS : BINORMAL;
@@ -37,12 +36,12 @@ DS_OUTPUT main(const HS_CONSTANT_OUTPUT IN, const float3 uvw : SV_DomainLocation
 
 	OUT.TexCoord = uvw.x * patch[0].TexCoord + uvw.y * patch[1].TexCoord + uvw.z * patch[2].TexCoord;
 
-	const float3 normalOS = normalize(uvw.x * patch[0].NormalOS + uvw.y * patch[1].NormalOS + uvw.z * patch[2].NormalOS);
+	const float3 normalOS = uvw.x * patch[0].NormalOS + uvw.y * patch[1].NormalOS + uvw.z * patch[2].NormalOS;
 	OUT.NormalVS = normalize(mul(float4(normalOS, 0.0f), WorldView).xyz);
 
 	// Compute SV_Position by displacing object position in y coordinate
 	float4 posVS = mul(uvw.x * patch[0].PosOS + uvw.y * patch[1].PosOS + uvw.z * patch[2].PosOS, WorldView);
-	const float displacement = DisplacementMap.SampleLevel(TexSampler, OUT.TexCoord, 0).x * DisplacementScale;
+	const float displacement = (DisplacementMap.SampleLevel(TexSampler, OUT.TexCoord, 0).x - 1.0f) * DisplacementScale;
 	posVS += float4(OUT.NormalVS * displacement, 0.0f);
 	OUT.PosCS = mul(posVS, Proj);
 
@@ -50,7 +49,6 @@ DS_OUTPUT main(const HS_CONSTANT_OUTPUT IN, const float3 uvw : SV_DomainLocation
 	OUT.TangentVS = normalize(uvw.x * patch[0].TangentOS + uvw.y * patch[1].TangentOS + uvw.z * patch[2].TangentOS);
 	OUT.TangentVS = normalize(mul(float4(OUT.TangentVS, 0.0f), WorldView).xyz);
 	OUT.BinormalVS = normalize(cross(OUT.NormalVS, OUT.TangentVS));
-	OUT.DepthVS = posVS.z;
 
 	return OUT;
 }

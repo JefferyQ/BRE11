@@ -9,6 +9,7 @@ struct ID3D11DepthStencilView;
 struct ID3D11Device1;
 struct ID3D11DeviceContext1;
 struct ID3D11RenderTargetView;
+struct ID3D11ShaderResourceView;
 struct IDXGISwapChain1;
 
 namespace BRE {
@@ -38,7 +39,8 @@ namespace BRE {
 		unsigned int mScreenHeight;
 
 		ID3D11RenderTargetView* mBackBufferRTV;
-		ID3D11DepthStencilView* mPrimaryDSV;
+		ID3D11DepthStencilView* mDepthStencilView;
+		ID3D11ShaderResourceView* mDepthStencilSRV;
 
 		Clock mClock;
 

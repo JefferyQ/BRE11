@@ -15,7 +15,7 @@ namespace BRE {
 		NormalMappingVsData& VertexShaderData() { return mVsData; }
 		NormalMappingPsData& PixelShaderData() { return mPsData; }
 		DirectX::XMFLOAT4X4& WorldMatrix() { return mWorld; }
-		void Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj, const float farClipPlaneDistance);
+		void Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj);
 
 	private:
 		NormalMappingVsData mVsData;

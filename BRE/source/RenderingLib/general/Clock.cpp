@@ -26,7 +26,6 @@ namespace BRE {
 		mTotalTime = (mCurrentTime.QuadPart - mStartTime.QuadPart) / mFrequency;
 		mElapsedTime = (mCurrentTime.QuadPart - mLastTime.QuadPart) / mFrequency;
 		mLastTime = mCurrentTime;
-
 		mLastTotalElapsedTime += mElapsedTime;
 		if (mLastTotalElapsedTime >= 1.0) {
 			mLastTotalElapsedTime = 0.0;

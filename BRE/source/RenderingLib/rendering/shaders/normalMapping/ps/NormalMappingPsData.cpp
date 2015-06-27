@@ -16,24 +16,6 @@ namespace BRE {
 	NormalMappingPsData::NormalMappingPsData() {
 		ShadersManager::gInstance->LoadPixelShader(shader, &mShader);
 		ASSERT_PTR(mShader);
-		InitializeCBuffers();
-	}
-
-	void NormalMappingPsData::InitializeCBuffers() {
-		// Initialize constant buffer
-		D3D11_BUFFER_DESC bufferDesc;
-		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
-		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		bufferDesc.ByteWidth = static_cast<unsigned int> (sizeof(CBufferPerFrameData));
-		bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		bufferDesc.MiscFlags = 0;
-		bufferDesc.StructureByteStride = 0;
-		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-
-		std::stringstream str;
-		str << "NormalMappingPsData";
-		str << rand();
-		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
 	void NormalMappingPsData::SetMaterial(const size_t matId) {
@@ -51,7 +33,7 @@ namespace BRE {
 		ASSERT_PTR(mReflectanceSRV);
 	}
 
-	void NormalMappingPsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
+	void NormalMappingPsData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
 		ASSERT_PTR(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 		
@@ -62,10 +44,6 @@ namespace BRE {
 		ASSERT_PTR(mReflectanceSRV);
 		ID3D11ShaderResourceView* const srvs[] = { mNormalSRV, mBaseColorSRV, mSmoothnessSRV, mMetalMaskSRV, mReflectanceSRV };
 		context.PSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
-
-		mCBuffer.CopyDataToBuffer(device);
-		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
-		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
 		ID3D11SamplerState* const samplerStates[] = { mSampler };
 		context.PSSetSamplers(0, ARRAYSIZE(samplerStates), samplerStates);
@@ -80,9 +58,6 @@ namespace BRE {
 
 		ID3D11ShaderResourceView* const srvs[] = { nullptr, nullptr, nullptr, nullptr, nullptr };
 		context.PSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
-
-		ID3D11Buffer* const cBuffers[] = { nullptr };
-		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
 		ID3D11SamplerState* const samplerStates[] = { nullptr };
 		context.PSSetSamplers(0, ARRAYSIZE(samplerStates), samplerStates);

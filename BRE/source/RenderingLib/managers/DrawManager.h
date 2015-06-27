@@ -29,7 +29,7 @@ namespace BRE {
 
 		void LoadModels(const char* filepath);
 
-		void DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView);
+		void DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView, ID3D11ShaderResourceView& depthStencilSRV);
 
 		std::vector<NormalDisplacementDrawer>& NormalDisplacementDrawerVec() { return mNormalDisplacementDrawer; }
 		std::vector<NormalMappingDrawer>& NormalMappingDrawerVec() { return mNormalMappingDrawer; }
@@ -48,9 +48,8 @@ namespace BRE {
 		// [1] -> Base Color
 		// [2] -> Smoothness_MetalMask
 		// [3] -> Reflectance 
-		// [3] -> Depth
-		ID3D11RenderTargetView* mGBuffersRTVs[5];
-		ID3D11ShaderResourceView* mGBuffersSRVs[5];
+		ID3D11RenderTargetView* mGBuffersRTVs[4];
+		ID3D11ShaderResourceView* mGBuffersSRVs[4];
 
 		// Render target views and shader resource views of
 		// textures used for postprocessing purposes

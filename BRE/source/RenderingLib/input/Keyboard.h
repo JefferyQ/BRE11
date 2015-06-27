@@ -16,13 +16,13 @@ namespace BRE {
 
 		const byte* const CurrentState() const { return mCurrentState; }
 		const byte* const LastState() const { return mLastState; }
-		bool IsKeyUp(const byte key) const { return ((mCurrentState[key] & 0x80) == 0); }
-		bool IsKeyDown(const byte key) const { return ((mCurrentState[key] & 0x80) != 0); }
-		bool WasKeyUp(const byte key) const { return ((mLastState[key] & 0x80) == 0); }
-		bool WasKeyDown(const byte key) const { return ((mLastState[key] & 0x80) != 0); }
-		bool WasKeyPressedThisFrame(const byte key) const { return (IsKeyDown(key) && WasKeyUp(key)); }
-		bool WasKeyReleasedThisFrame(const byte key) const { return (IsKeyUp(key) && WasKeyDown(key)); }
-		bool IsKeyHeldDown(const byte key) const { return (IsKeyDown(key) && WasKeyDown(key)); }
+		bool IsKeyUp(const byte key) const { return (mCurrentState[key] & 0x80) == 0; }
+		bool IsKeyDown(const byte key) const { return (mCurrentState[key] & 0x80) != 0; }
+		bool WasKeyUp(const byte key) const { return (mLastState[key] & 0x80) == 0; }
+		bool WasKeyDown(const byte key) const { return (mLastState[key] & 0x80) != 0; }
+		bool WasKeyPressedThisFrame(const byte key) const { return IsKeyDown(key) && WasKeyUp(key); }
+		bool WasKeyReleasedThisFrame(const byte key) const { return IsKeyUp(key) && WasKeyDown(key); }
+		bool IsKeyHeldDown(const byte key) const { return IsKeyDown(key) && WasKeyDown(key); }
 
 	private:
 		IDirectInput8& mDirectInput;

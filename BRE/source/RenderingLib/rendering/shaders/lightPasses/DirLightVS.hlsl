@@ -4,7 +4,7 @@ struct VS_INPUT {
 
 struct VS_OUTPUT {
 	float4 PosCS : SV_Position;
-	float3 ViewRayVS : VIEW_RAY;
+	float3 ViewRay : VIEW_RAY;
 };
 
 cbuffer CBufferPerFrame : register (b0) {
@@ -14,6 +14,9 @@ cbuffer CBufferPerFrame : register (b0) {
 VS_OUTPUT main(const VS_INPUT IN) {
 	VS_OUTPUT OUT = (VS_OUTPUT)0;
 	OUT.PosCS = IN.PosCS;
-	OUT.ViewRayVS = mul(IN.PosCS, InvProj).xyz;
+
+	// Clamp the view space position to the plane at Z = 1
+	const float3 posVS = mul(IN.PosCS, InvProj).xyz;
+	OUT.ViewRay = float3(posVS.xy / posVS.z, 1.0f);
 	return OUT;
 }

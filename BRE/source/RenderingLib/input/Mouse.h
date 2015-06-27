@@ -5,16 +5,15 @@
 namespace BRE {
 	class Mouse {
 	public:
-		// Global Instance
 		static Mouse* gInstance;
 
 		const Mouse& operator=(const Mouse& rhs) = delete;
 
-		enum MouseButtons {
+		enum MouseButton {
 			MouseButtonsLeft = 0,
-			MouseButtonsRight = 1,
-			MouseButtonsMiddle = 2,
-			MouseButtonsX1 = 3
+			MouseButtonsRight,
+			MouseButtonsMiddle,
+			MouseButtonsX1
 		};
 
 		Mouse(IDirectInput8& directInput, const HWND windowHandle);
@@ -27,20 +26,19 @@ namespace BRE {
 		long X() const { return mX; }
 		long Y() const { return mY; }
 		long Wheel() const { return mWheel; }
-		bool IsButtonUp(const MouseButtons button) const { return ((mCurrentState.rgbButtons[button] & 0x80) == 0); }
-		bool IsButtonDown(const MouseButtons button) const { return ((mCurrentState.rgbButtons[button] & 0x80) != 0); }
-		bool WasButtonUp(const MouseButtons button) const { return ((mLastState.rgbButtons[button] & 0x80) == 0); }
-		bool WasButtonDown(const MouseButtons button) const { return ((mLastState.rgbButtons[button] & 0x80) != 0); }
-		bool WasButtonPressedThisFrame(const MouseButtons button) const { return (IsButtonDown(button) && WasButtonUp(button)); }
-		bool WasButtonReleasedThisFrame(const MouseButtons button) const { return (IsButtonUp(button) && WasButtonDown(button)); }
-		bool IsButtonHeldDown(const MouseButtons button) const { return (IsButtonDown(button) && WasButtonDown(button)); }
+		bool IsButtonUp(const MouseButton b) const { return (mCurrentState.rgbButtons[b] & 0x80) == 0; }
+		bool IsButtonDown(const MouseButton b) const { return (mCurrentState.rgbButtons[b] & 0x80) != 0; }
+		bool WasButtonUp(const MouseButton b) const { return (mLastState.rgbButtons[b] & 0x80) == 0; }
+		bool WasButtonDown(const MouseButton b) const { return (mLastState.rgbButtons[b] & 0x80) != 0; }
+		bool WasButtonPressedThisFrame(const MouseButton b) const { return IsButtonDown(b) && WasButtonUp(b); }
+		bool WasButtonReleasedThisFrame(const MouseButton b) const { return IsButtonUp(b) && WasButtonDown(b); }
+		bool IsButtonHeldDown(const MouseButton b) const { return IsButtonDown(b) && WasButtonDown(b); }
 
 	private:
 		IDirectInput8& mDirectInput;
 		LPDIRECTINPUTDEVICE8 mDevice;
 		DIMOUSESTATE mCurrentState;
 		DIMOUSESTATE mLastState;
-
 		long mX;
 		long mY;
 		long mWheel;

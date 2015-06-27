@@ -182,7 +182,7 @@ namespace BRE {
 		}
 	}
 
-	void DrawManager::DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView) {
+	void DrawManager::DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView, ID3D11ShaderResourceView& depthStencilSRV) {
 		static enum RenderMode {
 			BACK_BUFFER,
 			NORMAL,
@@ -223,20 +223,21 @@ namespace BRE {
 
 		const XMMATRIX view = Camera::gInstance->ViewMatrix();
 		const XMMATRIX proj = Camera::gInstance->ProjectionMatrix();
+		const float nearClipPlaneDistance = Camera::gInstance->NearPlaneDistance();
 		const float farClipPlaneDistance = Camera::gInstance->FarPlaneDistance();
 		for (NormalDisplacementDrawer& elem : mNormalDisplacementDrawer) {
-			elem.Draw(device, context, mGBuffersRTVs, view, proj, farClipPlaneDistance);
+			elem.Draw(device, context, mGBuffersRTVs, view, proj);
 		}
 		for (NormalMappingDrawer& elem : mNormalMappingDrawer) {
-			elem.Draw(device, context, mGBuffersRTVs, view, proj, farClipPlaneDistance);
+			elem.Draw(device, context, mGBuffersRTVs, view, proj);
 		}
 		for (BasicDrawer& elem : mBasicDrawer) {
-			elem.Draw(device, context, mGBuffersRTVs, view, proj, farClipPlaneDistance);
+			elem.Draw(device, context, mGBuffersRTVs, view, proj);
 		}
 
 		if (renderMode == BACK_BUFFER) {
-			context.OMSetRenderTargets(1, &mPostprocess1RTV, &depthStencilView);
-			mLightsDrawer.Draw(device, context, mGBuffersSRVs, farClipPlaneDistance, view, proj);
+			context.OMSetRenderTargets(1, &mPostprocess1RTV, nullptr);
+			mLightsDrawer.Draw(device, context, mGBuffersSRVs, depthStencilSRV, nearClipPlaneDistance, farClipPlaneDistance, view, proj);
 			context.OMSetRenderTargets(1, &backBuffer, &depthStencilView);
 			mPostProcessDrawer.Draw(device, context, mPostprocess1SRV);	 		
 		}
@@ -261,7 +262,7 @@ namespace BRE {
 			context.CopyResource(backBufferTexture, texture);
 		} 
 
-		//mFrameRateDrawer.Draw();
+		mFrameRateDrawer.Draw();
 
 		ASSERT_HR(swapChain.Present(0, 0));
 
@@ -324,18 +325,6 @@ namespace BRE {
 		textureDesc[3].SampleDesc.Count = 1;
 		textureDesc[3].SampleDesc.Quality = 0;
 
-		// Depth texture description
-		ZeroMemory(&textureDesc[4], sizeof(textureDesc[4]));
-		textureDesc[4].Width = screenWidth;
-		textureDesc[4].Height = screenHeight;
-		textureDesc[4].MipLevels = 1;
-		textureDesc[4].ArraySize = 1;
-		textureDesc[4].Format = DXGI_FORMAT_R16_UNORM;
-		textureDesc[4].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		textureDesc[4].Usage = D3D11_USAGE_DEFAULT;
-		textureDesc[4].SampleDesc.Count = 1;
-		textureDesc[4].SampleDesc.Quality = 0;
-
 		//
 		// Texture id's
 		//
@@ -344,7 +333,6 @@ namespace BRE {
 			"gbuffers_base_color",
 			"gbuffers_smoothness_metalmask",
 			"gbuffers_reflectance",
-			"gbuffers_depth",
 		};
 
 		//

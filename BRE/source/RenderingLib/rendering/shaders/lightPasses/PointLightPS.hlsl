@@ -5,8 +5,13 @@ struct PsInput {
 	float4 PosCS : SV_POSITION;
 	nointerpolation float3 LightPosVS : POSITION;
 	nointerpolation float4 LightColorAndRadius : LIGHT_COLOR_AND_RADIUS;
-	float3 ViewRayVS : VIEW_RAY;
+	float3 VertexPosVS : POS_VIEW_SPACE;
 };
+
+cbuffer CBufferPerFrame : register (b0) {
+	float2 ProjectionFactors; // x -> Far clip distance / (Far clip distance / near clip distance)
+							  // y -> (- Far clip distance * Near clip distance) / (Far clip distance - near clip distance)
+}
 
 SamplerState TexSampler : register (s0);
 
@@ -21,7 +26,10 @@ float4 main(const in PsInput IN) : SV_TARGET{
 	// screen position
 	const int3 sampleIndices = int3(IN.PosCS.xy, 0);
 	const float depth = DepthTexture.Load(sampleIndices).x;
-	const float3 posVS = IN.ViewRayVS * depth;
+	const float linearDepth = ProjectionFactors.y / (depth - ProjectionFactors.x);
+	const float3 viewRay = float3(IN.VertexPosVS.xy / IN.VertexPosVS.z, 1.0f);
+	const float3 posVS = viewRay * linearDepth;
+	
 	const float3 normalVS = OctDecode(NormalTexture.Load(sampleIndices).xy);
 	const float3 lightDir = IN.LightPosVS - posVS;
 	const float dist = length(lightDir);
@@ -33,7 +41,7 @@ float4 main(const in PsInput IN) : SV_TARGET{
 	data.MetalMask = smoothness_metalMask.y;
 	data.Smoothness = smoothness_metalMask.x;
 	data.Reflectance = Reflectance_Texture.Load(sampleIndices).rgb;
-	const float3 final = brdf(normalVS, normalize(-posVS), normalize(lightDir), data) * IN.LightColorAndRadius.xyz * attenuation;
+	const float3 final = attenuation * IN.LightColorAndRadius.xyz * brdf(normalVS, normalize(-posVS), normalize(lightDir), data);
 	return float4(final, 1.0f);
 }
 

@@ -83,7 +83,7 @@ float3 brdf(const float3 N, const float3 V, const float3 L, const MaterialData d
 	const float dotNL = saturate(dot(N, L)); 	
 	
 	// Specular BRDF
-	const float3 f0 = (1.0f - data.MetalMask) * 0.16f * data.Reflectance * data.Reflectance + data.BaseColor * data.MetalMask;
+	const float3 f0 = (1.0f - data.MetalMask) * data.Reflectance + data.BaseColor * data.MetalMask;
 	const float3 F = F_Schlick(f0, 1.0f, dotLH);
 	const float Vis = V_SmithGGXCorrelated(dotNV, dotNL, roughness);
 	const float D = D_GGX(dotNH, roughness);

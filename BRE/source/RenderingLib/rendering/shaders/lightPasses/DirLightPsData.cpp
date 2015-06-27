@@ -38,7 +38,7 @@ namespace BRE {
 		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
-	void DirLightPixelShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* *geometryBuffersSRVs) {
+	void DirLightPixelShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* *geometryBuffersSRVs, ID3D11ShaderResourceView& depthStencilSRV) {
 		ASSERT_PTR(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 
@@ -47,7 +47,8 @@ namespace BRE {
 		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
 		ASSERT_PTR(geometryBuffersSRVs);
-		context.PSSetShaderResources(0, sNumGBuffers, geometryBuffersSRVs);
+		ID3D11ShaderResourceView* views[sNumGBuffers] = { geometryBuffersSRVs[0], geometryBuffersSRVs[1], geometryBuffersSRVs[2], geometryBuffersSRVs[3], &depthStencilSRV };
+		context.PSSetShaderResources(0, ARRAYSIZE(views), views);
 
 		ID3D11SamplerState* const samplerStates[] = { mSampler };
 		context.PSSetSamplers(0, ARRAYSIZE(samplerStates), samplerStates);

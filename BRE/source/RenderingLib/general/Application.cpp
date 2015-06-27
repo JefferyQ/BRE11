@@ -77,7 +77,8 @@ namespace {
 		ID3D11DeviceContext1* &context,
 		IDXGISwapChain1* & swapChain,
 		ID3D11RenderTargetView* &backBufferRTV,
-		ID3D11DepthStencilView* &primaryDSV) {
+		ID3D11DepthStencilView* &depthStencilView,
+		ID3D11ShaderResourceView* &depthStencilSRV) {
 		unsigned int multisamplingQualityLevels;
 
 		// Create device and device context
@@ -155,17 +156,31 @@ namespace {
 			depthStencilDesc.Height = screenHeight;
 			depthStencilDesc.MipLevels = 1;
 			depthStencilDesc.ArraySize = 1;
-			depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-			depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+			depthStencilDesc.Format = DXGI_FORMAT_R32_TYPELESS;
+			depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
 			depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
 			depthStencilDesc.SampleDesc.Count = multisamplingCount;
 			depthStencilDesc.SampleDesc.Quality = multisamplingQualityLevels - 1;
 
 			ID3D11Texture2D* depthStencilBuffer;
-			BRE::ShaderResourcesManager::gInstance->AddTexture2D("primary_depth_stencil_texture2d", depthStencilDesc, nullptr, &depthStencilBuffer);
+			BRE::ShaderResourcesManager::gInstance->AddTexture2D("depth_stencil_texture", depthStencilDesc, nullptr, &depthStencilBuffer);
 			ASSERT_PTR(depthStencilBuffer);
-			BRE::ShaderResourcesManager::gInstance->AddDepthStencilView("primary_depth_stencil_texture2d", *depthStencilBuffer, nullptr, &primaryDSV);
-			ASSERT_PTR(primaryDSV);
+
+			D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+			ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+			depthStencilViewDesc.Flags = 0;
+			depthStencilViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+			depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+			BRE::ShaderResourcesManager::gInstance->AddDepthStencilView("depth_stencil_view", *depthStencilBuffer, &depthStencilViewDesc, &depthStencilView);
+			ASSERT_PTR(depthStencilView);
+
+			D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
+			ZeroMemory(&shaderResourceViewDesc, sizeof(shaderResourceViewDesc));
+			shaderResourceViewDesc.Format = DXGI_FORMAT_R32_FLOAT;
+			shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+			shaderResourceViewDesc.Texture2D.MipLevels = 1;
+			BRE::ShaderResourcesManager::gInstance->AddResourceSRV("depth_stencil_shader_resource_view", *depthStencilBuffer, &shaderResourceViewDesc, &depthStencilSRV);
+			ASSERT_PTR(depthStencilSRV);
 		}
 
 		// Set viewport
@@ -183,7 +198,7 @@ namespace {
 	}
 }
 
-namespace BRE {
+namespace BRE {    
 	Application::Application(const HINSTANCE& instance, const int showCommand) { 
 		srand(static_cast<unsigned int>(time(reinterpret_cast<time_t*>(0))));
 
@@ -202,13 +217,13 @@ namespace BRE {
 
 		const unsigned multisamplingCount = YamlUtils::GetScalar<unsigned int>(settingsNode, "multiSamplingCount");
 		const unsigned int frameRate = YamlUtils::GetScalar<unsigned int>(settingsNode, "frameRate");
-		InitDirectX(multisamplingCount, mScreenWidth, mScreenHeight, frameRate, mWindowHandle, mDevice, mContext, mSwapChain, mBackBufferRTV, mPrimaryDSV);
+		InitDirectX(multisamplingCount, mScreenWidth, mScreenHeight, frameRate, mWindowHandle, mDevice, mContext, mSwapChain, mBackBufferRTV, mDepthStencilView, mDepthStencilSRV);
 
-		ShadersManager::gInstance = new ShadersManager(*mDevice);
+		ShadersManager::gInstance = new ShadersManager(*mDevice);    
 		MaterialManager::gInstance = new MaterialManager();
-		ModelManager::gInstance = new ModelManager();
-		DrawManager::gInstance = new DrawManager(*mDevice, *mContext, mScreenWidth, mScreenHeight);
-		RenderStateHelper::gInstance = new RenderStateHelper(*mContext);
+		ModelManager::gInstance = new ModelManager(); 
+		DrawManager::gInstance = new DrawManager(*mDevice, *mContext, mScreenWidth, mScreenHeight); 
+		RenderStateHelper::gInstance = new RenderStateHelper(*mContext);  
 
 		LPDIRECTINPUT8 directInput;
 		ASSERT_HR(DirectInput8Create(instance, DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)&directInput, nullptr));
@@ -251,8 +266,8 @@ namespace BRE {
 	}
 
 	void Application::Run() {
-		MSG message;
-		ZeroMemory(&message, sizeof(message));
+		MSG message; 
+		ZeroMemory(&message, sizeof(message)); 
 		mClock.Reset();
 		while (message.message != WM_QUIT) {
 			if (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE)) {
@@ -281,6 +296,6 @@ namespace BRE {
 		std::wostringstream frameRate;
 		frameRate << mClock.FrameRate();
 		DrawManager::gInstance->FrameRateDrawer().Text() = frameRate.str();
-		DrawManager::gInstance->DrawAll(*mDevice, *mContext, *mSwapChain, *mBackBufferRTV, *mPrimaryDSV);
+		DrawManager::gInstance->DrawAll(*mDevice, *mContext, *mSwapChain, *mBackBufferRTV, *mDepthStencilView, *mDepthStencilSRV);
 	}
 }

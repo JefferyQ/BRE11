@@ -6,7 +6,6 @@ struct VS_INPUT {
 struct VS_OUTPUT {
 	float4 PosCS : SV_Position;
 	float3 NormalVS : NORMAL;
-	float DepthVS : DEPTH_VIEW_SPACE;
 };
 
 cbuffer CBufferPerFrame : register (b0) {
@@ -17,7 +16,6 @@ cbuffer CBufferPerFrame : register (b0) {
 VS_OUTPUT main(const VS_INPUT IN) {
 	VS_OUTPUT OUT = (VS_OUTPUT)0;
 	OUT.PosCS = mul(IN.PosOS, WorldViewProj);
-	OUT.DepthVS = mul(IN.PosOS, WorldView).z;
 	OUT.NormalVS = normalize(mul(float4(IN.NormalOS, 0.0f), WorldView).xyz);
 	return OUT;
 }

@@ -7,9 +7,6 @@ namespace BRE {
 
 	Mouse::Mouse(IDirectInput8& directInput, const HWND windowHandle)
 		: mDirectInput(directInput)
-		, mX(0)
-		, mY(0)
-		, mWheel(0)
 	{
 		ZeroMemory(&mCurrentState, sizeof(mCurrentState));
 		ZeroMemory(&mLastState, sizeof(mLastState));

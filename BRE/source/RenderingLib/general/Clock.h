@@ -22,10 +22,8 @@ namespace BRE {
 		LARGE_INTEGER mCurrentTime;
 		LARGE_INTEGER mLastTime;
 		double mFrequency;
-
 		double mTotalTime;
 		double mElapsedTime;
-
 		unsigned int mFrameCount;
 		unsigned int mFrameRate;
 		double mLastTotalElapsedTime;

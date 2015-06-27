@@ -3,11 +3,6 @@
 #include <input/Keyboard.h>
 #include <input/Mouse.h>
 
-#define ZERO_VECTOR2 DirectX::XMFLOAT2(0.0f, 0.0f)
-#define FORWARD_VECTOR3 DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f)
-#define UP_VECTOR3 DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f)
-#define RIGHT_VECTOR3 DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f)
-
 using namespace DirectX;
 
 namespace BRE {
@@ -15,9 +10,9 @@ namespace BRE {
 
 	Camera::Camera(const Camera::InputData& data)
 		: mPosition(data.mPos)
-		, mDirection(FORWARD_VECTOR3)
-		, mUp(UP_VECTOR3)
-		, mRight(RIGHT_VECTOR3)
+		, mDirection(DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f))
+		, mUp(DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f))
+		, mRight(DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f))
 		, mFieldOfView(data.mFieldOfView)
 		, mAspectRatio(data.mAspectRatio)
 		, mNearPlaneDistance(data.mNearPlaneDistance)
@@ -50,7 +45,7 @@ namespace BRE {
 
 	void Camera::Update(const float elapsedTime) {
 		// Update rotation
-		XMFLOAT2 rotationAmount = ZERO_VECTOR2;
+		XMFLOAT2 rotationAmount = DirectX::XMFLOAT2(0.0f, 0.0f);
 		if (Mouse::gInstance->IsButtonHeldDown(Mouse::MouseButtonsLeft)) {
 			const DIMOUSESTATE& mouseState = Mouse::gInstance->CurrentState();
 			rotationAmount.x = mouseState.lX * mMouseSensitivity;
@@ -62,25 +57,11 @@ namespace BRE {
 		ApplyRotation(XMMatrixMultiply(pitchMatrix, yawMatrix));
 		
 		// Update position
-		XMFLOAT2 movementAmount = ZERO_VECTOR2;
-		if (Keyboard::gInstance->IsKeyDown(DIK_W)) {
-			++movementAmount.y;
-		}
-		if (Keyboard::gInstance->IsKeyDown(DIK_S)) {
-			--movementAmount.y;
-		}
-		if (Keyboard::gInstance->IsKeyDown(DIK_A)) {
-			--movementAmount.x;
-		}
-		if (Keyboard::gInstance->IsKeyDown(DIK_D)) {
-			++movementAmount.x;
-		}
-		XMVECTOR position = XMLoadFloat3(&mPosition);
-		const XMVECTOR movement = XMLoadFloat2(&movementAmount) * mMovementRate * elapsedTime;
-		const XMVECTOR strafe = XMLoadFloat3(&mRight) * XMVectorGetX(movement);
-		position += strafe;
-		const XMVECTOR forward = XMLoadFloat3(&mDirection) * XMVectorGetY(movement);
-		position += forward;
+		const float movementMultiplier = (1.0f + Keyboard::gInstance->IsKeyDown(DIK_LSHIFT) * 5.0f) * mMovementRate * elapsedTime;
+		const XMFLOAT2 movementAmount = DirectX::XMFLOAT2(movementMultiplier * (Keyboard::gInstance->IsKeyDown(DIK_W) - Keyboard::gInstance->IsKeyDown(DIK_S)), movementMultiplier * (Keyboard::gInstance->IsKeyDown(DIK_D) - Keyboard::gInstance->IsKeyDown(DIK_A)));
+		XMVECTOR position = XMLoadFloat3(&mPosition);		
+		position += XMLoadFloat3(&mRight) * movementAmount.y;
+		position += XMLoadFloat3(&mDirection) * movementAmount.x;
 		XMStoreFloat3(&mPosition, position);
 
 		UpdateViewMatrix();

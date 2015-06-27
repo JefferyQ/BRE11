@@ -5,8 +5,8 @@ settings:
   multiSamplingCount: 1
   translation: [0.0, 0.0, -550.0]
   rotation: [0.0, 0.0, 0.0]
-  nearPlaneDistance: 0.01
-  farPlaneDistance: 5000.0
+  nearPlaneDistance: 1.0
+  farPlaneDistance: 1000000.0
   fieldOfView: 0.78539
   rotationRate: 0.005
   movementRate: 300.0

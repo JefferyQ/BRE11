@@ -11,37 +11,44 @@
 using namespace DirectX;
 
 namespace BRE {
-	void LightsDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* *geometryBuffersSRVs, const float farClipPlaneDistance, const XMMATRIX& view, const XMMATRIX& proj) {
+	void LightsDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* *geometryBuffersSRVs, ID3D11ShaderResourceView& depthStencilSRV, const float nearClipPlaneDistance, const float farClipPlaneDistance, const XMMATRIX& /*view*/, const XMMATRIX& proj) {
 		context.OMSetBlendState(mDefaultBS, nullptr, UINT32_MAX);
 		context.OMSetDepthStencilState(mDisableDepthTestDSS, UINT32_MAX);
 
-		/*const XMMATRIX invProj = XMMatrixInverse(nullptr, proj); 
+		const XMMATRIX invProj = XMMatrixInverse(nullptr, proj); 
+
+		// Far clip distance / (Far clip distance / near clip distance)
+		const float projA = farClipPlaneDistance / (farClipPlaneDistance / nearClipPlaneDistance);
+		// (-Far clip distance * Near clip distance) / (Far clip distance - near clip distance)
+		const float projB = (-farClipPlaneDistance * nearClipPlaneDistance) / (farClipPlaneDistance - nearClipPlaneDistance);
 
 		for (DirLightData& data : mDirLightDataVec) {
 			XMStoreFloat4x4(&data.mVertexShaderData.InvProjMatrix(), invProj);
 			data.mVertexShaderData.PreDraw(device, context);
-			data.mPixelShaderData.PreDraw(device, context, geometryBuffersSRVs);
+			data.mPixelShaderData.ProjectionA() = projA;
+			data.mPixelShaderData.ProjectionB() = projB;
+			data.mPixelShaderData.PreDraw(device, context, geometryBuffersSRVs, depthStencilSRV);
 			data.mVertexShaderData.DrawIndexed(context);
 			data.mPixelShaderData.PostDraw(context);
 			data.mVertexShaderData.PostDraw(context);
-		}*/
+		}
 
-		for (PointLightData& data : mPointLightDataVec) {
+		/*for (PointLightData& data : mPointLightDataVec) {
 			XMStoreFloat4x4(&data.mPointLightVsData.ViewMatrix(), XMMatrixTranspose(view));
-
 			XMStoreFloat4x4(&data.mPointLightGsData.ProjectionMatrix(), XMMatrixTranspose(proj));
-			data.mPointLightGsData.FarClipPlaneDistance() = farClipPlaneDistance;
 
 			data.mPointLightPsData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+			data.mPointLightPsData.ProjectionA() = projA;
+			data.mPointLightPsData.ProjectionB() = projB;
 
 			data.mPointLightVsData.PreDraw(device, context);
 			data.mPointLightGsData.PreDraw(device, context);
-			data.mPointLightPsData.PreDraw(device, context, geometryBuffersSRVs);
+			data.mPointLightPsData.PreDraw(device, context, geometryBuffersSRVs, depthStencilSRV);
 			data.mPointLightVsData.Draw(context);
 			data.mPointLightVsData.PostDraw(context);
 			data.mPointLightGsData.PostDraw(context);
 			data.mPointLightPsData.PostDraw(context);
-		}
+		}*/
 	}
 
 	void LightsDrawer::InitStates() {

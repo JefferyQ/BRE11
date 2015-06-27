@@ -2,8 +2,6 @@
 
 #include <DirectXMath.h>
 
-#include <rendering/shaders/Buffer.h>
-
 struct ID3D11DepthStencilView;
 struct ID3D11Device1;
 struct ID3D11DeviceContext1;
@@ -20,20 +18,12 @@ namespace BRE {
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs);
 		void PostDraw(ID3D11DeviceContext1& context);
 
-		float& FarClipPlaneDistance() { return mCBuffer.mData.mFarClipPlaneDistance; }
 		ID3D11SamplerState* &SamplerState() { return mSampler; }
 
 		void SetMaterial(const size_t matId);
 
 	private:
-		void InitializeCBuffers();
-
 		ID3D11PixelShader* mShader;
-
-		struct CBufferPerFrameData {
-			float mFarClipPlaneDistance;
-		};
-		Buffer<CBufferPerFrameData> mCBuffer;
 
 		ID3D11ShaderResourceView* mBaseColorSRV;
 		ID3D11ShaderResourceView* mSmoothnessSRV;
