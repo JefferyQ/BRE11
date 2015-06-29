@@ -3,8 +3,6 @@
 #include <cstdint>
 #include <d3d11_1.h>
 
-#include <utils/Memory.h>
-
 namespace BRE {
 	RenderStateHelper* RenderStateHelper::gInstance = nullptr;
 
@@ -19,13 +17,13 @@ namespace BRE {
 	}
 
 	RenderStateHelper::~RenderStateHelper() {
-		RELEASE_OBJECT(mRasterizerState);
-		RELEASE_OBJECT(mBlendState);
-		RELEASE_OBJECT(mDepthStencilState);
+		if (mRasterizerState) mRasterizerState->Release();
+		if (mBlendState) mBlendState->Release();
+		if (mDepthStencilState) mDepthStencilState->Release();
 	}
 
 	void RenderStateHelper::SaveRasterizerState() {
-		RELEASE_OBJECT(mRasterizerState);
+		if (mRasterizerState) mRasterizerState->Release();
 		mContext.RSGetState(&mRasterizerState);
 	}
 
@@ -52,7 +50,7 @@ namespace BRE {
 	}
 
 	void RenderStateHelper::SaveBlendState() {
-		RELEASE_OBJECT(mBlendState);
+		if (mBlendState) mBlendState->Release();
 		mContext.OMGetBlendState(&mBlendState, mBlendFactor, &mSampleMask);
 	}
 
@@ -61,7 +59,7 @@ namespace BRE {
 	}
 
 	void RenderStateHelper::SaveDepthStencilState() {
-		RELEASE_OBJECT(mDepthStencilState);
+		if (mDepthStencilState) mDepthStencilState->Release();
 		mContext.OMGetDepthStencilState(&mDepthStencilState, &mStencilRef);
 	}
 

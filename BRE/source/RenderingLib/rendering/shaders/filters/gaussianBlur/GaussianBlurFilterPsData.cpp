@@ -6,7 +6,7 @@
 #include <managers/ShadersManager.h>
 #include <managers/ShaderResourcesManager.h>
 #include <utils/Assert.h>
-#include <utils/Utility.h>
+#include <utils/DXUtils.h>
 
 using namespace DirectX;
 
@@ -22,7 +22,7 @@ namespace BRE {
 		, mSampleOffsetType(SampleOffsetType::HORIZONTAL)
 	{
 		ShadersManager::gInstance->LoadPixelShader(sShaderFile, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		InitSampleOffsets(screenWidth, screenHeight);
 		InitSampleWeights();
 		InitializeCBuffers();
@@ -34,11 +34,11 @@ namespace BRE {
 
 	void GaussianBlurFilterPsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
 		// Set shader
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 
 		// Set resources
-		ASSERT_PTR(mTextureToFilterSRV);
+		BRE_ASSERT(mTextureToFilterSRV);
 		context.PSSetShaderResources(0, 1, &mTextureToFilterSRV);
 
 		// Set samplers
@@ -46,8 +46,8 @@ namespace BRE {
 		context.PSSetSamplers(0, ARRAYSIZE(samplerStates), samplerStates);
 
 		// Set constant buffers
-		Utility::CopyData(device, &mSampleOffsets, sizeof(mSampleOffsets), *mCBufferSampleOffsets);
-		Utility::CopyData(device, &mSampleWeights, sizeof(mSampleWeights), *mCBufferSampleWeights);
+		Utils::CopyData(device, &mSampleOffsets, sizeof(mSampleOffsets), *mCBufferSampleOffsets);
+		Utils::CopyData(device, &mSampleWeights, sizeof(mSampleWeights), *mCBufferSampleWeights);
 		ID3D11Buffer* const cBuffers[] = { mCBufferSampleOffsets, mCBufferSampleWeights };
 		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 	}
@@ -125,8 +125,8 @@ namespace BRE {
 	}
 
 	void GaussianBlurFilterPsData::InitializeCBuffers() {
-		ASSERT_COND(mCBufferSampleOffsets == nullptr);
-		ASSERT_COND(mCBufferSampleWeights == nullptr);
+		BRE_ASSERT(mCBufferSampleOffsets == nullptr);
+		BRE_ASSERT(mCBufferSampleWeights == nullptr);
 
 		D3D11_BUFFER_DESC bufferDesc;
 		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
@@ -142,7 +142,7 @@ namespace BRE {
 			str << "GaussianBlurFilterPsData_mCBufferSampleOffsets";
 			str << rand();
 			ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferSampleOffsets);
-			ASSERT_PTR(mCBufferSampleOffsets);
+			BRE_ASSERT(mCBufferSampleOffsets);
 		}
 
 
@@ -159,7 +159,7 @@ namespace BRE {
 			str << "GaussianBlurFilterPsData_mCBufferSampleWeights";
 			str << rand();
 			ShaderResourcesManager::gInstance->AddBuffer(str.str().c_str(), bufferDesc, nullptr, &mCBufferSampleWeights);
-			ASSERT_PTR(mCBufferSampleWeights);
+			BRE_ASSERT(mCBufferSampleWeights);
 		}
 	}
 }

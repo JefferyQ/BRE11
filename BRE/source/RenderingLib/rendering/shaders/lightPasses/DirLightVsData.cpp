@@ -30,10 +30,10 @@ namespace BRE {
 
 		const unsigned int numElems = ARRAYSIZE(inputElementDescriptions);
 		ShadersManager::gInstance->LoadVertexShader(sShaderFile, inputElementDescriptions, &numElems, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 
-		mInputLayout = ShadersManager::gInstance->InputLayout(Hash(sShaderFile));
-		ASSERT_PTR(mInputLayout);
+		mInputLayout = ShadersManager::gInstance->InputLayout(Utils::Hash(sShaderFile));
+		BRE_ASSERT(mInputLayout);
 	}
 
 	void DirLightVertexShaderData::InitializeCBuffers() {
@@ -55,14 +55,14 @@ namespace BRE {
 
 	void DirLightVertexShaderData::InitializeGeometryBuffers() {
 		const char* vertexBufferName = "FullscreenVertexShaderData_vertex_buffer";
-		const size_t vertexBufferId = Hash(vertexBufferName);
+		const size_t vertexBufferId = Utils::Hash(vertexBufferName);
 		const char* indexBufferName = "FullscreenVertexShaderData_index_buffer";
-		const size_t indexBufferId = Hash(indexBufferName);
+		const size_t indexBufferId = Utils::Hash(indexBufferName);
 		mVertexBuffer = ShaderResourcesManager::gInstance->Buffer(vertexBufferId);
 		if (mVertexBuffer) {
 			mIndexBuffer = ShaderResourcesManager::gInstance->Buffer(indexBufferId);
 			mIndexCount = 6;
-			ASSERT_PTR(mIndexBuffer);
+			BRE_ASSERT(mIndexBuffer);
 			return;
 		}
 
@@ -91,7 +91,7 @@ namespace BRE {
 		ZeroMemory(&vertexSubResourceData, sizeof(vertexSubResourceData));
 		vertexSubResourceData.pSysMem = &vertices[0];
 		ShaderResourcesManager::gInstance->AddBuffer(vertexBufferName, vertexBufferDesc, &vertexSubResourceData, &mVertexBuffer);
-		ASSERT_PTR(mVertexBuffer);
+		BRE_ASSERT(mVertexBuffer);
 
 		// Create index buffer
 		D3D11_BUFFER_DESC indexBufferDesc;
@@ -106,16 +106,16 @@ namespace BRE {
 		ZeroMemory(&indexSubResourceData, sizeof(indexSubResourceData));
 		indexSubResourceData.pSysMem = &indices;
 		ShaderResourcesManager::gInstance->AddBuffer(indexBufferName, indexBufferDesc, &indexSubResourceData, &mIndexBuffer);
-		ASSERT_PTR(mIndexBuffer);
+		BRE_ASSERT(mIndexBuffer);
 
 		mIndexCount = sizeof(indices) / sizeof(unsigned int);
 	}
 
 	void DirLightVertexShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
-		ASSERT_PTR(mInputLayout);
-		ASSERT_PTR(mShader);
-		ASSERT_PTR(mVertexBuffer);
-		ASSERT_PTR(mIndexBuffer);
+		BRE_ASSERT(mInputLayout);
+		BRE_ASSERT(mShader);
+		BRE_ASSERT(mVertexBuffer);
+		BRE_ASSERT(mIndexBuffer);
 		context.IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		context.IASetInputLayout(mInputLayout);
 		context.VSSetShader(mShader, nullptr, 0);
@@ -145,10 +145,10 @@ namespace BRE {
 	}
 
 	void DirLightVertexShaderData::DrawIndexed(ID3D11DeviceContext1& context) {
-		ASSERT_PTR(mInputLayout);
-		ASSERT_PTR(mShader);
-		ASSERT_PTR(mVertexBuffer);
-		ASSERT_COND(mIndexCount > 0);
+		BRE_ASSERT(mInputLayout);
+		BRE_ASSERT(mShader);
+		BRE_ASSERT(mVertexBuffer);
+		BRE_ASSERT(mIndexCount > 0);
 		context.DrawIndexed(mIndexCount, 0, 0);
 	}
 }

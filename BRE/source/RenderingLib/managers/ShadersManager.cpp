@@ -4,7 +4,6 @@
 #include <fstream>
 
 #include <utils/Assert.h>
-#include <utils/Memory.h>
 #include <utils/Hash.h>
 
 namespace BRE {
@@ -17,33 +16,33 @@ namespace BRE {
 
 	ShadersManager::~ShadersManager() {
 		for (auto& elem : mInputLayouts) {
-			RELEASE_OBJECT(elem.second);
+			elem.second->Release();
 		}
 		for (auto& elem : mVertexShaders) {
-			RELEASE_OBJECT(elem.second);
+			elem.second->Release();
 		}
 		for (auto& elem : mPixelShaders) {
-			RELEASE_OBJECT(elem.second);
+			elem.second->Release();
 		}
 		for (auto& elem : mGeometryShaders) {
-			RELEASE_OBJECT(elem.second);
+			elem.second->Release();
 		}
 		for (auto& elem : mComputeShaders) {
-			RELEASE_OBJECT(elem.second);
+			elem.second->Release();
 		}
 		for (auto& elem : mHullShaders) {
-			RELEASE_OBJECT(elem.second);
+			elem.second->Release();
 		}
 		for (auto& elem : mDomainShaders) {
-			RELEASE_OBJECT(elem.second);
+			elem.second->Release();
 		}
 	}
 
 	size_t ShadersManager::LoadVertexShader(const char* filepath, const D3D11_INPUT_ELEMENT_DESC* inputLayoutDesc, const unsigned int* descNumElems, ID3D11VertexShader* *shader) {
-		ASSERT_PTR(filepath);
+		BRE_ASSERT(filepath);
 		const bool createInputLayout = inputLayoutDesc != nullptr && descNumElems != nullptr;
-		ASSERT_COND(!createInputLayout || (createInputLayout && mInputLayouts.find(*filepath) == mInputLayouts.end()));
-		const size_t id = Hash(filepath);
+		BRE_ASSERT(!createInputLayout || (createInputLayout && mInputLayouts.find(*filepath) == mInputLayouts.end()));
+		const size_t id = Utils::Hash(filepath);
 		VertexShaders::const_iterator findIt = mVertexShaders.find(id);
 		if (findIt != mVertexShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -64,8 +63,8 @@ namespace BRE {
 	}
 
 	size_t ShadersManager::LoadPixelShader(const char* filepath, ID3D11PixelShader* *shader) {
-		ASSERT_PTR(filepath);
-		const size_t id = Hash(filepath);
+		BRE_ASSERT(filepath);
+		const size_t id = Utils::Hash(filepath);
 		PixelShaders::const_iterator findIt = mPixelShaders.find(id);
 		if (findIt != mPixelShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -81,8 +80,8 @@ namespace BRE {
 	}
 
 	size_t ShadersManager::LoadHullShader(const char* filepath, ID3D11HullShader* *shader) {
-		ASSERT_PTR(filepath);
-		const size_t id = Hash(filepath);
+		BRE_ASSERT(filepath);
+		const size_t id = Utils::Hash(filepath);
 		HullShaders::const_iterator findIt = mHullShaders.find(id);
 		if (findIt != mHullShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -98,8 +97,8 @@ namespace BRE {
 	}
 
 	size_t ShadersManager::LoadDomainShader(const char* filepath, ID3D11DomainShader* *shader) {
-		ASSERT_PTR(filepath);
-		const size_t id = Hash(filepath);
+		BRE_ASSERT(filepath);
+		const size_t id = Utils::Hash(filepath);
 		DomainShaders::const_iterator findIt = mDomainShaders.find(id);
 		if (findIt != mDomainShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -115,8 +114,8 @@ namespace BRE {
 	}
 
 	size_t ShadersManager::LoadGeometryShader(const char* filepath, ID3D11GeometryShader* *shader) {
-		ASSERT_PTR(filepath);
-		const size_t id = Hash(filepath);
+		BRE_ASSERT(filepath);
+		const size_t id = Utils::Hash(filepath);
 		GeometryShaders::const_iterator findIt = mGeometryShaders.find(id);
 		if (findIt != mGeometryShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -132,8 +131,8 @@ namespace BRE {
 	}
 
 	size_t ShadersManager::LoadComputeShader(const char* filepath, ID3D11ComputeShader* *shader) {
-		ASSERT_PTR(filepath);
-		const size_t id = Hash(filepath);
+		BRE_ASSERT(filepath);
+		const size_t id = Utils::Hash(filepath);
 		ComputeShaders::const_iterator findIt = mComputeShaders.find(id);
 		if (findIt != mComputeShaders.end()) {
 			if (shader) *shader = findIt->second;
@@ -149,15 +148,15 @@ namespace BRE {
 
 	ID3D11InputLayout* ShadersManager::InputLayout(const size_t id) const {
 		InputLayouts::const_iterator findIt = mInputLayouts.find(id);
-		ASSERT_COND(findIt != mInputLayouts.end());
+		BRE_ASSERT(findIt != mInputLayouts.end());
 		return findIt->second;
 	}
 
 	void ShadersManager::StoreShaderByteCode(const char* fileName, std::vector<char>& buffer) const {
-		ASSERT_COND(fileName);
+		BRE_ASSERT(fileName);
 		std::ifstream file;
 		file.open(fileName, std::ios::binary);
-		ASSERT_COND(file.is_open());
+		BRE_ASSERT(file.is_open());
 		file.seekg(0, std::ios_base::end);
 		size_t size = static_cast<size_t> (file.tellg());
 		file.seekg(0, std::ios_base::beg);
@@ -167,7 +166,7 @@ namespace BRE {
 	}
 
 	void ShadersManager::BuildVertexLayout(std::vector<char>& shaderByteCode, const D3D11_INPUT_ELEMENT_DESC* inputLayoutDesc, const unsigned int inputLayoutDescSize, ID3D11InputLayout* &inputLayout) const {
-		ASSERT_COND(!shaderByteCode.empty());
+		BRE_ASSERT(!shaderByteCode.empty());
 		ASSERT_HR(mDevice.CreateInputLayout(inputLayoutDesc, inputLayoutDescSize, &shaderByteCode[0], shaderByteCode.size(), &inputLayout));
 	}
 }

@@ -16,7 +16,7 @@ namespace {
 namespace BRE {
 	PointLightGeometryShaderData::PointLightGeometryShaderData() {
 		ShadersManager::gInstance->LoadGeometryShader(sShaderFile, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		InitializeCBuffers();
 	}
 
@@ -39,7 +39,7 @@ namespace BRE {
 
 	void PointLightGeometryShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
 		// Set shader
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		context.GSSetShader(mShader, nullptr, 0);
 
 		// Set constant buffers

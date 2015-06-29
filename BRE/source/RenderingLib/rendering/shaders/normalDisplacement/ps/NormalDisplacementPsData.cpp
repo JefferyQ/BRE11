@@ -15,33 +15,33 @@ namespace {
 namespace BRE {
 	NormalDisplacementPsData::NormalDisplacementPsData() {
 		ShadersManager::gInstance->LoadPixelShader(shader, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 	}
 
 	void NormalDisplacementPsData::SetMaterial(const size_t matId) {
 		MaterialManager::MaterialData matData;
 		MaterialManager::gInstance->GetMaterial(matId, matData);
 		mNormalSRV = matData.mNormalSRV;
-		ASSERT_PTR(mNormalSRV);
+		BRE_ASSERT(mNormalSRV);
 		mBaseColorSRV = matData.mBaseColorSRV;
-		ASSERT_PTR(mBaseColorSRV);
+		BRE_ASSERT(mBaseColorSRV);
 		mSmoothnessSRV = matData.mSmoothnessSRV;
-		ASSERT_PTR(mSmoothnessSRV);
+		BRE_ASSERT(mSmoothnessSRV);
 		mMetalMaskSRV = matData.mMetalMaskSRV;
-		ASSERT_PTR(mMetalMaskSRV);
+		BRE_ASSERT(mMetalMaskSRV);
 		mReflectanceSRV = matData.mReflectanceSRV;
-		ASSERT_PTR(mReflectanceSRV);
+		BRE_ASSERT(mReflectanceSRV);
 	}
 
 	void NormalDisplacementPsData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 
-		ASSERT_PTR(mNormalSRV);
-		ASSERT_PTR(mBaseColorSRV);
-		ASSERT_PTR(mSmoothnessSRV);
-		ASSERT_PTR(mMetalMaskSRV);
-		ASSERT_PTR(mReflectanceSRV);
+		BRE_ASSERT(mNormalSRV);
+		BRE_ASSERT(mBaseColorSRV);
+		BRE_ASSERT(mSmoothnessSRV);
+		BRE_ASSERT(mMetalMaskSRV);
+		BRE_ASSERT(mReflectanceSRV);
 		ID3D11ShaderResourceView* const srvs[] = { mNormalSRV, mBaseColorSRV, mSmoothnessSRV, mMetalMaskSRV, mReflectanceSRV };
 		context.PSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
 

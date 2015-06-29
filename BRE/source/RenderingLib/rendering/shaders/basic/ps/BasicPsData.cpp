@@ -15,24 +15,24 @@ namespace {
 namespace BRE {
 	BasicPsData::BasicPsData() {
 		ShadersManager::gInstance->LoadPixelShader(shader, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 	}
 
 	void BasicPsData::SetMaterial(const size_t matId) {
 		MaterialManager::MaterialData matData;
 		MaterialManager::gInstance->GetMaterial(matId, matData);
 		mBaseColorSRV = matData.mBaseColorSRV;
-		ASSERT_PTR(mBaseColorSRV);
+		BRE_ASSERT(mBaseColorSRV);
 		mSmoothnessSRV = matData.mSmoothnessSRV; 
-		ASSERT_PTR(mSmoothnessSRV);
+		BRE_ASSERT(mSmoothnessSRV);
 		mMetalMaskSRV = matData.mMetalMaskSRV;
-		ASSERT_PTR(mMetalMaskSRV);
+		BRE_ASSERT(mMetalMaskSRV);
 		mReflectanceSRV = matData.mReflectanceSRV;
-		ASSERT_PTR(mReflectanceSRV);
+		BRE_ASSERT(mReflectanceSRV);
 	}
 
 	void BasicPsData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 		
 		ID3D11ShaderResourceView* const srvs[] = { mBaseColorSRV, mSmoothnessSRV, mMetalMaskSRV, mReflectanceSRV };

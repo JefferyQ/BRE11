@@ -26,6 +26,6 @@ namespace BRE {
 		desc.MinLOD = 0.0f;
 		desc.MaxLOD = 0.0f;
 		ShaderResourcesManager::gInstance->AddSamplerState("D3D11_FILTER_MIN_MAG_MIP_POINT_sampler_state", desc, &mMinMagMipPointSS);
-		ASSERT_PTR(mMinMagMipPointSS);
+		BRE_ASSERT(mMinMagMipPointSS);
 	}
 }

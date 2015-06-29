@@ -13,7 +13,7 @@ namespace {
 namespace BRE {
 	NormalDisplacementHsData::NormalDisplacementHsData() {
 		ShadersManager::gInstance->LoadHullShader(shader, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		InitializeCBuffers();
 	}
 
@@ -34,7 +34,7 @@ namespace BRE {
 	}
 
 	void NormalDisplacementHsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		context.HSSetShader(mShader, nullptr, 0);
 
 		mCBuffer.CopyDataToBuffer(device);

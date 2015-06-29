@@ -20,7 +20,6 @@
 #include <rendering/shaders/normalMapping/NormalMappingDrawer.h>
 #include <rendering/shaders/normalMapping/vs/NormalMappingVsData.h>
 #include <utils/Assert.h>
-#include <utils/Memory.h>
 #include <utils/Hash.h>
 #include <utils/YamlUtils.h>
 
@@ -38,20 +37,20 @@ namespace BRE {
 	}
 
 	void DrawManager::LoadModels(const char* filepath) {
-		ASSERT_PTR(filepath);
+		BRE_ASSERT(filepath);
 
 		const YAML::Node yamlFile = YAML::LoadFile(filepath);
-		ASSERT_COND(yamlFile.IsDefined());
+		BRE_ASSERT(yamlFile.IsDefined());
 
 		// Get models node
 		const YAML::Node nodes = yamlFile["models"];
-		ASSERT_COND(nodes.IsDefined());
-		ASSERT_COND(nodes.IsSequence());
+		BRE_ASSERT(nodes.IsDefined());
+		BRE_ASSERT(nodes.IsSequence());
 		
 		// Iterate through each node
 		for (const YAML::Node& node : nodes) {
-			ASSERT_COND(node.IsDefined());
-			ASSERT_COND(node.IsMap());
+			BRE_ASSERT(node.IsDefined());
+			BRE_ASSERT(node.IsMap());
 
 			// Get common rendering attributes
 			const std::string modelFilePath = YamlUtils::GetScalar<std::string>(node, "path");
@@ -72,14 +71,14 @@ namespace BRE {
 			const XMMATRIX worldMatrix = scalingMatrix * rotationMatrix * translationMatrix;
 
 			const std::string material = YamlUtils::GetScalar<std::string>(node, "material");
-			const size_t matId = Hash(material.c_str());
+			const size_t matId = Utils::Hash(material.c_str());
 
 			const Model* model;
 			const size_t modelId = ModelManager::gInstance->LoadModel(modelFilePath.c_str(), &model);			
-			ASSERT_COND(model);
+			BRE_ASSERT(model);
 			const std::vector<BRE::Mesh*>& meshes = model->Meshes();
 			const size_t numMeshes = meshes.size();
-			ASSERT_COND(numMeshes > 0);
+			BRE_ASSERT(numMeshes > 0);
 			if (renderType == "Normal") {	
 				const float textureScaleFactor = YamlUtils::GetScalar<float>(node, "textureScaleFactor");
 				ID3D11ShaderResourceView* normalMapSRV = nullptr;
@@ -92,7 +91,7 @@ namespace BRE {
 				for (size_t iMeshIndex = 0; iMeshIndex < numMeshes; ++iMeshIndex) {
 					NormalMappingDrawer renderer;
 					renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId, iMeshIndex));
-					ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
+					BRE_ASSERT(renderer.VertexShaderData().VertexBuffer());
 					renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer(iMeshIndex));
 					renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(meshes[iMeshIndex]->Indices().size()));
 					renderer.VertexShaderData().TextureScaleFactor() = textureScaleFactor;
@@ -121,7 +120,7 @@ namespace BRE {
 					ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
 					const std::string displacementMapTexture = YamlUtils::GetScalar<std::string>(node, "displacementMapTexture");
 					shaderResourcesMgr.AddTextureFromFileSRV(displacementMapTexture.c_str(), &displacementSRV);
-					ASSERT_PTR(displacementSRV);
+					BRE_ASSERT(displacementSRV);
 				}
 				ID3D11ShaderResourceView* normalMapSRV = nullptr;				
 				if (YamlUtils::IsDefined(node, "normalMapTexture")) {
@@ -133,7 +132,7 @@ namespace BRE {
 				for (size_t iMeshIndex = 0; iMeshIndex < numMeshes; ++iMeshIndex) {
 					NormalDisplacementDrawer renderer;
 					renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId, iMeshIndex));
-					ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
+					BRE_ASSERT(renderer.VertexShaderData().VertexBuffer());
 					renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer(iMeshIndex));
 					renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[iMeshIndex]->Indices().size()));
 					renderer.VertexShaderData().TextureScaleFactor() = textureScaleFactor;
@@ -167,7 +166,7 @@ namespace BRE {
 				for (size_t iMeshIndex = 0; iMeshIndex < numMeshes; ++iMeshIndex) {
 					BasicDrawer renderer;
 					renderer.VertexShaderData().VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(BasicVertexData::CreateVertexBuffer(modelId, iMeshIndex));
-					ASSERT_PTR(renderer.VertexShaderData().VertexBuffer());
+					BRE_ASSERT(renderer.VertexShaderData().VertexBuffer());
 					renderer.VertexShaderData().IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer(iMeshIndex));
 					renderer.VertexShaderData().SetIndexCount(static_cast<unsigned int>(model->Meshes()[iMeshIndex]->Indices().size()));
 
@@ -246,19 +245,19 @@ namespace BRE {
 			ID3D11Texture2D* backBufferTexture;
 			ASSERT_HR(swapChain.GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBufferTexture)));
 			if (renderMode == NORMAL) {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_normal"));
+				texture = ShaderResourcesManager::gInstance->Texture2D(Utils::Hash("gbuffers_normal"));
 			}
 			else if (renderMode == BASE_COLOR) {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_base_color"));
+				texture = ShaderResourcesManager::gInstance->Texture2D(Utils::Hash("gbuffers_base_color"));
 			}
 			else if (renderMode == SMOOTHNESS_METALMASK) {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_smoothness_metalmask"));
+				texture = ShaderResourcesManager::gInstance->Texture2D(Utils::Hash("gbuffers_smoothness_metalmask"));
 			}
 			else {
-				texture = ShaderResourcesManager::gInstance->Texture2D(Hash("gbuffers_reflectance"));
+				texture = ShaderResourcesManager::gInstance->Texture2D(Utils::Hash("gbuffers_reflectance"));
 			}
 
-			ASSERT_PTR(texture);
+			BRE_ASSERT(texture);
 			context.CopyResource(backBufferTexture, texture);
 		} 
 
@@ -342,15 +341,15 @@ namespace BRE {
 		for (size_t iTex = 0; iTex < numTextures; ++iTex) {
 			ID3D11Texture2D* texture;
 			shaderResourcesMgr.AddTexture2D(textureIds[iTex], textureDesc[iTex], nullptr, &texture);
-			ASSERT_PTR(texture);
+			BRE_ASSERT(texture);
 
-			ASSERT_COND(mGBuffersRTVs[iTex] == nullptr);
+			BRE_ASSERT(mGBuffersRTVs[iTex] == nullptr);
 			shaderResourcesMgr.AddRenderTargetView(textureIds[iTex], *texture, nullptr, &mGBuffersRTVs[iTex]);
-			ASSERT_PTR(mGBuffersRTVs[iTex]);
+			BRE_ASSERT(mGBuffersRTVs[iTex]);
 
-			ASSERT_COND(mGBuffersSRVs[iTex] == nullptr);
+			BRE_ASSERT(mGBuffersSRVs[iTex] == nullptr);
 			shaderResourcesMgr.AddResourceSRV(textureIds[iTex], *texture, nullptr, &mGBuffersSRVs[iTex]);
-			ASSERT_PTR(mGBuffersSRVs[iTex]);
+			BRE_ASSERT(mGBuffersSRVs[iTex]);
 		}
 	}
 
@@ -376,22 +375,22 @@ namespace BRE {
 		ShaderResourcesManager& shaderResourcesMgr = *ShaderResourcesManager::gInstance;
 		ID3D11Texture2D* texture1;
 		shaderResourcesMgr.AddTexture2D(textureId1, textureDesc, nullptr, &texture1);
-		ASSERT_PTR(texture1);
+		BRE_ASSERT(texture1);
 
 		shaderResourcesMgr.AddRenderTargetView(textureId1, *texture1, nullptr, &mPostprocess1RTV);
-		ASSERT_PTR(mPostprocess1RTV);
+		BRE_ASSERT(mPostprocess1RTV);
 
 		shaderResourcesMgr.AddResourceSRV(textureId1, *texture1, nullptr, &mPostprocess1SRV);
-		ASSERT_PTR(mPostprocess1SRV);
+		BRE_ASSERT(mPostprocess1SRV);
 
 		ID3D11Texture2D* texture2;
 		shaderResourcesMgr.AddTexture2D(textureId2, textureDesc, nullptr, &texture2);
-		ASSERT_PTR(texture2);
+		BRE_ASSERT(texture2);
 
 		shaderResourcesMgr.AddRenderTargetView(textureId2, *texture2, nullptr, &mPostprocess2RTV);
-		ASSERT_PTR(mPostprocess2RTV);
+		BRE_ASSERT(mPostprocess2RTV);
 
 		shaderResourcesMgr.AddResourceSRV(textureId2, *texture2, nullptr, &mPostprocess2SRV);
-		ASSERT_PTR(mPostprocess2SRV);
+		BRE_ASSERT(mPostprocess2SRV);
 	}
 }

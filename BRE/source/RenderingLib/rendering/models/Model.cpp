@@ -12,20 +12,20 @@
 #include <rendering/models/Mesh.h>
 #include <utils/Assert.h>
 #include <utils/Hash.h>
-#include <utils/Utility.h>
+#include <utils/DXUtils.h>
 
 namespace BRE {
 	Model::Model(const char* filename) 
 		: mFilename(filename)
 	{
-		ASSERT_PTR(filename);
+		BRE_ASSERT(filename);
 		Assimp::Importer importer;
 		const unsigned int flags = aiProcessPreset_TargetRealtime_Fast | aiProcess_ConvertToLeftHanded;
 		const aiScene* scene = importer.ReadFile(filename, flags);
 		if (!scene) {
 			const char* errorMsg = importer.GetErrorString();
 			std::cerr << errorMsg << std::endl;
-			ASSERT_PTR(scene);
+			BRE_ASSERT(scene);
 		}
 				
 		if (scene->HasMaterials()) {
@@ -51,13 +51,13 @@ namespace BRE {
 	}
 
 	size_t Model::CreateIndexBuffer(const size_t meshIndex, ID3D11Buffer* *buffer) const {
-		ASSERT_COND(meshIndex < mMeshes.size());
+		BRE_ASSERT(meshIndex < mMeshes.size());
 
 		// Check if there is already a buffer for current model
 		std::stringstream stream;
 		stream << meshIndex;
 		const std::string bufferName = mFilename + std::string("_indexBuffer_") + stream.str();
-		const size_t bufferId = Hash(bufferName.c_str());
+		const size_t bufferId = Utils::Hash(bufferName.c_str());
 		ID3D11Buffer* elem = ShaderResourcesManager::gInstance->Buffer(bufferId);
 		if (elem) {
 			if (buffer) *buffer = elem;
@@ -66,11 +66,11 @@ namespace BRE {
 
 		// Create buffer
 		BRE::Mesh& mesh = *Meshes()[meshIndex];
-		ASSERT_COND(!mesh.Indices().empty());
+		BRE_ASSERT(!mesh.Indices().empty());
 		std::vector<unsigned int> indices;
 		indices.insert(indices.end(), mesh.Indices().begin(), mesh.Indices().end());
 		const unsigned int bufferSize = static_cast<unsigned int> (indices.size() * sizeof(unsigned int));
-		Utility::CreateInitializedBuffer(bufferName.c_str(), &indices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_INDEX_BUFFER, buffer);
+		Utils::CreateInitializedBuffer(bufferName.c_str(), &indices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_INDEX_BUFFER, buffer);
 
 		return bufferId;
 	}

@@ -10,29 +10,26 @@ namespace BRE {
 	class YamlUtils {
 	public:
 		static bool IsDefined(const YAML::Node& node, const char* key) {
-			ASSERT_PTR(key);
-
+			BRE_ASSERT(key);
 			YAML::Node attr = node[key];
 			return attr.IsDefined();
 		}
 
 		template<typename T>
 		static T GetScalar(const YAML::Node& node, const char* key) {
-			ASSERT_PTR(key);
-
+			BRE_ASSERT(key);
 			YAML::Node attr = node[key];
-			ASSERT_COND(attr.IsDefined());
-			ASSERT_COND(attr.IsScalar());
+			BRE_ASSERT(attr.IsDefined());
+			BRE_ASSERT(attr.IsScalar());
 			return boost::lexical_cast<T>(attr.as<std::string>());
 		}
 
 		template<>
 		static std::string GetScalar(const YAML::Node& node, const char* key) {
-			ASSERT_PTR(key);
-
+			BRE_ASSERT(key);
 			YAML::Node attr = node[key];
-			ASSERT_COND(attr.IsDefined());
-			ASSERT_COND(attr.IsScalar());
+			BRE_ASSERT(attr.IsDefined());
+			BRE_ASSERT(attr.IsScalar());
 			return attr.as<std::string>();
 		}
 
@@ -42,20 +39,19 @@ namespace BRE {
 #else
 		static void GetSequence(const YAML::Node& node, const char* key, T* const sequence, const size_t) {
 #endif
-			ASSERT_PTR(key);
-			ASSERT_PTR(sequence);
-
+			BRE_ASSERT(key);
+			BRE_ASSERT(sequence);
 			YAML::Node attr = node[key];
-			ASSERT_COND(attr.IsDefined());
-			ASSERT_COND(attr.IsSequence());
+			BRE_ASSERT(attr.IsDefined());
+			BRE_ASSERT(attr.IsSequence());
 			size_t currentNumElems = 0;
 			for (const YAML::Node& seqNode : attr) {
-				ASSERT_COND(seqNode.IsScalar());
-				ASSERT_COND(currentNumElems < numElems);
+				BRE_ASSERT(seqNode.IsScalar());
+				BRE_ASSERT(currentNumElems < numElems);
 				sequence[currentNumElems] = seqNode.as<T>();
 				++currentNumElems;
 			}
-			ASSERT_COND(currentNumElems == numElems);
+			BRE_ASSERT(currentNumElems == numElems);
 		}
 
 		template<>
@@ -64,20 +60,19 @@ namespace BRE {
 #else
 		static void GetSequence(const YAML::Node& node, const char* key, float* const sequence, const size_t) {
 #endif
-			ASSERT_PTR(key);
-			ASSERT_PTR(sequence);
-
+			BRE_ASSERT(key);
+			BRE_ASSERT(sequence);
 			YAML::Node attr = node[key];
-			ASSERT_COND(attr.IsDefined());
-			ASSERT_COND(attr.IsSequence());
+			BRE_ASSERT(attr.IsDefined());
+			BRE_ASSERT(attr.IsSequence());
 			size_t currentNumElems = 0;
 			for (const YAML::Node& seqNode : attr) {
-				ASSERT_COND(seqNode.IsScalar());
-				ASSERT_COND(currentNumElems < numElems);
+				BRE_ASSERT(seqNode.IsScalar());
+				BRE_ASSERT(currentNumElems < numElems);
 				sequence[currentNumElems] = boost::lexical_cast<float>(seqNode.as<std::string>());
 				++currentNumElems;
 			}
-			ASSERT_COND(currentNumElems == numElems);
+			BRE_ASSERT(currentNumElems == numElems);
 		}
 	};
 }

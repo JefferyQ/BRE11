@@ -11,21 +11,21 @@ namespace BRE {
 		, mMaxPosition(maxPosition.x, maxPosition.y, maxPosition.z, position->w)
 		, mOffset(offset.x, offset.y, offset.z, position->w)
 	{
-		ASSERT_PTR(position);
-		ASSERT_COND(XMVector3LessOrEqual(XMLoadFloat4(&mMinPosition), XMLoadFloat4(mPosition)));
-		ASSERT_COND(XMVector3LessOrEqual(XMLoadFloat4(mPosition), XMLoadFloat4(&mMaxPosition)));
+		BRE_ASSERT(position);
+		BRE_ASSERT(XMVector3LessOrEqual(XMLoadFloat4(&mMinPosition), XMLoadFloat4(mPosition)));
+		BRE_ASSERT(XMVector3LessOrEqual(XMLoadFloat4(mPosition), XMLoadFloat4(&mMaxPosition)));
 	}
 
 	void PositionUpdater::Add(const PositionUpdater::Params& params) {
-		ASSERT_COND(XMVector4LessOrEqual(XMLoadFloat4(&params.mMinPosition), XMLoadFloat4(params.mPosition)));
-		ASSERT_COND(XMVector4LessOrEqual(XMLoadFloat4(params.mPosition), XMLoadFloat4(&params.mMaxPosition)));
+		BRE_ASSERT(XMVector4LessOrEqual(XMLoadFloat4(&params.mMinPosition), XMLoadFloat4(params.mPosition)));
+		BRE_ASSERT(XMVector4LessOrEqual(XMLoadFloat4(params.mPosition), XMLoadFloat4(&params.mMaxPosition)));
 
 		mPositions.push_back(params);
 	}
 
 	void PositionUpdater::Update(const float elapsedTime) {
 		for (Params& params : mPositions) {
-			ASSERT_PTR(params.mPosition);
+			BRE_ASSERT(params.mPosition);
 
 			// New pos = pos + offset * time
 			XMFLOAT4 newPos;

@@ -11,7 +11,7 @@ namespace BRE {
 		ZeroMemory(&mCurrentState, sizeof(mCurrentState));
 		ZeroMemory(&mLastState, sizeof(mLastState));
 		ASSERT_HR(mDirectInput.CreateDevice(GUID_SysMouse, &mDevice, nullptr));
-		ASSERT_PTR(mDevice);
+		BRE_ASSERT(mDevice);
 		ASSERT_HR(mDevice->SetDataFormat(&c_dfDIMouse));
 		ASSERT_HR(mDevice->SetCooperativeLevel(windowHandle, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE));
 		mDevice->Acquire();
@@ -23,7 +23,7 @@ namespace BRE {
 	}
 
 	void Mouse::Update() {
-		ASSERT_PTR(mDevice);
+		BRE_ASSERT(mDevice);
 		memcpy(&mLastState, &mCurrentState, sizeof(mCurrentState));
 		if (FAILED(mDevice->GetDeviceState(sizeof(mCurrentState), &mCurrentState)) && SUCCEEDED(mDevice->Acquire()) && FAILED(mDevice->GetDeviceState(sizeof(mCurrentState), &mCurrentState))) {
 			return;

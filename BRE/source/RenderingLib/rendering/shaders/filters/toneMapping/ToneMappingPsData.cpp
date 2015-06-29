@@ -14,14 +14,14 @@ namespace BRE {
 		: mTextureToFilterSRV(nullptr)
 	{
 		ShadersManager::gInstance->LoadPixelShader(sShaderFile, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 	}
 
 	void ToneMappingPixelShaderData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context) {
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 
-		ASSERT_PTR(mTextureToFilterSRV);
+		BRE_ASSERT(mTextureToFilterSRV);
 		context.PSSetShaderResources(0, 1, &mTextureToFilterSRV);
 
 		ID3D11SamplerState* const samplerStates[] = { mSampler };

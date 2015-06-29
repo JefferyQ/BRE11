@@ -23,7 +23,7 @@ namespace BRE {
 		ID3D11Device1& Device() { return *mDevice; }
 		ID3D11DeviceContext1& Context() { return *mContext; }
 
-		void Add(Component* component) { ASSERT_PTR(component); mComponents.push_back(component); }
+		void Add(Component* component) { BRE_ASSERT(component); mComponents.push_back(component); }
 		void Run();
 
 	private:

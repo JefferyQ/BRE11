@@ -1,5 +1,7 @@
 #pragma once
 
 namespace BRE {
-	size_t Hash(const char* str);
+	namespace Utils {
+		size_t Hash(const char* str);
+	}
 }

@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="doc">
-      <UniqueIdentifier>{b4d72fc9-6bf0-4e18-9b29-22c96c9cb9c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="input">
       <UniqueIdentifier>{bb36e326-d350-4022-b2b9-e2351dec1e5c}</UniqueIdentifier>
     </Filter>
@@ -92,9 +89,6 @@
     </ClCompile>
     <ClCompile Include="managers\ShadersManager.cpp">
       <Filter>managers</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\Utility.cpp">
-      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="utils\updaters\PositionUpdater.cpp">
       <Filter>utils\updaters</Filter>
@@ -225,6 +219,15 @@
     <ClCompile Include="rendering\shaders\filters\PostProcessDrawer.cpp">
       <Filter>rendering\shaders\filters</Filter>
     </ClCompile>
+    <ClCompile Include="utils\DXUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\MathUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\StringUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input\Keyboard.h">
@@ -240,12 +243,6 @@
       <Filter>managers</Filter>
     </ClInclude>
     <ClInclude Include="utils\Assert.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\Memory.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\Utility.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\updaters\PositionUpdater.h">
@@ -300,9 +297,6 @@
       <Filter>general</Filter>
     </ClInclude>
     <ClInclude Include="general\Camera.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="general\Component.h">
       <Filter>general</Filter>
     </ClInclude>
     <ClInclude Include="rendering\StringDrawer.h">
@@ -386,17 +380,18 @@
     <ClInclude Include="rendering\shaders\filters\PostProcessDrawer.h">
       <Filter>rendering\shaders\filters</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="doc\LightingModels.txt">
-      <Filter>doc</Filter>
-    </Text>
-    <Text Include="doc\LightTypes.txt">
-      <Filter>doc</Filter>
-    </Text>
-    <Text Include="doc\Mappings.txt">
-      <Filter>doc</Filter>
-    </Text>
+    <ClInclude Include="utils\DXUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\MathUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\StringUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="general\Component.h">
+      <Filter>general</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="rendering\shaders\Lighting.hlsli">

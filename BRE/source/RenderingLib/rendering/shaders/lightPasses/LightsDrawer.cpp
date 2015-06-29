@@ -70,7 +70,7 @@ namespace BRE {
 			blendDesc.RenderTarget[0] = desc;
 
 			ShaderResourcesManager::gInstance->AddBlendState("default_blend_state", blendDesc, &mDefaultBS);
-			ASSERT_PTR(mDefaultBS);
+			BRE_ASSERT(mDefaultBS);
 		}
 
 		// Create depth stencil state which disable depth test
@@ -78,7 +78,7 @@ namespace BRE {
 			D3D11_DEPTH_STENCIL_DESC desc;
 			ZeroMemory(&desc, sizeof(desc));
 			ShaderResourcesManager::gInstance->AddDepthStencilState("disable_depth_test", desc, &mDisableDepthTestDSS);
-			ASSERT_PTR(mDisableDepthTestDSS);
+			BRE_ASSERT(mDisableDepthTestDSS);
 		}
 	}
 }

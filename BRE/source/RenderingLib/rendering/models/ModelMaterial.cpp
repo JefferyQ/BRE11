@@ -3,8 +3,6 @@
 #include <assimp/scene.h>
 
 #include <utils/Assert.h>
-#include <utils/Memory.h>
-#include <utils/Utility.h>
 
 namespace {
 	void InitializeTextureTypeMappings(std::map<BRE::TextureType, unsigned int> textureTypeMappings) {
@@ -60,7 +58,7 @@ namespace BRE {
 
 	ModelMaterial::~ModelMaterial() {
 		for (std::pair<TextureType, std::vector<std::string>*> textures : mTextures) {
-			DELETE_OBJECT(textures.second);
+			delete textures.second;
 		}
 	}
 }

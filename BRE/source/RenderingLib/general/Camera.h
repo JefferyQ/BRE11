@@ -5,6 +5,7 @@
 // Implementation of a first person camera.
 // The W and S keys move the camera forward and backward along its direction vector.
 // The A and D keys "strafe" (move the camera horizontally) along the right vector.
+// Left Shift increases movement speed.
 // The mouse controls the yaw and pitch of the camera: You move the mouse vertically to pitch, and horizontally to yaw.
 // We do not support roll.
 //

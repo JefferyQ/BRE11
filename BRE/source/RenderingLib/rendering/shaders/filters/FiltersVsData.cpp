@@ -43,22 +43,22 @@ namespace BRE {
 
 		const unsigned int numElems = ARRAYSIZE(inputElementDescriptions);
 		ShadersManager::gInstance->LoadVertexShader(sShaderFile, inputElementDescriptions, &numElems, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 
-		const size_t id = Hash(sShaderFile);
+		const size_t id = Utils::Hash(sShaderFile);
 		mInputLayout = ShadersManager::gInstance->InputLayout(id);
-		ASSERT_PTR(mInputLayout);
+		BRE_ASSERT(mInputLayout);
 	}
 
 	void FiltersVertexShaderData::InitializeGeometryBuffers(ID3D11Device1& device) {
 		const char* vertexBufferName = "FiltersVertexShaderData";
-		const size_t vertexBufferId = Hash(vertexBufferName);
+		const size_t vertexBufferId = Utils::Hash(vertexBufferName);
 		const char* indexBufferName = "FiltersVertexShaderData";
-		const size_t indexBufferId = Hash(indexBufferName);
+		const size_t indexBufferId = Utils::Hash(indexBufferName);
 		mVertexBuffer = ShaderResourcesManager::gInstance->Buffer(vertexBufferId);
 		if (mVertexBuffer) {
 			mIndexBuffer = ShaderResourcesManager::gInstance->Buffer(indexBufferId);
-			ASSERT_PTR(mIndexBuffer);
+			BRE_ASSERT(mIndexBuffer);
 			mIndexCount = 6;
 			return;
 		}
@@ -92,7 +92,7 @@ namespace BRE {
 		ZeroMemory(&vertexSubResourceData, sizeof(vertexSubResourceData));
 		vertexSubResourceData.pSysMem = &vertices[0];
 		ASSERT_HR(device.CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &mVertexBuffer));
-		ASSERT_PTR(mVertexBuffer);
+		BRE_ASSERT(mVertexBuffer);
 
 		// Create index buffer
 		D3D11_BUFFER_DESC indexBufferDesc;
@@ -107,15 +107,15 @@ namespace BRE {
 		ZeroMemory(&indexSubResourceData, sizeof(indexSubResourceData));
 		indexSubResourceData.pSysMem = &indices;
 		ASSERT_HR(device.CreateBuffer(&indexBufferDesc, &indexSubResourceData, &mIndexBuffer));
-		ASSERT_PTR(mIndexBuffer);
+		BRE_ASSERT(mIndexBuffer);
 		mIndexCount = sizeof(indices) / sizeof(unsigned int);
 	}
 
 	void FiltersVertexShaderData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context) {
-		ASSERT_PTR(mInputLayout);
-		ASSERT_PTR(mShader);
-		ASSERT_PTR(mVertexBuffer);
-		ASSERT_PTR(mIndexBuffer);
+		BRE_ASSERT(mInputLayout);
+		BRE_ASSERT(mShader);
+		BRE_ASSERT(mVertexBuffer);
+		BRE_ASSERT(mIndexBuffer);
 		context.IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		context.IASetInputLayout(mInputLayout);
@@ -138,11 +138,11 @@ namespace BRE {
 	}
 
 	void FiltersVertexShaderData::DrawIndexed(ID3D11DeviceContext1& context) {
-		ASSERT_PTR(mInputLayout);
-		ASSERT_PTR(mShader);
-		ASSERT_PTR(mVertexBuffer);
-		ASSERT_PTR(mIndexBuffer);
-		ASSERT_COND(mIndexCount > 0);
+		BRE_ASSERT(mInputLayout);
+		BRE_ASSERT(mShader);
+		BRE_ASSERT(mVertexBuffer);
+		BRE_ASSERT(mIndexBuffer);
+		BRE_ASSERT(mIndexCount > 0);
 		context.DrawIndexed(mIndexCount, 0, 0);
 	}
 }

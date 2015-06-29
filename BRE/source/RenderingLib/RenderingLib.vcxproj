@@ -200,9 +200,11 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="rendering\shaders\normalMapping\vs\NormalMappingVsData.cpp" />
     <ClCompile Include="rendering\shaders\VertexType.cpp" />
     <ClCompile Include="rendering\StringDrawer.cpp" />
+    <ClCompile Include="utils\DXUtils.cpp" />
     <ClCompile Include="utils\Hash.cpp" />
+    <ClCompile Include="utils\MathUtils.cpp" />
+    <ClCompile Include="utils\StringUtils.cpp" />
     <ClCompile Include="utils\updaters\PositionUpdater.cpp" />
-    <ClCompile Include="utils\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="general\Application.h" />
@@ -253,16 +255,12 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\shaders\VertexType.h" />
     <ClInclude Include="rendering\StringDrawer.h" />
     <ClInclude Include="utils\Assert.h" />
+    <ClInclude Include="utils\DXUtils.h" />
     <ClInclude Include="utils\Hash.h" />
-    <ClInclude Include="utils\Memory.h" />
+    <ClInclude Include="utils\MathUtils.h" />
+    <ClInclude Include="utils\StringUtils.h" />
     <ClInclude Include="utils\updaters\PositionUpdater.h" />
-    <ClInclude Include="utils\Utility.h" />
     <ClInclude Include="utils\YamlUtils.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="doc\LightingModels.txt" />
-    <Text Include="doc\LightTypes.txt" />
-    <Text Include="doc\Mappings.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="rendering\shaders\Lighting.hlsli" />

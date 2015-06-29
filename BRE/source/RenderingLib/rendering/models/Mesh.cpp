@@ -7,7 +7,6 @@
 #include <general/Application.h>
 #include <rendering/models/Model.h>
 #include <utils/Assert.h>
-#include <utils\Utility.h>
 
 using namespace DirectX;
 
@@ -19,17 +18,17 @@ namespace BRE {
 		, mFaceCount(0)
 	{
 		mMaterial = mModel.Materials()[mesh.mMaterialIndex];
-		ASSERT_PTR(mMaterial);
+		BRE_ASSERT(mMaterial);
 
 		// Vertices
-		ASSERT_COND(mesh.mNumVertices > 0);
+		BRE_ASSERT(mesh.mNumVertices > 0);
 		mVertices.reserve(mesh.mNumVertices);
 		for (unsigned int i = 0; i < mesh.mNumVertices; ++i) {
 			mVertices.push_back(XMFLOAT3(reinterpret_cast<const float*>(&mesh.mVertices[i])));
 		}
 
 		// Normals
-		ASSERT_COND(mesh.HasNormals());
+		BRE_ASSERT(mesh.HasNormals());
 		mNormals.reserve(mesh.mNumVertices);
 		for (unsigned int i = 0; i < mesh.mNumVertices; ++i) {
 			mNormals.push_back(XMFLOAT3(reinterpret_cast<const float*>(&mesh.mNormals[i])));
@@ -38,10 +37,10 @@ namespace BRE {
 
 		// Texture Coordinates
 		if (mesh.HasTextureCoords(0)) {
-			ASSERT_COND(mesh.GetNumUVChannels() == 1);
+			BRE_ASSERT(mesh.GetNumUVChannels() == 1);
 			mTextureCoordinates.reserve(mesh.mNumVertices);
 			const aiVector3D* aiTextureCoordinates = mesh.mTextureCoords[0];
-			ASSERT_PTR(aiTextureCoordinates);
+			BRE_ASSERT(aiTextureCoordinates);
 			for (unsigned int j = 0; j < mesh.mNumVertices; j++) {
 				mTextureCoordinates.push_back(XMFLOAT3(reinterpret_cast<const float*>(&aiTextureCoordinates[j])));
 			}
@@ -49,7 +48,7 @@ namespace BRE {
 
 		// Colors
 		if (mesh.HasVertexColors(0)) {
-			ASSERT_COND(mesh.GetNumColorChannels() == 1);
+			BRE_ASSERT(mesh.GetNumColorChannels() == 1);
 			const aiColor4D* aiColors = mesh.mColors[0];
 			for (unsigned int j = 0; j < mesh.mNumVertices; j++) {
 				mColors.push_back(XMFLOAT4(reinterpret_cast<const float*>(&aiColors[j])));
@@ -57,12 +56,12 @@ namespace BRE {
 		}		
 
 		// We only allow triangles
-		ASSERT_COND(mesh.HasFaces());
+		BRE_ASSERT(mesh.HasFaces());
 		mFaceCount = mesh.mNumFaces;
 		for (unsigned int i = 0; i < mFaceCount; ++i) {
 			const aiFace* face = &mesh.mFaces[i];
-			ASSERT_PTR(face);
-			ASSERT_COND(face->mNumIndices == 3);
+			BRE_ASSERT(face);
+			BRE_ASSERT(face->mNumIndices == 3);
 			mIndices.push_back(face->mIndices[0]);
 			mIndices.push_back(face->mIndices[1]);
 			mIndices.push_back(face->mIndices[2]);
@@ -79,7 +78,7 @@ namespace BRE {
 			}
 		}
 		/*else {
-			Utility::CalculateTangentArray(*this, mTangents);
+			Utils::CalculateTangentArray(*this, mTangents);
 		}*/
 
 	}

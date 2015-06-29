@@ -22,7 +22,7 @@ namespace BRE {
 
 		ID3D11Buffer* &VertexBuffer() { return mVertexBuffer; }
 		ID3D11Buffer* &IndexBuffer() { return mIndexBuffer; }
-		void SetIndexCount(const unsigned int indexCount) { ASSERT_COND(indexCount > 0); mIndexCount = indexCount; }
+		void SetIndexCount(const unsigned int indexCount) { BRE_ASSERT(indexCount > 0); mIndexCount = indexCount; }
 		float& TextureScaleFactor() { return mCBuffer.mData.mTextureScaleFactor; }
 
 	private:

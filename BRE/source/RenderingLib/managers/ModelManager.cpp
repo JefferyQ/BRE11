@@ -14,8 +14,8 @@ namespace BRE {
 	}
 
 	size_t ModelManager::LoadModel(const char* modelPath, const Model* *model) {
-		ASSERT_PTR(modelPath);
-		const size_t id = Hash(modelPath);
+		BRE_ASSERT(modelPath);
+		const size_t id = Utils::Hash(modelPath);
 		ModelById::const_iterator it = mModelById.find(id);
 		if (it == mModelById.end()) {
 			Model* elem = new Model(modelPath);

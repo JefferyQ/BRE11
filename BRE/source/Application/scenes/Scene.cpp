@@ -7,8 +7,7 @@
 #include <rendering/GlobalResources.h> 
 #include <rendering/shaders/lightPasses/DirLightPsData.h>      
 #include <utils/Assert.h>
-#include <utils/Memory.h>
-#include <utils/Utility.h>   
+#include <utils/MathUtils.h>   
 
 using namespace DirectX;    
 
@@ -69,17 +68,17 @@ void Scene::InitPointLights() {
 	const float factor = 500.0f;
 	for (BRE::LightsDrawer::PointLightData& data : quadCulledPointLightDataVec) {
 		for (unsigned int iLight = 0; iLight < sMaxShaderPointLights; ++iLight, ++lightIndex) {
-			data.mPointLightVsData.LightPosAndRadius(iLight).x = BRE::Utility::RandomFloat(-factor, factor);
-			data.mPointLightVsData.LightPosAndRadius(iLight).y = BRE::Utility::RandomFloat(-factor, factor);
-			data.mPointLightVsData.LightPosAndRadius(iLight).z = BRE::Utility::RandomFloat(-factor, factor);
+			data.mPointLightVsData.LightPosAndRadius(iLight).x = BRE::Utils::RandomFloat(-factor, factor);
+			data.mPointLightVsData.LightPosAndRadius(iLight).y = BRE::Utils::RandomFloat(-factor, factor);
+			data.mPointLightVsData.LightPosAndRadius(iLight).z = BRE::Utils::RandomFloat(-factor, factor);
 			data.mPointLightVsData.LightPosAndRadius(iLight).w = 100; 
-			const float c = BRE::Utility::RandomFloat(0.5f, 1.0f);
+			const float c = BRE::Utils::RandomFloat(0.5f, 1.0f);
 			DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(c, c, c, 0.0f); 
 			data.mPointLightVsData.LightColor(iLight) = color; 
 
-			const float f5 = BRE::Utility::RandomFloat(25.0f, 30.0f) * ((rand() % 2) ? 1.0f : -1.0f);  
-			const float f6 = BRE::Utility::RandomFloat(25.0f, 30.0f) * ((rand() % 2) ? 1.0f : -1.0f); 
-			const float f7 = BRE::Utility::RandomFloat(25.0f, 30.0f ) * ((rand() % 2) ? 1.0f : -1.0f);
+			const float f5 = BRE::Utils::RandomFloat(25.0f, 30.0f) * ((rand() % 2) ? 1.0f : -1.0f);  
+			const float f6 = BRE::Utils::RandomFloat(25.0f, 30.0f) * ((rand() % 2) ? 1.0f : -1.0f); 
+			const float f7 = BRE::Utils::RandomFloat(25.0f, 30.0f ) * ((rand() % 2) ? 1.0f : -1.0f);
 			mPosUpdater.Add(BRE::PositionUpdater::Params(&data.mPointLightVsData.LightPosAndRadius(iLight), XMFLOAT3(-factor, -factor, -factor), XMFLOAT3(factor, factor, factor), XMFLOAT3(f5, f6, f7)));
 		}
 	}

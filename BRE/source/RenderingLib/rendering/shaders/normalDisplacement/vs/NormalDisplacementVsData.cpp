@@ -30,10 +30,10 @@ namespace BRE {
 
 		const unsigned int numElems = ARRAYSIZE(inputElementDescriptions);
 		ShadersManager::gInstance->LoadVertexShader(shader, inputElementDescriptions, &numElems, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 
-		mInputLayout = ShadersManager::gInstance->InputLayout(Hash(shader));
-		ASSERT_PTR(mInputLayout);
+		mInputLayout = ShadersManager::gInstance->InputLayout(Utils::Hash(shader));
+		BRE_ASSERT(mInputLayout);
 	}
 
 	void NormalDisplacementVsData::InitializeCBuffers() {
@@ -53,11 +53,11 @@ namespace BRE {
 	}
 
 	void NormalDisplacementVsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
-		ASSERT_PTR(mInputLayout);
-		ASSERT_PTR(mShader);
-		ASSERT_PTR(mVertexBuffer);
-		ASSERT_PTR(mIndexBuffer);
-		ASSERT_COND(mIndexCount > 0);
+		BRE_ASSERT(mInputLayout);
+		BRE_ASSERT(mShader);
+		BRE_ASSERT(mVertexBuffer);
+		BRE_ASSERT(mIndexBuffer);
+		BRE_ASSERT(mIndexCount > 0);
 
 		context.IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 		context.IASetInputLayout(mInputLayout);
@@ -73,11 +73,11 @@ namespace BRE {
 	}
 
 	void NormalDisplacementVsData::DrawIndexed(ID3D11DeviceContext1& context) {
-		ASSERT_PTR(mInputLayout);
-		ASSERT_PTR(mShader);
-		ASSERT_PTR(mVertexBuffer);
-		ASSERT_PTR(mIndexBuffer);
-		ASSERT_COND(mIndexCount > 0);
+		BRE_ASSERT(mInputLayout);
+		BRE_ASSERT(mShader);
+		BRE_ASSERT(mVertexBuffer);
+		BRE_ASSERT(mIndexBuffer);
+		BRE_ASSERT(mIndexCount > 0);
 		context.DrawIndexed(mIndexCount, 0, 0);
 	}
 

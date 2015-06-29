@@ -16,8 +16,6 @@
 #include <managers/ShaderResourcesManager.h>
 #include <rendering/GlobalResources.h>
 #include <rendering/RenderStateHelper.h>
-#include <utils/Memory.h>
-#include <utils/Utility.h>
 #include <utils/YamlUtils.h>
 
 using namespace DirectX;
@@ -98,11 +96,11 @@ namespace {
 			ASSERT_HR(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, createDeviceFlags, featureLevels, ARRAYSIZE(featureLevels), D3D11_SDK_VERSION, &direct3DDevice, nullptr, &direct3DDeviceContext));
 			ASSERT_HR(direct3DDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&device)));
 			ASSERT_HR(direct3DDeviceContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&context)));
-			RELEASE_OBJECT(direct3DDevice);
-			RELEASE_OBJECT(direct3DDeviceContext);
+			direct3DDevice->Release();
+			direct3DDeviceContext->Release();
 
 			device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, multisamplingCount, &multisamplingQualityLevels);
-			ASSERT_COND(multisamplingQualityLevels != 0);
+			BRE_ASSERT(multisamplingQualityLevels != 0);
 		}
 
 		// Create swap chain
@@ -136,9 +134,9 @@ namespace {
 
 			ASSERT_HR(dxgiFactory->CreateSwapChainForHwnd(dxgiDevice, windowHandle, &swapChainDesc, &fullScreenDesc, nullptr, &swapChain));
 
-			RELEASE_OBJECT(dxgiDevice);
-			RELEASE_OBJECT(dxgiAdapter);
-			RELEASE_OBJECT(dxgiFactory);
+			dxgiDevice->Release();
+			dxgiAdapter->Release();
+			dxgiFactory->Release();
 		}
 
 		BRE::ShaderResourcesManager::gInstance = new BRE::ShaderResourcesManager(*device);
@@ -148,7 +146,7 @@ namespace {
 			ID3D11Texture2D* backBuffer;
 			ASSERT_HR(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer)));
 			ASSERT_HR(device->CreateRenderTargetView(backBuffer, nullptr, &backBufferRTV));
-			RELEASE_OBJECT(backBuffer);
+			backBuffer->Release();
 
 			D3D11_TEXTURE2D_DESC depthStencilDesc;
 			ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
@@ -164,7 +162,7 @@ namespace {
 
 			ID3D11Texture2D* depthStencilBuffer;
 			BRE::ShaderResourcesManager::gInstance->AddTexture2D("depth_stencil_texture", depthStencilDesc, nullptr, &depthStencilBuffer);
-			ASSERT_PTR(depthStencilBuffer);
+			BRE_ASSERT(depthStencilBuffer);
 
 			D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 			ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
@@ -172,7 +170,7 @@ namespace {
 			depthStencilViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
 			depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 			BRE::ShaderResourcesManager::gInstance->AddDepthStencilView("depth_stencil_view", *depthStencilBuffer, &depthStencilViewDesc, &depthStencilView);
-			ASSERT_PTR(depthStencilView);
+			BRE_ASSERT(depthStencilView);
 
 			D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
 			ZeroMemory(&shaderResourceViewDesc, sizeof(shaderResourceViewDesc));
@@ -180,7 +178,7 @@ namespace {
 			shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 			shaderResourceViewDesc.Texture2D.MipLevels = 1;
 			BRE::ShaderResourcesManager::gInstance->AddResourceSRV("depth_stencil_shader_resource_view", *depthStencilBuffer, &shaderResourceViewDesc, &depthStencilSRV);
-			ASSERT_PTR(depthStencilSRV);
+			BRE_ASSERT(depthStencilSRV);
 		}
 
 		// Set viewport
@@ -205,10 +203,10 @@ namespace BRE {
 		const char* appConfigFile = "content/configs/settings.yml";
 
 		const YAML::Node yamlFile = YAML::LoadFile(appConfigFile);
-		ASSERT_COND(yamlFile.IsDefined());
+		BRE_ASSERT(yamlFile.IsDefined());
 		const YAML::Node settingsNode = yamlFile["settings"];
-		ASSERT_COND(settingsNode.IsDefined());
-		ASSERT_COND(settingsNode.IsMap());
+		BRE_ASSERT(settingsNode.IsDefined());
+		BRE_ASSERT(settingsNode.IsMap());
 			
 		mScreenWidth = YamlUtils::GetScalar<unsigned int>(settingsNode, "screenWidth");
 		mScreenHeight = YamlUtils::GetScalar<unsigned int>(settingsNode, "screenHeight");
@@ -251,7 +249,7 @@ namespace BRE {
 
 	Application::~Application() {
 		for (Component* component : mComponents) {
-			DELETE_OBJECT(component);
+			delete component;
 		}
 		delete ShaderResourcesManager::gInstance;
 		delete ShadersManager::gInstance;
@@ -282,15 +280,15 @@ namespace BRE {
 	}
 
 	void Application::Update() {
+		const float elapsedTime = mClock.ElapsedTime();
 		if (BRE::Keyboard::gInstance->WasKeyPressedThisFrame(DIK_ESCAPE)) {
 			PostQuitMessage(0);
 		}
 		Keyboard::gInstance->Update();
-		Mouse::gInstance->Update();
-		const float elapsedTime = mClock.ElapsedTime();
+		Mouse::gInstance->Update();		
 		Camera::gInstance->Update(elapsedTime);
 		for (Component* component : mComponents) {
-			ASSERT_PTR(component);
+			BRE_ASSERT(component);
 			component->Update(elapsedTime);
 		}
 		std::wostringstream frameRate;

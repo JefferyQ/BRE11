@@ -9,7 +9,7 @@
 #include <rendering/models/Model.h>
 #include <utils/Assert.h>
 #include <utils/Hash.h>
-#include <utils/Utility.h>
+#include <utils/DXUtils.h>
 
 using namespace DirectX;
 
@@ -28,9 +28,9 @@ namespace BRE {
 	size_t NormalMappingVertexData::CreateVertexBuffer(const size_t modelId, const size_t meshIndex) {
 		// Check if there is already a buffer for current model
 		// and current vertex type.
-		ASSERT_PTR(ModelManager::gInstance->GetModel(modelId));
+		BRE_ASSERT(ModelManager::gInstance->GetModel(modelId));
 		const Model& model = *ModelManager::gInstance->GetModel(modelId);
-		ASSERT_COND(meshIndex < model.Meshes().size());
+		BRE_ASSERT(meshIndex < model.Meshes().size());
 		std::string bufferName = model.Filename();
 		bufferName += "_";
 		bufferName += "NormalMappingVertexData";
@@ -38,7 +38,7 @@ namespace BRE {
 		std::stringstream stream;
 		stream << meshIndex;
 		bufferName += stream.str();
-		const size_t bufferId = Hash(bufferName.c_str());
+		const size_t bufferId = Utils::Hash(bufferName.c_str());
 		if (ShaderResourcesManager::gInstance->Buffer(bufferId)) {
 			return bufferId;
 		}
@@ -47,11 +47,11 @@ namespace BRE {
 		BRE::Mesh& mesh = *model.Meshes()[meshIndex];
 		const std::vector<XMFLOAT3>& sourceVertices = mesh.Vertices();
 		const std::vector<XMFLOAT3>& textureCoordinates = mesh.TextureCoordinates();
-		ASSERT_COND(textureCoordinates.size() == sourceVertices.size());
+		BRE_ASSERT(textureCoordinates.size() == sourceVertices.size());
 		const std::vector<XMFLOAT3>& normals = mesh.Normals();
-		ASSERT_COND(normals.size() == sourceVertices.size());
+		BRE_ASSERT(normals.size() == sourceVertices.size());
 		const std::vector<XMFLOAT3>& tangents = mesh.Tangents();
-		ASSERT_COND(tangents.size() == sourceVertices.size());
+		BRE_ASSERT(tangents.size() == sourceVertices.size());
 		const size_t numVerts = sourceVertices.size();
 		std::vector<NormalMappingVertexData> vertices;
 		vertices.reserve(numVerts);
@@ -63,7 +63,7 @@ namespace BRE {
 			vertices.push_back(NormalMappingVertexData(XMFLOAT4(posL.x, posL.y, posL.z, 1.0f), XMFLOAT2(uv.x, uv.y), normalL, tangentL));
 		}
 		const unsigned int bufferSize = static_cast<unsigned int> (vertices.size() * sizeof(NormalMappingVertexData));
-		Utility::CreateInitializedBuffer(bufferName.c_str(), &vertices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_VERTEX_BUFFER);
+		Utils::CreateInitializedBuffer(bufferName.c_str(), &vertices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_VERTEX_BUFFER);
 
 		return bufferId;
 	}
@@ -80,9 +80,9 @@ namespace BRE {
 	size_t BasicVertexData::CreateVertexBuffer(const size_t modelId, const size_t meshIndex) {
 		// Check if there is already a buffer for current model
 		// and current vertex type.
-		ASSERT_PTR(ModelManager::gInstance->GetModel(modelId));
+		BRE_ASSERT(ModelManager::gInstance->GetModel(modelId));
 		const Model& model = *ModelManager::gInstance->GetModel(modelId);
-		ASSERT_COND(meshIndex < model.Meshes().size());
+		BRE_ASSERT(meshIndex < model.Meshes().size());
 		std::string bufferName = model.Filename();
 		bufferName += "_";
 		bufferName += "BasicVertexData";
@@ -90,7 +90,7 @@ namespace BRE {
 		std::stringstream stream;
 		stream << meshIndex;
 		bufferName += stream.str();
-		const size_t bufferId = Hash(bufferName.c_str());
+		const size_t bufferId = Utils::Hash(bufferName.c_str());
 		if (ShaderResourcesManager::gInstance->Buffer(bufferId)) {
 			return bufferId;
 		}
@@ -99,7 +99,7 @@ namespace BRE {
 		BRE::Mesh& mesh = *model.Meshes()[meshIndex];
 		const std::vector<XMFLOAT3>& sourceVertices = mesh.Vertices();
 		const std::vector<XMFLOAT3>& normals = mesh.Normals();
-		ASSERT_COND(normals.size() == sourceVertices.size());
+		BRE_ASSERT(normals.size() == sourceVertices.size());
 		const size_t numVerts = sourceVertices.size();
 		std::vector<BasicVertexData> vertices;
 		vertices.reserve(numVerts);
@@ -109,7 +109,7 @@ namespace BRE {
 			vertices.push_back(BasicVertexData(XMFLOAT4(posL.x, posL.y, posL.z, 1.0f), normalL));
 		}
 		const unsigned int bufferSize = static_cast<unsigned int> (vertices.size() * sizeof(BasicVertexData));
-		Utility::CreateInitializedBuffer(bufferName.c_str(), &vertices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_VERTEX_BUFFER);
+		Utils::CreateInitializedBuffer(bufferName.c_str(), &vertices[0], bufferSize, D3D11_USAGE_IMMUTABLE, D3D11_BIND_VERTEX_BUFFER);
 
 		return bufferId;
 	}

@@ -13,7 +13,7 @@ namespace {
 namespace BRE {
 	NormalDisplacementDsData::NormalDisplacementDsData() {
 		ShadersManager::gInstance->LoadDomainShader(shader, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		InitializeCBuffers();
 	}
 
@@ -34,14 +34,14 @@ namespace BRE {
 	}
 
 	void NormalDisplacementDsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		context.DSSetShader(mShader, nullptr, 0);
 
 		mCBuffer.CopyDataToBuffer(device);
 		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
 		context.DSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
-		ASSERT_PTR(mDisplacementMapSRV);
+		BRE_ASSERT(mDisplacementMapSRV);
 		ID3D11ShaderResourceView* const srvs[] = { mDisplacementMapSRV };
 		context.DSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
 

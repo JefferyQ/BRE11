@@ -15,17 +15,17 @@ namespace {
 namespace BRE {
 	PointLightVertexShaderData::PointLightVertexShaderData() {
 		ShadersManager::gInstance->LoadVertexShader(sShaderFile, nullptr, nullptr, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		InitializeCBuffers();
 	}
 
 	DirectX::XMFLOAT4& PointLightVertexShaderData::LightPosAndRadius(const unsigned int index) {
-		ASSERT_COND(index < sMaxLights);
+		BRE_ASSERT(index < sMaxLights);
 		return mCBuffer.mData.mLightPosAndRadius[index];
 	}
 
 	DirectX::XMFLOAT4& PointLightVertexShaderData::LightColor(const unsigned int index) {
-		ASSERT_COND(index < sMaxLights);
+		BRE_ASSERT(index < sMaxLights);
 		return mCBuffer.mData.mLightColor[index];
 	}
 
@@ -51,7 +51,7 @@ namespace BRE {
 		context.IASetInputLayout(nullptr);
 
 		// Set shader
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		context.VSSetShader(mShader, nullptr, 0);
 
 		// Set constant buffers

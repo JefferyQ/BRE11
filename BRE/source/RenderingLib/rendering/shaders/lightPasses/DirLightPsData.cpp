@@ -18,7 +18,7 @@ namespace BRE {
 	DirLightPixelShaderData::DirLightPixelShaderData()
 	{
 		ShadersManager::gInstance->LoadPixelShader(sShaderFile, &mShader);
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		InitializeCBuffers();
 	}
 
@@ -39,14 +39,14 @@ namespace BRE {
 	}
 
 	void DirLightPixelShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11ShaderResourceView* *geometryBuffersSRVs, ID3D11ShaderResourceView& depthStencilSRV) {
-		ASSERT_PTR(mShader);
+		BRE_ASSERT(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 
 		mCBuffer.CopyDataToBuffer(device);
 		ID3D11Buffer* const cBuffers[] = { mCBuffer.mBuffer };
 		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
-		ASSERT_PTR(geometryBuffersSRVs);
+		BRE_ASSERT(geometryBuffersSRVs);
 		ID3D11ShaderResourceView* views[sNumGBuffers] = { geometryBuffersSRVs[0], geometryBuffersSRVs[1], geometryBuffersSRVs[2], geometryBuffersSRVs[3], &depthStencilSRV };
 		context.PSSetShaderResources(0, ARRAYSIZE(views), views);
 
