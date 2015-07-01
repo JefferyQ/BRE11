@@ -11,18 +11,14 @@ namespace BRE {
 
 	void MaterialManager::LoadMaterials(const char* materialFile) {
 		BRE_ASSERT(materialFile);
-
 		const YAML::Node yamlFile = YAML::LoadFile(materialFile);
 		BRE_ASSERT(yamlFile.IsDefined());
-
 		const YAML::Node nodes = yamlFile["materials"];
 		BRE_ASSERT(nodes.IsDefined());
 		BRE_ASSERT(nodes.IsSequence());
-
 		for (const YAML::Node& node : nodes) {
 			BRE_ASSERT(node.IsDefined());
 			BRE_ASSERT(node.IsMap());
-
 			InputData data;
 			data.mName = YamlUtils::GetScalar<std::string>(node, "name");
 			data.mNormalTexturePath = YamlUtils::GetScalar<std::string>(node, "normal");
@@ -36,8 +32,7 @@ namespace BRE {
 
 	size_t MaterialManager::AddMaterial(const InputData& data, MaterialData* material) {
 		const size_t id = Utils::Hash(data.mName.c_str());
-		BRE_ASSERT(mMaterialDataIdById.find(id) == mMaterialDataIdById.end());
-		
+		BRE_ASSERT(mMaterialDataIdById.find(id) == mMaterialDataIdById.end());		
 		MaterialDataId& newMaterialId = mMaterialDataIdById[id];
 		newMaterialId.mNormal = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mNormalTexturePath.c_str(), (material) ? &material->mNormalSRV : nullptr);
 		newMaterialId.mBaseColor = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mBaseColorTexturePath.c_str(), (material) ? &material->mBaseColorSRV : nullptr);
@@ -50,7 +45,6 @@ namespace BRE {
 	void MaterialManager::GetMaterial(const size_t id, MaterialManager::MaterialData& material) const {
 		auto findIt = mMaterialDataIdById.find(id);
 		BRE_ASSERT(findIt != mMaterialDataIdById.end());
-
 		material.mNormalSRV = ShaderResourcesManager::gInstance->ShaderResourceView(findIt->second.mNormal);
 		BRE_ASSERT(material.mNormalSRV);
 		material.mBaseColorSRV = ShaderResourcesManager::gInstance->ShaderResourceView(findIt->second.mBaseColor);

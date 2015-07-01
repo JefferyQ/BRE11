@@ -8,7 +8,6 @@ namespace BRE {
 	class ModelManager {
 	public:
 		static ModelManager* gInstance;
-
 		ModelManager() {}
 		~ModelManager();
 		ModelManager(const ModelManager&) = delete;

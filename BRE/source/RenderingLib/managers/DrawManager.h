@@ -31,9 +31,6 @@ namespace BRE {
 
 		void DrawAll(ID3D11Device1& device, ID3D11DeviceContext1& context, IDXGISwapChain1& swapChain, ID3D11RenderTargetView& backBufferRTV, ID3D11DepthStencilView& depthStencilView, ID3D11ShaderResourceView& depthStencilSRV);
 
-		std::vector<NormalDisplacementDrawer>& NormalDisplacementDrawerVec() { return mNormalDisplacementDrawer; }
-		std::vector<NormalMappingDrawer>& NormalMappingDrawerVec() { return mNormalMappingDrawer; }
-		std::vector<BasicDrawer>& BasicDrawerVec() { return mBasicDrawer; }
 		std::vector<LightsDrawer::DirLightData>& DirLightDataVec() { return mLightsDrawer.DirLightDataVec(); }
 		std::vector<LightsDrawer::PointLightData>& PointLightDataVec() { return mLightsDrawer.PointLightDataVec(); }
 		StringDrawer& FrameRateDrawer() { return mFrameRateDrawer; }
@@ -58,9 +55,9 @@ namespace BRE {
 		ID3D11RenderTargetView* mPostprocess2RTV;
 		ID3D11ShaderResourceView* mPostprocess2SRV;
 
-		std::vector<NormalDisplacementDrawer> mNormalDisplacementDrawer;
-		std::vector<NormalMappingDrawer> mNormalMappingDrawer;
-		std::vector<BasicDrawer> mBasicDrawer;
+		std::vector<NormalDisplacementDrawer> mNormalDisplacementDrawers;
+		std::vector<NormalMappingDrawer> mNormalMappingDrawers;
+		std::vector<BasicDrawer> mBasicDrawers;
 		LightsDrawer mLightsDrawer;
 		PostProcessDrawer mPostProcessDrawer;
 		StringDrawer mFrameRateDrawer;		

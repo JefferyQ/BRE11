@@ -1,11 +1,5 @@
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Init and destroy shaders and input layout used in the application
-//
-//////////////////////////////////////////////////////////////////////////
-
 #include <unordered_map>
 
 struct D3D11_INPUT_ELEMENT_DESC;
@@ -27,7 +21,7 @@ namespace BRE {
 		~ShadersManager();
 		const ShadersManager& operator=(const ShadersManager& rhs) = delete;
 
-		// Methods to get/load differnt kinds of shaders.
+		// Methods to get/load different kind of shaders.
 		// If a shader was already loaded, it is only returned.
 		// For vertex shader loading, you can optionally load a input layout too or not.
 		// Note: Shader should be previously compiled to .cso

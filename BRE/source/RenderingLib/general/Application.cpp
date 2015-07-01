@@ -16,6 +16,7 @@
 #include <managers/ShaderResourcesManager.h>
 #include <rendering/GlobalResources.h>
 #include <rendering/RenderStateHelper.h>
+#include <utils/DXUtils.h>
 #include <utils/YamlUtils.h>
 
 using namespace DirectX;
@@ -66,78 +67,21 @@ namespace {
 	}
 
 	void InitDirectX(
-		const unsigned multisamplingCount,
+		const unsigned sampleCount,
 		const unsigned screenWidth,
 		const unsigned screenHeight,
 		const unsigned frameRate,
 		const HWND windowHandle,
 		ID3D11Device1* &device,
 		ID3D11DeviceContext1* &context,
-		IDXGISwapChain1* & swapChain,
+		IDXGISwapChain1* &swapChain,
 		ID3D11RenderTargetView* &backBufferRTV,
 		ID3D11DepthStencilView* &depthStencilView,
 		ID3D11ShaderResourceView* &depthStencilSRV) {
-		unsigned int multisamplingQualityLevels;
+		unsigned int qualityLevels;
 
-		// Create device and device context
-		{
-			unsigned int createDeviceFlags = 0;
-#if defined(DEBUG) || defined(_DEBUG)
-			createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
-
-			D3D_FEATURE_LEVEL featureLevels[] = {
-				D3D_FEATURE_LEVEL_11_1,
-				D3D_FEATURE_LEVEL_11_0
-			};
-
-			ID3D11Device* direct3DDevice = nullptr;
-			ID3D11DeviceContext* direct3DDeviceContext = nullptr;
-			ASSERT_HR(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, createDeviceFlags, featureLevels, ARRAYSIZE(featureLevels), D3D11_SDK_VERSION, &direct3DDevice, nullptr, &direct3DDeviceContext));
-			ASSERT_HR(direct3DDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&device)));
-			ASSERT_HR(direct3DDeviceContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&context)));
-			direct3DDevice->Release();
-			direct3DDeviceContext->Release();
-
-			device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, multisamplingCount, &multisamplingQualityLevels);
-			BRE_ASSERT(multisamplingQualityLevels != 0);
-		}
-
-		// Create swap chain
-		{
-			DXGI_SWAP_CHAIN_DESC1 swapChainDesc;
-			ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
-			swapChainDesc.Width = screenWidth;
-			swapChainDesc.Height = screenHeight;
-			swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-			swapChainDesc.SampleDesc.Count = multisamplingCount;
-			swapChainDesc.SampleDesc.Quality = multisamplingQualityLevels - 1;
-
-			swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-			swapChainDesc.BufferCount = 1;
-			swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-
-			IDXGIDevice* dxgiDevice = nullptr;
-			ASSERT_HR(device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice)));
-
-			IDXGIAdapter *dxgiAdapter = nullptr;
-			ASSERT_HR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&dxgiAdapter)));
-
-			IDXGIFactory2* dxgiFactory = nullptr;
-			ASSERT_HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory)));
-
-			DXGI_SWAP_CHAIN_FULLSCREEN_DESC fullScreenDesc;
-			ZeroMemory(&fullScreenDesc, sizeof(fullScreenDesc));
-			fullScreenDesc.RefreshRate.Numerator = frameRate;
-			fullScreenDesc.RefreshRate.Denominator = 1;
-			fullScreenDesc.Windowed = true;
-
-			ASSERT_HR(dxgiFactory->CreateSwapChainForHwnd(dxgiDevice, windowHandle, &swapChainDesc, &fullScreenDesc, nullptr, &swapChain));
-
-			dxgiDevice->Release();
-			dxgiAdapter->Release();
-			dxgiFactory->Release();
-		}
+		BRE::Utils::CreateDeviceAndContext(device, context, sampleCount, qualityLevels);
+		BRE::Utils::CreateSwapChain(*device, screenWidth, screenHeight, sampleCount, qualityLevels, frameRate, windowHandle, swapChain);
 
 		BRE::ShaderResourcesManager::gInstance = new BRE::ShaderResourcesManager(*device);
 
@@ -157,8 +101,8 @@ namespace {
 			depthStencilDesc.Format = DXGI_FORMAT_R32_TYPELESS;
 			depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
 			depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
-			depthStencilDesc.SampleDesc.Count = multisamplingCount;
-			depthStencilDesc.SampleDesc.Quality = multisamplingQualityLevels - 1;
+			depthStencilDesc.SampleDesc.Count = sampleCount;
+			depthStencilDesc.SampleDesc.Quality = qualityLevels - 1;
 
 			ID3D11Texture2D* depthStencilBuffer;
 			BRE::ShaderResourcesManager::gInstance->AddTexture2D("depth_stencil_texture", depthStencilDesc, nullptr, &depthStencilBuffer);
@@ -199,10 +143,7 @@ namespace {
 namespace BRE {    
 	Application::Application(const HINSTANCE& instance, const int showCommand) { 
 		srand(static_cast<unsigned int>(time(reinterpret_cast<time_t*>(0))));
-
-		const char* appConfigFile = "content/configs/settings.yml";
-
-		const YAML::Node yamlFile = YAML::LoadFile(appConfigFile);
+		const YAML::Node yamlFile = YAML::LoadFile("content/configs/settings.yml");
 		BRE_ASSERT(yamlFile.IsDefined());
 		const YAML::Node settingsNode = yamlFile["settings"];
 		BRE_ASSERT(settingsNode.IsDefined());
@@ -212,7 +153,6 @@ namespace BRE {
 		mScreenHeight = YamlUtils::GetScalar<unsigned int>(settingsNode, "screenHeight");
 
 		InitWindow(instance, showCommand, mScreenWidth, mScreenHeight, mWindowClass, mWindowHandle, WndProc);
-
 		const unsigned multisamplingCount = YamlUtils::GetScalar<unsigned int>(settingsNode, "multiSamplingCount");
 		const unsigned int frameRate = YamlUtils::GetScalar<unsigned int>(settingsNode, "frameRate");
 		InitDirectX(multisamplingCount, mScreenWidth, mScreenHeight, frameRate, mWindowHandle, mDevice, mContext, mSwapChain, mBackBufferRTV, mDepthStencilView, mDepthStencilSRV);
