@@ -14,12 +14,12 @@ namespace {
 }
 
 namespace BRE {
-	BasicVsData::BasicVsData() {
+	BasicVertexShaderData::BasicVertexShaderData() {
 		InitializeShader();
 		InitializeCBuffers();
 	}
 
-	void BasicVsData::InitializeShader() {
+	void BasicVertexShaderData::InitializeShader() {
 		D3D11_INPUT_ELEMENT_DESC inputElementDescriptions[] = {
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
@@ -33,7 +33,7 @@ namespace BRE {
 		BRE_ASSERT(mInputLayout);
 	}
 
-	void BasicVsData::InitializeCBuffers() {
+	void BasicVertexShaderData::InitializeCBuffers() {
 		D3D11_BUFFER_DESC bufferDesc;
 		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -49,7 +49,7 @@ namespace BRE {
 		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
-	void BasicVsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
+	void BasicVertexShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
 		BRE_ASSERT(mInputLayout);
 		BRE_ASSERT(mShader);
 		BRE_ASSERT(mVertexBuffer);
@@ -74,7 +74,7 @@ namespace BRE {
 		context.VSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 	}
 
-	void BasicVsData::DrawIndexed(ID3D11DeviceContext1& context) {
+	void BasicVertexShaderData::DrawIndexed(ID3D11DeviceContext1& context) {
 		BRE_ASSERT(mInputLayout);
 		BRE_ASSERT(mShader);
 		BRE_ASSERT(mVertexBuffer);
@@ -83,7 +83,7 @@ namespace BRE {
 		context.DrawIndexed(mIndexCount, 0, 0);
 	}
 
-	void BasicVsData::PostDraw(ID3D11DeviceContext1& context) {
+	void BasicVertexShaderData::PostDraw(ID3D11DeviceContext1& context) {
 		context.IASetInputLayout(nullptr);
 		context.VSSetShader(nullptr, nullptr, 0);
 

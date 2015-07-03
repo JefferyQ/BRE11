@@ -11,13 +11,13 @@ namespace {
 }
 
 namespace BRE {
-	NormalDisplacementHsData::NormalDisplacementHsData() {
+	NormalDisplacementHullShaderData::NormalDisplacementHullShaderData() {
 		ShadersManager::gInstance->LoadHullShader(shader, &mShader);
 		BRE_ASSERT(mShader);
 		InitializeCBuffers();
 	}
 
-	void NormalDisplacementHsData::InitializeCBuffers() {
+	void NormalDisplacementHullShaderData::InitializeCBuffers() {
 		D3D11_BUFFER_DESC bufferDesc;
 		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -33,7 +33,7 @@ namespace BRE {
 		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
-	void NormalDisplacementHsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
+	void NormalDisplacementHullShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
 		BRE_ASSERT(mShader);
 		context.HSSetShader(mShader, nullptr, 0);
 
@@ -42,7 +42,7 @@ namespace BRE {
 		context.HSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 	}
 
-	void NormalDisplacementHsData::PostDraw(ID3D11DeviceContext1& context) {
+	void NormalDisplacementHullShaderData::PostDraw(ID3D11DeviceContext1& context) {
 		context.HSSetShader(nullptr, nullptr, 0);
 
 		ID3D11Buffer* const cBuffers[] = { nullptr };

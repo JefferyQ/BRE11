@@ -1,11 +1,11 @@
-struct VS_INPUT {
+struct Input {
 	float4 PosOS : POSITION;
 	float2 TexCoord : TEXCOORD;
 	float3 NormalOS : NORMAL;
 	float3 TangentOS : TANGENT;
 };
 
-struct VS_OUTPUT {
+struct Output {
 	float4 PosOS : POSITION;
 	float3 NormalOS : NORMAL;
 	float2 TexCoord : TEXCOORD0;
@@ -16,11 +16,11 @@ cbuffer CBufferPerFrame : register (b0) {
 	float TextureScaleFactor;
 }
 
-VS_OUTPUT main(const VS_INPUT IN) {
-	VS_OUTPUT OUT = (VS_OUTPUT)0;
-	OUT.PosOS = IN.PosOS;
-	OUT.NormalOS = IN.NormalOS;
-	OUT.TexCoord = IN.TexCoord * TextureScaleFactor;
-	OUT.TangentOS = IN.TangentOS;
-	return OUT;
+Output main(const Input input) {
+	Output output = (Output)0;
+	output.PosOS = input.PosOS;
+	output.NormalOS = input.NormalOS;
+	output.TexCoord = input.TexCoord * TextureScaleFactor;
+	output.TangentOS = input.TangentOS;
+	return output;
 }

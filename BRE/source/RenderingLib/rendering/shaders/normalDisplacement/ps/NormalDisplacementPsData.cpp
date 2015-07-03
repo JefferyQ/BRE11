@@ -13,12 +13,12 @@ namespace {
 }
 
 namespace BRE {
-	NormalDisplacementPsData::NormalDisplacementPsData() {
+	NormalDisplacementPixelShaderData::NormalDisplacementPixelShaderData() {
 		ShadersManager::gInstance->LoadPixelShader(shader, &mShader);
 		BRE_ASSERT(mShader);
 	}
 
-	void NormalDisplacementPsData::SetMaterial(const size_t matId) {
+	void NormalDisplacementPixelShaderData::SetMaterial(const size_t matId) {
 		MaterialManager::MaterialData matData;
 		MaterialManager::gInstance->GetMaterial(matId, matData);
 		mNormalSRV = matData.mNormalSRV;
@@ -33,7 +33,7 @@ namespace BRE {
 		BRE_ASSERT(mReflectanceSRV);
 	}
 
-	void NormalDisplacementPsData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
+	void NormalDisplacementPixelShaderData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
 		BRE_ASSERT(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 
@@ -52,7 +52,7 @@ namespace BRE {
 		context.OMSetRenderTargets(sNumGBuffers, geometryBuffersRTVs, mDefaultDSV);
 	}
 
-	void NormalDisplacementPsData::PostDraw(ID3D11DeviceContext1& context) {
+	void NormalDisplacementPixelShaderData::PostDraw(ID3D11DeviceContext1& context) {
 		context.PSSetShader(nullptr, nullptr, 0);
 
 		ID3D11ShaderResourceView* const srvs[] = { nullptr, nullptr, nullptr, nullptr, nullptr };

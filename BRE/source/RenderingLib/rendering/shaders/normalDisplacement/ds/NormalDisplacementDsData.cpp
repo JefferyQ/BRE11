@@ -11,13 +11,13 @@ namespace {
 }
 
 namespace BRE {
-	NormalDisplacementDsData::NormalDisplacementDsData() {
+	NormalDisplacementDomainShaderData::NormalDisplacementDomainShaderData() {
 		ShadersManager::gInstance->LoadDomainShader(shader, &mShader);
 		BRE_ASSERT(mShader);
 		InitializeCBuffers();
 	}
 
-	void NormalDisplacementDsData::InitializeCBuffers() {
+	void NormalDisplacementDomainShaderData::InitializeCBuffers() {
 		D3D11_BUFFER_DESC bufferDesc;
 		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -33,7 +33,7 @@ namespace BRE {
 		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
-	void NormalDisplacementDsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
+	void NormalDisplacementDomainShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
 		BRE_ASSERT(mShader);
 		context.DSSetShader(mShader, nullptr, 0);
 
@@ -49,7 +49,7 @@ namespace BRE {
 		context.DSSetSamplers(0, ARRAYSIZE(samplerStates), samplerStates);
 	}
 
-	void NormalDisplacementDsData::PostDraw(ID3D11DeviceContext1& context) {
+	void NormalDisplacementDomainShaderData::PostDraw(ID3D11DeviceContext1& context) {
 		context.DSSetShader(nullptr, nullptr, 0);
 
 		ID3D11Buffer* const cBuffers[] = { nullptr };

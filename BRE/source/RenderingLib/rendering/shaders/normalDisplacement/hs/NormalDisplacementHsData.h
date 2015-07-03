@@ -7,9 +7,9 @@ struct ID3D11DeviceContext1;
 struct ID3D11HullShader;
 
 namespace BRE {
-	class NormalDisplacementHsData {
+	class NormalDisplacementHullShaderData {
 	public:
-		NormalDisplacementHsData();
+		NormalDisplacementHullShaderData();
 
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context);
 		void PostDraw(ID3D11DeviceContext1& context);

@@ -1,18 +1,18 @@
 #define NUM_PATCH_POINTS 3
 
-struct HS_CONSTANT_OUTPUT {
+struct HullShaderConstantOutput {
 	float EdgeFactors[3] : SV_TessFactor;
 	float InsideFactors : SV_InsideTessFactor;
 };
 
-struct HS_OUTPUT {
+struct Input {
 	float4 PosOS : POSITION;
 	float3 NormalOS : NORMAL;
 	float2 TexCoord : TEXCOORD0;
 	float3 TangentOS : TANGENT;
 };
 
-struct DS_OUTPUT {
+struct Output {
 	float4 PosCS : SV_Position;
 	float3 NormalVS : NORMAL;
 	float2 TexCoord : TEXCOORD0;
@@ -31,24 +31,24 @@ SamplerState TexSampler : register (s0);
 Texture2D DisplacementMap : register (t0);
 
 [domain("tri")]
-DS_OUTPUT main(const HS_CONSTANT_OUTPUT IN, const float3 uvw : SV_DomainLocation, const OutputPatch <HS_OUTPUT, NUM_PATCH_POINTS> patch) {
-	DS_OUTPUT OUT = (DS_OUTPUT)0;
+Output main(const HullShaderConstantOutput IN, const float3 uvw : SV_DomainLocation, const OutputPatch <Input, NUM_PATCH_POINTS> patch) {
+	Output output = (Output)0;
 
-	OUT.TexCoord = uvw.x * patch[0].TexCoord + uvw.y * patch[1].TexCoord + uvw.z * patch[2].TexCoord;
+	output.TexCoord = uvw.x * patch[0].TexCoord + uvw.y * patch[1].TexCoord + uvw.z * patch[2].TexCoord;
 
 	const float3 normalOS = uvw.x * patch[0].NormalOS + uvw.y * patch[1].NormalOS + uvw.z * patch[2].NormalOS;
-	OUT.NormalVS = normalize(mul(float4(normalOS, 0.0f), WorldView).xyz);
+	output.NormalVS = normalize(mul(float4(normalOS, 0.0f), WorldView).xyz);
 
 	// Compute SV_Position by displacing object position in y coordinate
 	float4 posVS = mul(uvw.x * patch[0].PosOS + uvw.y * patch[1].PosOS + uvw.z * patch[2].PosOS, WorldView);
-	const float displacement = (DisplacementMap.SampleLevel(TexSampler, OUT.TexCoord, 0).x - 1.0f) * DisplacementScale;
-	posVS += float4(OUT.NormalVS * displacement, 0.0f);
-	OUT.PosCS = mul(posVS, Proj);
+	const float displacement = (DisplacementMap.SampleLevel(TexSampler, output.TexCoord, 0).x - 1.0f) * DisplacementScale;
+	posVS += float4(output.NormalVS * displacement, 0.0f);
+	output.PosCS = mul(posVS, Proj);
 
 	// Compute world tangent and binormal
-	OUT.TangentVS = normalize(uvw.x * patch[0].TangentOS + uvw.y * patch[1].TangentOS + uvw.z * patch[2].TangentOS);
-	OUT.TangentVS = normalize(mul(float4(OUT.TangentVS, 0.0f), WorldView).xyz);
-	OUT.BinormalVS = normalize(cross(OUT.NormalVS, OUT.TangentVS));
+	output.TangentVS = normalize(uvw.x * patch[0].TangentOS + uvw.y * patch[1].TangentOS + uvw.z * patch[2].TangentOS);
+	output.TangentVS = normalize(mul(float4(output.TangentVS, 0.0f), WorldView).xyz);
+	output.BinormalVS = normalize(cross(output.NormalVS, output.TangentVS));
 
-	return OUT;
+	return output;
 }

@@ -9,16 +9,16 @@
 
 namespace {
 	const char* shader = "content\\shaders\\normalMapping\\NormalMappingPS.cso";
-	const size_t sNumGBuffers = 5;
+	const size_t sNumGBuffers = 4;
 }
 
 namespace BRE {
-	NormalMappingPsData::NormalMappingPsData() {
+	NormalMappingPixelShaderData::NormalMappingPixelShaderData() {
 		ShadersManager::gInstance->LoadPixelShader(shader, &mShader);
 		BRE_ASSERT(mShader);
 	}
 
-	void NormalMappingPsData::SetMaterial(const size_t matId) {
+	void NormalMappingPixelShaderData::SetMaterial(const size_t matId) {
 		MaterialManager::MaterialData matData;
 		MaterialManager::gInstance->GetMaterial(matId, matData);
 		mNormalSRV = matData.mNormalSRV;
@@ -33,7 +33,7 @@ namespace BRE {
 		BRE_ASSERT(mReflectanceSRV);
 	}
 
-	void NormalMappingPsData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
+	void NormalMappingPixelShaderData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
 		BRE_ASSERT(mShader);
 		context.PSSetShader(mShader, nullptr, 0);
 		
@@ -53,7 +53,7 @@ namespace BRE {
 		context.OMSetRenderTargets(sNumGBuffers, geometryBuffersRTVs, mDefaultDSV);
 	}
 
-	void NormalMappingPsData::PostDraw(ID3D11DeviceContext1& context) {
+	void NormalMappingPixelShaderData::PostDraw(ID3D11DeviceContext1& context) {
 		context.PSSetShader(nullptr, nullptr, 0);
 
 		ID3D11ShaderResourceView* const srvs[] = { nullptr, nullptr, nullptr, nullptr, nullptr };

@@ -24,10 +24,10 @@ namespace BRE {
 		void Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj);
 
 	private:
-		NormalDisplacementVsData mVsData;
-		NormalDisplacementHsData mHsData;
-		NormalDisplacementDsData mDsData;
-		NormalDisplacementPsData mPsData;
+		NormalDisplacementVertexShaderData mVertexShaderData;
+		NormalDisplacementHullShaderData mHullShaderData;
+		NormalDisplacementDomainShaderData mDomainShaderData;
+		NormalDisplacementPixelShaderData mPixelShaderData;
 
 		DirectX::XMFLOAT4X4 mWorld;
 	};

@@ -17,7 +17,8 @@ namespace BRE {
 
 	double Clock::Frequency() const {
 		LARGE_INTEGER frequency;
-		BRE_ASSERT(QueryPerformanceFrequency(&frequency) == static_cast<BOOL>(true));
+		const BOOL success = QueryPerformanceFrequency(&frequency);
+		BRE_ASSERT(success);
 		return static_cast<double>(frequency.QuadPart);
 	}
 

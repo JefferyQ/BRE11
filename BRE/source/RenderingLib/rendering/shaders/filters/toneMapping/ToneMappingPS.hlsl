@@ -1,4 +1,4 @@
-struct VS_OUTPUT {
+struct Input {
 	float4 PositionH : SV_Position;
 	float2 TexCoord : TEXCOORD0;
 };
@@ -20,7 +20,7 @@ float3 HableToneMap(float3 color) {
 	return color;
 }
 
-float4 main(const in VS_OUTPUT IN) : SV_TARGET{
-	const float3 color = Texture.Sample(TexSampler, IN.TexCoord).rgb;
+float4 main(const in Input input) : SV_TARGET{
+	const float3 color = Texture.Sample(TexSampler, input.TexCoord).rgb;
 	return float4(HableToneMap(color), 1.0f);
 }

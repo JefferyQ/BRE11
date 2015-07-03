@@ -71,10 +71,10 @@ namespace BRE {
 		const XMMATRIX proj = Camera::gInstance->ProjectionMatrix();
 		{			
 			context.OMSetRenderTargets(1, &backBuffer, &depthStencilView);
-			for (NormalDisplacementDrawer& elem : mNormalDisplacementDrawers) {
+			for (NormalMappingDrawer& elem : mNormalMappingDrawers) {
 				elem.Draw(device, context, mGBuffersRTVs, view, proj);
 			}
-			for (NormalMappingDrawer& elem : mNormalMappingDrawers) {
+			for (NormalDisplacementDrawer& elem : mNormalDisplacementDrawers) {
 				elem.Draw(device, context, mGBuffersRTVs, view, proj);
 			}
 			for (BasicDrawer& elem : mBasicDrawers) {

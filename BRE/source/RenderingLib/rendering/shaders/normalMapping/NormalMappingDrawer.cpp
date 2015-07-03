@@ -48,16 +48,16 @@ namespace BRE {
 		BRE_ASSERT(numMeshes > 0);
 		for (size_t iMeshIndex = 0; iMeshIndex < numMeshes; ++iMeshIndex) {
 			NormalMappingDrawer drawer;
-			drawer.mVsData.VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(BasicVertexData::CreateVertexBuffer(modelId, iMeshIndex));
-			BRE_ASSERT(drawer.mVsData.VertexBuffer());
-			drawer.mVsData.IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer(iMeshIndex));
-			drawer.mVsData.SetIndexCount(static_cast<unsigned int>(model->Meshes()[iMeshIndex]->Indices().size()));
-			drawer.mVsData.TextureScaleFactor() = textureScaleFactor;
+			drawer.mVertexShaderData.VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId, iMeshIndex));
+			BRE_ASSERT(drawer.mVertexShaderData.VertexBuffer());
+			drawer.mVertexShaderData.IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer(iMeshIndex));
+			drawer.mVertexShaderData.SetIndexCount(static_cast<unsigned int>(model->Meshes()[iMeshIndex]->Indices().size()));
+			drawer.mVertexShaderData.TextureScaleFactor() = textureScaleFactor;
 			XMStoreFloat4x4(&drawer.mWorld, worldMatrix);
-			drawer.mPsData.SetMaterial(matId);
-			drawer.mPsData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+			drawer.mPixelShaderData.SetMaterial(matId);
+			drawer.mPixelShaderData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 			if (normalMapSRV) {
-				drawer.mPsData.NormalSRV() = normalMapSRV;
+				drawer.mPixelShaderData.NormalSRV() = normalMapSRV;
 			}
 			drawers.push_back(drawer);
 		}
@@ -65,13 +65,13 @@ namespace BRE {
 
 	void NormalMappingDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs, const XMMATRIX& view, const XMMATRIX& proj) {
 		const XMMATRIX world = XMLoadFloat4x4(&mWorld);
-		XMStoreFloat4x4(&mVsData.WorldView(), XMMatrixTranspose(world * view));
-		XMStoreFloat4x4(&mVsData.WorldViewProjection(), XMMatrixTranspose(world * view * proj));
+		XMStoreFloat4x4(&mVertexShaderData.WorldView(), XMMatrixTranspose(world * view));
+		XMStoreFloat4x4(&mVertexShaderData.WorldViewProjection(), XMMatrixTranspose(world * view * proj));
 
-		mVsData.PreDraw(device, context);
-		mPsData.PreDraw(device, context, geometryBuffersRTVs);
-		mVsData.DrawIndexed(context);
-		mVsData.PostDraw(context);
-		mPsData.PostDraw(context);
+		mVertexShaderData.PreDraw(device, context);
+		mPixelShaderData.PreDraw(device, context, geometryBuffersRTVs);
+		mVertexShaderData.DrawIndexed(context);
+		mVertexShaderData.PostDraw(context);
+		mPixelShaderData.PostDraw(context);
 	}
 }

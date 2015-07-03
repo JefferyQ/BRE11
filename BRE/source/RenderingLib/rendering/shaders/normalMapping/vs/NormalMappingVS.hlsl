@@ -1,11 +1,11 @@
-struct VS_INPUT {
+struct Input {
 	float4 PosOS : POSITION;
 	float2 TexCoord : TEXCOORD;
 	float3 NormalOS : NORMAL;
 	float3 TangentOS : TANGENT;
 };
 
-struct VS_OUTPUT {
+struct Output {
 	float4 PosCS : SV_Position;
 	float3 NormalVS : NORMAL;
 	float2 TexCoord : TEXCOORD0;
@@ -19,12 +19,12 @@ cbuffer CBufferPerFrame : register (b0) {
 	float TextureScaleFactor;
 }
 
-VS_OUTPUT main(const VS_INPUT IN) {
-	VS_OUTPUT OUT = (VS_OUTPUT)0;
-	OUT.PosCS = mul(IN.PosOS, WorldViewProj);
-	OUT.NormalVS = normalize(mul(float4(IN.NormalOS, 0.0f), WorldView).xyz);
-	OUT.TexCoord = IN.TexCoord * TextureScaleFactor;
-	OUT.TangentVS = normalize(mul(float4(IN.TangentOS, 0.0f), WorldView).xyz);
-	OUT.BinormalVS = normalize(cross(OUT.NormalVS, OUT.TangentVS));
-	return OUT;
+Output main(const Input input) {
+	Output output = (Output)0;
+	output.PosCS = mul(input.PosOS, WorldViewProj);
+	output.NormalVS = normalize(mul(float4(input.NormalOS, 0.0f), WorldView).xyz);
+	output.TexCoord = input.TexCoord * TextureScaleFactor;
+	output.TangentVS = normalize(mul(float4(input.TangentOS, 0.0f), WorldView).xyz);
+	output.BinormalVS = normalize(cross(output.NormalVS, output.TangentVS));
+	return output;
 }

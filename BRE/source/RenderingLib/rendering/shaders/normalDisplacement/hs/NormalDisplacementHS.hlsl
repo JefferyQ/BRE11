@@ -1,18 +1,18 @@
 #define NUM_PATCH_POINTS 3
 
-struct VS_OUTPUT {
+struct Input {
 	float4 PosOS : POSITION;
 	float3 NormalOS : NORMAL;
 	float2 TexCoord : TEXCOORD0;
 	float3 TangentOS : TANGENT;
 };
 
-struct HS_CONSTANT_OUTPUT {
+struct HullShaderConstantOutput {
 	float EdgeFactors[3] : SV_TessFactor;
 	float InsideFactors : SV_InsideTessFactor;
 };
 
-struct HS_OUTPUT {
+struct Output {
 	float4 PosOS : POSITION;
 	float3 NormalOS : NORMAL;
 	float2 TexCoord : TEXCOORD0;
@@ -24,13 +24,13 @@ cbuffer CBufferImmutable : register (b0) {
 	float4 TessellationFactors;
 }
 
-HS_CONSTANT_OUTPUT constant_hull_shader(const InputPatch<VS_OUTPUT, NUM_PATCH_POINTS> patch, const uint patchID : SV_PrimitiveID) {
-	HS_CONSTANT_OUTPUT OUT = (HS_CONSTANT_OUTPUT)0;
-	OUT.EdgeFactors[0] = TessellationFactors.x;
-	OUT.EdgeFactors[1] = TessellationFactors.y;
-	OUT.EdgeFactors[2] = TessellationFactors.z;
-	OUT.InsideFactors = TessellationFactors.w;
-	return OUT;
+HullShaderConstantOutput constant_hull_shader(const InputPatch<Input, NUM_PATCH_POINTS> patch, const uint patchID : SV_PrimitiveID) {
+	HullShaderConstantOutput output = (HullShaderConstantOutput)0;
+	output.EdgeFactors[0] = TessellationFactors.x;
+	output.EdgeFactors[1] = TessellationFactors.y;
+	output.EdgeFactors[2] = TessellationFactors.z;
+	output.InsideFactors = TessellationFactors.w;
+	return output;
 }
 
 [domain("tri")]
@@ -38,11 +38,11 @@ HS_CONSTANT_OUTPUT constant_hull_shader(const InputPatch<VS_OUTPUT, NUM_PATCH_PO
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(NUM_PATCH_POINTS)]
 [patchconstantfunc("constant_hull_shader")]
-HS_OUTPUT main(const InputPatch <VS_OUTPUT, NUM_PATCH_POINTS> patch, const uint controlPointID : SV_OutputControlPointID) {
-	HS_OUTPUT OUT = (HS_OUTPUT)0;
-	OUT.PosOS = patch[controlPointID].PosOS;
-	OUT.NormalOS = patch[controlPointID].NormalOS;
-	OUT.TexCoord = patch[controlPointID].TexCoord;
-	OUT.TangentOS = patch[controlPointID].TangentOS;
-	return OUT;
+Output main(const InputPatch <Input, NUM_PATCH_POINTS> patch, const uint controlPointID : SV_OutputControlPointID) {
+	Output output = (Output)0;
+	output.PosOS = patch[controlPointID].PosOS;
+	output.NormalOS = patch[controlPointID].NormalOS;
+	output.TexCoord = patch[controlPointID].TexCoord;
+	output.TangentOS = patch[controlPointID].TangentOS;
+	return output;
 }

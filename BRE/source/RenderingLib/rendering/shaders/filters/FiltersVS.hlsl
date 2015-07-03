@@ -1,16 +1,16 @@
-struct VS_INPUT {
+struct Input {
 	float4 PositionH : POSITION;
 	float2 TexCoord : TEXCOORD0;
 };
 
-struct VS_OUTPUT {
+struct Output {
 	float4 PositionH : SV_Position;
 	float2 TexCoord : TEXCOORD0;
 };
 
-VS_OUTPUT main(const VS_INPUT IN) {
-	VS_OUTPUT OUT = (VS_OUTPUT)0;
-	OUT.PositionH = IN.PositionH;
-	OUT.TexCoord = IN.TexCoord;
-	return OUT;
+Output main(const Input input) {
+	Output output = (Output)0;
+	output.PositionH = input.PositionH;
+	output.TexCoord = input.TexCoord;
+	return output;
 }

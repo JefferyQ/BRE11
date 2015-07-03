@@ -15,12 +15,12 @@ namespace {
 }
 
 namespace BRE {
-	NormalDisplacementVsData::NormalDisplacementVsData() {
+	NormalDisplacementVertexShaderData::NormalDisplacementVertexShaderData() {
 		InitializeShader();
 		InitializeCBuffers();
 	}
 
-	void NormalDisplacementVsData::InitializeShader() {
+	void NormalDisplacementVertexShaderData::InitializeShader() {
 		D3D11_INPUT_ELEMENT_DESC inputElementDescriptions[] = {
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -36,7 +36,7 @@ namespace BRE {
 		BRE_ASSERT(mInputLayout);
 	}
 
-	void NormalDisplacementVsData::InitializeCBuffers() {
+	void NormalDisplacementVertexShaderData::InitializeCBuffers() {
 		D3D11_BUFFER_DESC bufferDesc;
 		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -52,7 +52,7 @@ namespace BRE {
 		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
-	void NormalDisplacementVsData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
+	void NormalDisplacementVertexShaderData::PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context) {
 		BRE_ASSERT(mInputLayout);
 		BRE_ASSERT(mShader);
 		BRE_ASSERT(mVertexBuffer);
@@ -72,7 +72,7 @@ namespace BRE {
 		context.VSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 	}
 
-	void NormalDisplacementVsData::DrawIndexed(ID3D11DeviceContext1& context) {
+	void NormalDisplacementVertexShaderData::DrawIndexed(ID3D11DeviceContext1& context) {
 		BRE_ASSERT(mInputLayout);
 		BRE_ASSERT(mShader);
 		BRE_ASSERT(mVertexBuffer);
@@ -81,7 +81,7 @@ namespace BRE {
 		context.DrawIndexed(mIndexCount, 0, 0);
 	}
 
-	void NormalDisplacementVsData::PostDraw(ID3D11DeviceContext1& context) {
+	void NormalDisplacementVertexShaderData::PostDraw(ID3D11DeviceContext1& context) {
 		context.IASetInputLayout(nullptr);
 		context.VSSetShader(nullptr, nullptr, 0);
 		ID3D11Buffer* vertexBuffers[] = { nullptr };

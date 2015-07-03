@@ -20,8 +20,8 @@ namespace BRE {
 		void Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj);
 
 	private:
-		BasicVsData mVsData;
-		BasicPsData mPsData;
+		BasicVertexShaderData mVertexShaderData;
+		BasicPixelShaderData mPixelShaderData;
 		DirectX::XMFLOAT4X4 mWorld;
 	};
 }

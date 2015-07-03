@@ -1,7 +1,7 @@
 #include <rendering/shaders/Lighting.hlsli>
 #include <rendering/shaders/Utils.hlsli>
 
-struct VS_OUTPUT {
+struct Input {
 	float4 PosCS : SV_Position;
 	float3 ViewRay : VIEW_RAY;
 };
@@ -20,13 +20,13 @@ Texture2D Smoothness_MetalMask_Texture : register (t2);
 Texture2D Reflectance_Texture : register (t3);
 Texture2D DepthTexture : register (t4);
 
-float4 main(const in VS_OUTPUT IN) : SV_TARGET {
+float4 main(const in Input input) : SV_TARGET {
 	// Determine our indices for sampling the texture based on the current
 	// screen position
-	const int3 sampleIndices = int3(IN.PosCS.xy, 0);
+	const int3 sampleIndices = int3(input.PosCS.xy, 0);
 	const float depth = DepthTexture.Load(sampleIndices).x;
 	const float linearDepth = ProjectionB / (depth - ProjectionA);
-	const float3 posVS = IN.ViewRay * linearDepth;	
+	const float3 posVS = input.ViewRay * linearDepth;
 	const float3 normalVS = OctDecode(NormalTexture.Load(sampleIndices).xy);
 	
 	MaterialData data;

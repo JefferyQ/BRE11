@@ -59,32 +59,32 @@ namespace BRE {
 		BRE_ASSERT(numMeshes > 0);
 		for (size_t iMeshIndex = 0; iMeshIndex < numMeshes; ++iMeshIndex) {
 			NormalDisplacementDrawer drawer;
-			drawer.mVsData.VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId, iMeshIndex));
-			BRE_ASSERT(drawer.mVsData.VertexBuffer());
-			drawer.mVsData.IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer(iMeshIndex));
-			drawer.mVsData.SetIndexCount(static_cast<unsigned int>(model->Meshes()[iMeshIndex]->Indices().size()));
-			drawer.mVsData.TextureScaleFactor() = textureScaleFactor;
+			drawer.mVertexShaderData.VertexBuffer() = ShaderResourcesManager::gInstance->Buffer(NormalMappingVertexData::CreateVertexBuffer(modelId, iMeshIndex));
+			BRE_ASSERT(drawer.mVertexShaderData.VertexBuffer());
+			drawer.mVertexShaderData.IndexBuffer() = ShaderResourcesManager::gInstance->Buffer(model->CreateIndexBuffer(iMeshIndex));
+			drawer.mVertexShaderData.SetIndexCount(static_cast<unsigned int>(model->Meshes()[iMeshIndex]->Indices().size()));
+			drawer.mVertexShaderData.TextureScaleFactor() = textureScaleFactor;
 
 			// Build world matrix
 			XMStoreFloat4x4(&drawer.mWorld, worldMatrix);
 
 			// Initialize hull shader data
 			for (size_t iTessFactor = 0; iTessFactor < ARRAYSIZE(edgeTesselationFactors); ++iTessFactor) {
-				drawer.mHsData.TessellationFactors()[iTessFactor] = edgeTesselationFactors[iTessFactor];
+				drawer.mHullShaderData.TessellationFactors()[iTessFactor] = edgeTesselationFactors[iTessFactor];
 			}
-			drawer.mHsData.TessellationFactors()[3] = insideTessellationFactor;
+			drawer.mHullShaderData.TessellationFactors()[3] = insideTessellationFactor;
 
 			// Initialize domain shader data
-			drawer.mDsData.DisplacementScale() = displacementScale;
-			drawer.mDsData.DisplacementMapSRV() = displacementSRV;
-			drawer.mDsData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+			drawer.mDomainShaderData.DisplacementScale() = displacementScale;
+			drawer.mDomainShaderData.DisplacementMapSRV() = displacementSRV;
+			drawer.mDomainShaderData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 
 			// Initialize pixel shader data
-			drawer.mPsData.SetMaterial(matId);
-			drawer.mPsData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
+			drawer.mPixelShaderData.SetMaterial(matId);
+			drawer.mPixelShaderData.SamplerState() = GlobalResources::gInstance->MinMagMipPointSampler();
 
 			if (normalMapSRV) {
-				drawer.mPsData.NormalSRV() = normalMapSRV;
+				drawer.mPixelShaderData.NormalSRV() = normalMapSRV;
 			}
 
 			drawers.push_back(drawer);
@@ -93,16 +93,16 @@ namespace BRE {
 
 	void NormalDisplacementDrawer::Draw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs, const XMMATRIX& view, const XMMATRIX& proj) {
 		const XMMATRIX world = XMLoadFloat4x4(&mWorld);
-		XMStoreFloat4x4(&mDsData.WorldView(), XMMatrixTranspose(world * view));
-		XMStoreFloat4x4(&mDsData.Projection(), XMMatrixTranspose(proj));
-		mVsData.PreDraw(device, context);
-		mHsData.PreDraw(device, context);
-		mDsData.PreDraw(device, context);
-		mPsData.PreDraw(device, context, geometryBuffersRTVs);
-		mVsData.DrawIndexed(context);
-		mVsData.PostDraw(context);
-		mHsData.PostDraw(context);
-		mDsData.PostDraw(context);
-		mPsData.PostDraw(context);
+		XMStoreFloat4x4(&mDomainShaderData.WorldView(), XMMatrixTranspose(world * view));
+		XMStoreFloat4x4(&mDomainShaderData.Projection(), XMMatrixTranspose(proj));
+		mVertexShaderData.PreDraw(device, context);
+		mHullShaderData.PreDraw(device, context);
+		mDomainShaderData.PreDraw(device, context);
+		mPixelShaderData.PreDraw(device, context, geometryBuffersRTVs);
+		mVertexShaderData.DrawIndexed(context);
+		mVertexShaderData.PostDraw(context);
+		mHullShaderData.PostDraw(context);
+		mDomainShaderData.PostDraw(context);
+		mPixelShaderData.PostDraw(context);
 	}
 }

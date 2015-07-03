@@ -169,7 +169,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="managers\ShadersManager.cpp" />
     <ClCompile Include="rendering\GlobalResources.cpp" />
     <ClCompile Include="rendering\lights\DirectionalLight.cpp" />
-    <ClCompile Include="rendering\lights\SpotLight.cpp" />
     <ClCompile Include="rendering\models\Mesh.cpp" />
     <ClCompile Include="rendering\models\Model.cpp" />
     <ClCompile Include="rendering\models\ModelMaterial.cpp" />
@@ -221,7 +220,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="rendering\GlobalResources.h" />
     <ClInclude Include="rendering\lights\DirectionalLight.h" />
     <ClInclude Include="rendering\lights\PointLight.h" />
-    <ClInclude Include="rendering\lights\SpotLight.h" />
     <ClInclude Include="rendering\models\Mesh.h" />
     <ClInclude Include="rendering\models\Model.h" />
     <ClInclude Include="rendering\models\ModelMaterial.h" />

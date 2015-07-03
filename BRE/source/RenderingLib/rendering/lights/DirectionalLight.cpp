@@ -4,16 +4,12 @@
 
 using namespace DirectX;
 
-#define FORWARD_VECTOR3 DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f)
-#define UP_VECTOR3 DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f)
-#define RIGHT_VECTOR3 DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f)
-
 namespace BRE {
 	DirectionalLight::DirectionalLight()
 		: mColor(1.0f, 1.0f, 1.0f)
-		, mDirection(FORWARD_VECTOR3)
-		, mUp(UP_VECTOR3)
-		, mRight(RIGHT_VECTOR3)
+		, mDirection(DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f))
+		, mUp(DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f))
+		, mRight(DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f))
 	{
 	}
 

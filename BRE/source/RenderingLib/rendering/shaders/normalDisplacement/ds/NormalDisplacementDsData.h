@@ -11,9 +11,9 @@ struct ID3D11SamplerState;
 struct ID3D11ShaderResourceView;
 
 namespace BRE {
-	class NormalDisplacementDsData {
+	class NormalDisplacementDomainShaderData {
 	public:
-		NormalDisplacementDsData();
+		NormalDisplacementDomainShaderData();
 
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context);
 		void PostDraw(ID3D11DeviceContext1& context);

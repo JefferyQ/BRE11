@@ -12,9 +12,9 @@ struct ID3D11InputLayout;
 struct ID3D11VertexShader;
 
 namespace BRE {
-	class BasicVsData {
+	class BasicVertexShaderData {
 	public:
-		BasicVsData();
+		BasicVertexShaderData();
 
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context);
 		void DrawIndexed(ID3D11DeviceContext1& context);

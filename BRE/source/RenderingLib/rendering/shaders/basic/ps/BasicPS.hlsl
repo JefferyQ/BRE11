@@ -1,10 +1,10 @@
 #include <rendering/shaders/Utils.hlsli>
-struct VS_OUTPUT {
+struct Input {
 	float4 PosCS : SV_Position;
 	float3 NormalVS : NORMAL;
 };
 
-struct PS_OUTPUT {
+struct Output {
 	float2 NormalVS : SV_Target0;
 	float3 BaseColor : SV_Target1;
 	float2 Smoothness_MetalMask : SV_Target2;
@@ -18,13 +18,13 @@ Texture2D SmoothnessTexture : register (t1);
 Texture2D MetalMaskTexture : register (t2);
 Texture2D ReflectanceTexture : register (t3);
 
-PS_OUTPUT main(VS_OUTPUT IN) {
-	PS_OUTPUT OUT = (PS_OUTPUT)0;
-	OUT.NormalVS = OctEncode(normalize(IN.NormalVS));
+Output main(Input input) {
+	Output output = (Output)0;
+	output.NormalVS = OctEncode(normalize(input.NormalVS));
 	const float2 texCoord = float2(0.0f, 0.0f);
-	OUT.BaseColor = BaseColorTexture.Sample(TexSampler, texCoord).rgb;
-	OUT.Smoothness_MetalMask.x = SmoothnessTexture.Sample(TexSampler, texCoord).x;
-	OUT.Smoothness_MetalMask.y = MetalMaskTexture.Sample(TexSampler, texCoord).x;
-	OUT.Reflectance = ReflectanceTexture.Sample(TexSampler, texCoord).rgb;
-	return OUT;
+	output.BaseColor = BaseColorTexture.Sample(TexSampler, texCoord).rgb;
+	output.Smoothness_MetalMask.x = SmoothnessTexture.Sample(TexSampler, texCoord).x;
+	output.Smoothness_MetalMask.y = MetalMaskTexture.Sample(TexSampler, texCoord).x;
+	output.Reflectance = ReflectanceTexture.Sample(TexSampler, texCoord).rgb;
+	return output;
 }

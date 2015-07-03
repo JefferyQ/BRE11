@@ -1,21 +1,6 @@
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Structures that represent the different types of lights and
-// agrees with HLSL structure padding rules.
-// They are used in constant buffers in HLSL shaders
-//
-//////////////////////////////////////////////////////////////////////////
-
 #include <DirectXMath.h>
-#include <windows.h>
-
-//////////////////////////////////////////////////////////////////////////
-// Make sure structure alignment agrees with HLSL structure padding rules.
-// Elements are packed into 4D vectors with the restriction that an element
-// cannot straddle a 4D vector boundary.
-//////////////////////////////////////////////////////////////////////////
 
 namespace BRE {
 	struct DirectionalLightData {

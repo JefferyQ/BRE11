@@ -1,15 +1,5 @@
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////
-//
-// A directional light represents a light source that is infinitely
-// far away. It has no position relative to your 3D objects. As such,
-// the light rays that reach your objects are parallel to one another
-// (they all travel in the same direction).
-// The sun, while not infinitely distant, is a good example.
-//
-//////////////////////////////////////////////////////////////////////////
-
 #include <DirectXMath.h>
 
 namespace BRE {

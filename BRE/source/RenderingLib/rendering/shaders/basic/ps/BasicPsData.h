@@ -11,9 +11,9 @@ struct ID3D11SamplerState;
 struct ID3D11ShaderResourceView;
 
 namespace BRE {
-	class BasicPsData {
+	class BasicPixelShaderData {
 	public:
-		BasicPsData();
+		BasicPixelShaderData();
 
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs);
 		void PostDraw(ID3D11DeviceContext1& context);
