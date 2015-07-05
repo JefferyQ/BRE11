@@ -45,7 +45,7 @@ namespace BRE {
 
 		std::stringstream str;
 		str << "BasicVsData";
-		str << rand();
+		str << rand() << rand();
 		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 

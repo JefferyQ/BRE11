@@ -106,8 +106,8 @@ IF EXIST "$(ProjectDir)content" xcopy "$(ProjectDir)content" "$(SolutionDir)\con
 IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\content\" /D/S/H/V/C/F/K/Y</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib;$(SolutionDir)\external\assimp-3.1.1-win-binaries\lib64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp.lib;d3d11.lib;d3dcompiler.lib;dinput8.lib;DirectXTKd.lib;dxguid.lib;Shlwapi.lib;YamlCppd.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;DirectXTKd.lib;dxguid.lib;YamlCppd.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -152,8 +152,8 @@ IF EXIST "$(ProjectDir)content" xcopy "$(ProjectDir)content" "$(SolutionDir)\con
 IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\content\" /D/S/H/V/C/F/K/Y</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib;$(SolutionDir)\external\assimp-3.1.1-win-binaries\lib64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp.lib;d3d11.lib;d3dcompiler.lib;dinput8.lib;DirectXTK.lib;dxguid.lib;Shlwapi.lib;YamlCpp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;DirectXTK.lib;dxguid.lib;YamlCpp.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

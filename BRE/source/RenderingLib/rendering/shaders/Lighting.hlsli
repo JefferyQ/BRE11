@@ -14,17 +14,6 @@ struct PointLight {
 	float Range;
 };
 
-struct SpotLight {
-	float3 Color;
-	float InnerAngle;
-
-	float3 PosWS;
-	float OuterAngle;
-
-	float3 DirectionWS;
-	float Range;
-};
-
 struct MaterialData {
 	float3 BaseColor;
 	float Smoothness;
@@ -84,7 +73,8 @@ float3 brdf(const float3 N, const float3 V, const float3 L, const MaterialData d
 	
 	// Specular BRDF
 	const float3 f0 = (1.0f - data.MetalMask) * data.Reflectance + data.BaseColor * data.MetalMask;
-	const float3 F = F_Schlick(f0, 1.0f, dotLH);
+	const float f90 = saturate(50.0 * dot(f0, 0.33));
+	const float3 F = F_Schlick(f0, f90, dotLH);
 	const float Vis = V_SmithGGXCorrelated(dotNV, dotNL, roughness);
 	const float D = D_GGX(dotNH, roughness);
 	const float3 Fr = D * F * Vis / PI;

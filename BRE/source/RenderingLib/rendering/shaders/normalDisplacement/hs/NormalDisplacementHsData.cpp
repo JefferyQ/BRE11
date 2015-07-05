@@ -29,7 +29,7 @@ namespace BRE {
 		
 		std::stringstream str;
 		str << "NormalDisplacementHsData";
-		str << rand();
+		str << rand() << rand();
 		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 

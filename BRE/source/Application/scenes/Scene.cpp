@@ -18,7 +18,7 @@ namespace {
 	const unsigned int sNumPointLightShaders = 1; 
 
 	const char* sMaterialsFile = "content\\configs\\materials.yml";   
-	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";  
+	const char* sSceneModelsFile = "content\\configs\\fullyDeferred\\models.yml";     
 }
 
 Scene::Scene() {  
@@ -31,9 +31,9 @@ Scene::Scene() {
 
 void Scene::Update(const float elapsedTime) {   
 	UpdateDirectionalLight(elapsedTime); 
-	mPosUpdater.Update(elapsedTime); 
+	//mPosUpdater.Update(elapsedTime); 
 
-	UpdatePointLights(elapsedTime);
+	//UpdatePointLights(elapsedTime);
 
 	// Directional
 	std::vector<BRE::LightsDrawer::DirLightData>& dirLightDataVec = BRE::DrawManager::gInstance->DirLightDataVec();

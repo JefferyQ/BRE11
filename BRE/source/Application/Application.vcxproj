@@ -92,8 +92,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib;$(WindowsSDK_LibraryPath_x64)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>RenderingLibd.lib;%(AdditionalDependencies);</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib;$(SolutionDir)\external\assimp-3.1.1-win-binaries\lib64;$(WindowsSDK_LibraryPath_x64)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp.lib;Shlwapi.lib;RenderingLibd.lib;dinput8.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST "$(OutDir)content" del /s /f /q "$(OutDir)content" 
@@ -135,8 +135,8 @@ IF EXIST  "$(SolutionDir)\external\assimp-3.1.1-win-binaries\bin64\assimp.dll" x
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib;$(WindowsSDK_LibraryPath_x64)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>RenderingLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\external\assimp-3.1.1-win-binaries\lib64;$(SolutionDir)\lib;$(WindowsSDK_LibraryPath_x64)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp.lib;d3dcompiler.lib;dinput8.lib;RenderingLib.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST "$(OutDir)content" del /s /f /q "$(OutDir)content" 

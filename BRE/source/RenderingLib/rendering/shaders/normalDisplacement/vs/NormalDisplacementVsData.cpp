@@ -48,7 +48,7 @@ namespace BRE {
 
 		std::stringstream str;
 		str << "NormalDisplacementVsData";
-		str << rand();
+		str << rand() << rand();
 		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 

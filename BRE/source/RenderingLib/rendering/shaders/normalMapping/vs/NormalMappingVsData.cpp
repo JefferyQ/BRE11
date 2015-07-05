@@ -47,7 +47,7 @@ namespace BRE {
 
 		std::stringstream str;
 		str << "NormalMappingVsData";
-		str << rand();
+		str << rand() << rand();
 		mCBuffer.InitializeBuffer(str.str().c_str(), bufferDesc);
 	}
 
