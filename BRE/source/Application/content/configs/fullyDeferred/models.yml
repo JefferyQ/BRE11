@@ -11,3 +11,39 @@ models:
     edgeTessellationFactors: [5.0, 5.0, 5.0]
     insideTessellationFactors: 5.0
     displacementScale: 5.0
+  - renderType: Basic
+    path: "content\\models\\mitsuba-sphere.obj"
+    translation: [0.0, 50.0, 0.0]
+    rotation: [0.0, 1.57, 0.0]
+    scaling: [40.0, 40.0, 40.0] 
+    textureScaleFactor: 2.0
+    material: "gold" 
+    normalMapTexture: "content\\textures\\rock1\\rock1_normal.dds"
+    displacementMapTexture: "content\\textures\\rock1\\rock1_height.dds"
+    edgeTessellationFactors: [5.0, 5.0, 5.0]
+    insideTessellationFactors: 5.0
+    displacementScale: 5.0
+  - renderType: Basic
+    path: "content\\models\\mitsuba-sphere.obj"
+    translation: [0.0, 50.0, 150.0]
+    rotation: [0.0, 1.57, 0.0]
+    scaling: [40.0, 40.0, 40.0] 
+    textureScaleFactor: 2.0
+    material: "platinum" 
+    normalMapTexture: "content\\textures\\rock1\\rock1_normal.dds"
+    displacementMapTexture: "content\\textures\\rock1\\rock1_height.dds"
+    edgeTessellationFactors: [5.0, 5.0, 5.0]
+    insideTessellationFactors: 5.0
+    displacementScale: 5.0
+  - renderType: Normal
+    path: "content\\models\\mitsuba-sphere.obj"
+    translation: [0.0, 50.0, -150.0]
+    rotation: [0.0, 1.57, 0.0]
+    scaling: [40.0, 40.0, 40.0] 
+    textureScaleFactor: 2.0
+    material: "rock1" 
+    normalMapTexture: "content\\textures\\rock1\\rock1_normal.dds"
+    displacementMapTexture: "content\\textures\\rock1\\rock1_height.dds"
+    edgeTessellationFactors: [5.0, 5.0, 5.0]
+    insideTessellationFactors: 5.0
+    displacementScale: 5.0
