@@ -35,10 +35,10 @@ namespace BRE {
 		BRE_ASSERT(mMaterialDataIdById.find(id) == mMaterialDataIdById.end());		
 		MaterialDataId& newMaterialId = mMaterialDataIdById[id];
 		newMaterialId.mNormal = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mNormalTexturePath.c_str(), (material) ? &material->mNormalSRV : nullptr);
-		newMaterialId.mBaseColor = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mBaseColorTexturePath.c_str(), (material) ? &material->mBaseColorSRV : nullptr);
+		newMaterialId.mBaseColor = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mBaseColorTexturePath.c_str(), (material) ? &material->mBaseColorSRV : nullptr, true);
 		newMaterialId.mSmoothness = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mSmoothnessTexturePath.c_str(), (material) ? &material->mSmoothnessSRV : nullptr);
 		newMaterialId.mMetalMask = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mMetalMaskTexturePath.c_str(), (material) ? &material->mMetalMaskSRV : nullptr);
-		newMaterialId.mReflectance = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mReflectanceTexturePath.c_str(), (material) ? &material->mReflectanceSRV : nullptr);
+		newMaterialId.mReflectance = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mReflectanceTexturePath.c_str(), (material) ? &material->mReflectanceSRV : nullptr, true);
 		return id;
 	}
 

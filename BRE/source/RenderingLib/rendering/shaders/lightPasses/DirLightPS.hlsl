@@ -20,7 +20,7 @@ Texture2D Smoothness_MetalMask_Texture : register (t2);
 Texture2D Reflectance_Texture : register (t3);
 Texture2D DepthTexture : register (t4);
 
-float4 main(const in Input input) : SV_TARGET {
+float4 main(const in Input input) : SV_TARGET { 
 	// Determine our indices for sampling the texture based on the current
 	// screen position
 	const int3 sampleIndices = int3(input.PosCS.xy, 0);
@@ -35,6 +35,6 @@ float4 main(const in Input input) : SV_TARGET {
 	data.MetalMask = smoothness_metalMask.y;
 	data.Smoothness = smoothness_metalMask.x;
 	data.Reflectance = Reflectance_Texture.Load(sampleIndices).rgb;
-	const float3 final = data.BaseColor * 0.015f + brdf(normalVS, normalize(-posVS), -normalize(Light.Direction), data) * Light.Color;
+	const float3 final = data.BaseColor * 0.001f + brdf(normalVS, normalize(-posVS), -normalize(Light.Direction), data) * Light.Color;
 	return float4(final, 1.0f);
 }

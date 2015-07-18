@@ -47,7 +47,7 @@ namespace BRE {
 		}
 	}
 
-	size_t ShaderResourcesManager::AddTextureFromFileSRV(const char* filepath, ID3D11ShaderResourceView* *resource) {
+	size_t ShaderResourcesManager::AddTextureFromFileSRV(const char* filepath, ID3D11ShaderResourceView* *resource, const bool forceSRGB) {
 		BRE_ASSERT(filepath);
 		const size_t id = Utils::Hash(filepath);
 		ShaderResourceViews::iterator findIt = mShaderResourceViews.find(id);
@@ -57,13 +57,14 @@ namespace BRE {
 		}
 
 		ID3D11Resource* texture;
-		ID3D11ShaderResourceView* elem;
-		ASSERT_HR(DirectX::CreateDDSTextureFromFile(&mDevice, Utils::ToWideString(filepath).c_str(), &texture, &elem));
+		ID3D11ShaderResourceView* elem = nullptr;
+		ASSERT_HR(DirectX::CreateDDSTextureFromFileEx(&mDevice, Utils::ToWideString(filepath).c_str(), 0ui64, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, forceSRGB, &texture, &elem));
 		texture->Release();
+		BRE_ASSERT(elem);
 		mShaderResourceViews[id] = elem;
 		if (resource) *resource = elem;
 		return id;
-	}
+	} 
 
 	size_t ShaderResourcesManager::AddResourceSRV(const char* id, ID3D11Resource& resource, const D3D11_SHADER_RESOURCE_VIEW_DESC* desc, ID3D11ShaderResourceView* *view) {
 		BRE_ASSERT(id);

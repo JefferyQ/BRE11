@@ -40,7 +40,7 @@ namespace BRE {
 
 		const ShaderResourcesManager& operator=(const ShaderResourcesManager& rhs) = delete;
 
-		size_t AddTextureFromFileSRV(const char* filepath, ID3D11ShaderResourceView* * resource);
+		size_t AddTextureFromFileSRV(const char* filepath, ID3D11ShaderResourceView* * resource, const bool forceSRGB = false);
 
 		size_t AddResourceSRV(const char* id, ID3D11Resource& resource, const D3D11_SHADER_RESOURCE_VIEW_DESC* desc, ID3D11ShaderResourceView* * view = nullptr);
 		size_t AddResourceUAV(const char* id, ID3D11Resource& resource, const D3D11_UNORDERED_ACCESS_VIEW_DESC& desc, ID3D11UnorderedAccessView* *view = nullptr);

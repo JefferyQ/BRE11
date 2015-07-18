@@ -32,5 +32,5 @@ Output main(Input input) {
 	output.Smoothness_MetalMask.x = SmoothnessTexture.Sample(TexSampler, input.TexCoord).x;
 	output.Smoothness_MetalMask.y = MetalMaskTexture.Sample(TexSampler, input.TexCoord).x;
 	output.Reflectance = ReflectanceTexture.Sample(TexSampler, input.TexCoord).rgb;
-	return output;
+	return output;   
 }
