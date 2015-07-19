@@ -17,8 +17,8 @@ namespace BRE {
 
 		const XMMATRIX invProj = XMMatrixInverse(nullptr, proj); 
 
-		// Far clip distance / (Far clip distance / near clip distance)
-		const float projA = farClipPlaneDistance / (farClipPlaneDistance / nearClipPlaneDistance);
+		// Far clip distance / (Far clip distance - near clip distance)
+		const float projA = farClipPlaneDistance / (farClipPlaneDistance - nearClipPlaneDistance);
 		// (-Far clip distance * Near clip distance) / (Far clip distance - near clip distance)
 		const float projB = (-farClipPlaneDistance * nearClipPlaneDistance) / (farClipPlaneDistance - nearClipPlaneDistance);
 

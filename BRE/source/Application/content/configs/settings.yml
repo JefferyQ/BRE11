@@ -3,7 +3,7 @@ settings:
   screenHeight: 1080
   frameRate: 60
   multiSamplingCount: 1
-  translation: [0.0, 0.0, -550.0]
+  translation: [0.0, 0.0, 0.0]
   rotation: [0.0, 0.0, 0.0]
   nearPlaneDistance: 1.0
   farPlaneDistance: 1000000.0

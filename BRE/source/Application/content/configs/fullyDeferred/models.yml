@@ -1,49 +1,55 @@
 models:
-  - renderType: Normal_Displacement
-    path: "content\\models\\sponza.obj"
-    translation: [0.0, 0.0, 0.0] 
+  - renderType: Basic
+    path: "content\\models\\mitsuba.obj" 
+    translation: [0.0, 0.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
-    scaling: [1.0, 1.0, 1.0] 
-    textureScaleFactor: 5.0
+    scaling: [40.0, 40.0, 40.0] 
+    material: "bronze"
+  - renderType: Normal_Displacement
+    path: "content\\models\\mitsuba.obj"
+    translation: [500.0, 0.0, 0.0]
+    rotation: [0.0, 0.0, 0.0]
+    scaling: [40.0, 40.0, 40.0] 
+    textureScaleFactor: 2.0
+    material: "muddy_dirt" 
+    normalMapTexture: "content\\materials\\muddy_dirt\\muddy_dirt_normal.dds"
+    displacementMapTexture: "content\\materials\\muddy_dirt\\muddy_dirt_height.dds"
+    edgeTessellationFactors: [5.0, 5.0, 5.0]
+    insideTessellationFactors: 5.0
+    displacementScale: 1.0
+  - renderType: Basic
+    path: "content\\models\\mitsuba.obj"
+    translation: [-500.0, 0.0, 0.0]
+    rotation: [0.0, 0.0, 0.0]
+    scaling: [40.0, 40.0, 40.0] 
+    material: "gold"
+  - renderType: Basic
+    path: "content\\models\\mitsuba.obj"
+    translation: [1000.0, 0.0, 0.0]
+    rotation: [0.0, 0.0, 0.0]
+    scaling: [40.0, 40.0, 40.0]  
+    material: "iron"
+  - renderType: Basic
+    path: "content\\models\\mitsuba.obj"
+    translation: [-1000.0, 0.0, 0.0]
+    rotation: [0.0, 0.0, 0.0]
+    scaling: [40.0, 40.0, 40.0] 
+    material: "silver"
+  - renderType: Basic
+    path: "content\\models\\mitsuba.obj"
+    translation: [1500.0, 0.0, 0.0]
+    rotation: [0.0, 0.0, 0.0]
+    scaling: [40.0, 40.0, 40.0] 
+    material: "titanium"
+  - renderType: Normal_Displacement
+    path: "content\\models\\mitsuba.obj"
+    translation: [-1500.0, 0.0, 0.0]
+    rotation: [0.0, 0.0, 0.0]
+    scaling: [40.0, 40.0, 40.0] 
+    textureScaleFactor: 2.0
     material: "rock1" 
     normalMapTexture: "content\\materials\\rock1\\rock1_normal.dds"
     displacementMapTexture: "content\\materials\\rock1\\rock1_height.dds"
     edgeTessellationFactors: [5.0, 5.0, 5.0]
     insideTessellationFactors: 5.0
-    displacementScale: 5.0
-  - renderType: Basic
-    path: "content\\models\\mitsuba-sphere.obj"
-    translation: [0.0, 50.0, 0.0]
-    rotation: [0.0, 1.57, 0.0]
-    scaling: [40.0, 40.0, 40.0] 
-    material: "bronze"
-  - renderType: Basic
-    path: "content\\models\\mitsuba-sphere.obj"
-    translation: [0.0, 50.0, 150.0]
-    rotation: [0.0, 1.57, 0.0]
-    scaling: [40.0, 40.0, 40.0] 
-    material: "copper"
-  - renderType: Basic
-    path: "content\\models\\mitsuba-sphere.obj"
-    translation: [0.0, 50.0, -150.0]
-    rotation: [0.0, 1.57, 0.0]
-    scaling: [40.0, 40.0, 40.0] 
-    material: "gold"
-  - renderType: Basic
-    path: "content\\models\\mitsuba-sphere.obj"
-    translation: [0.0, 150.0, 0.0]
-    rotation: [0.0, 1.57, 0.0]
-    scaling: [40.0, 40.0, 40.0]  
-    material: "iron"
-  - renderType: Basic
-    path: "content\\models\\mitsuba-sphere.obj"
-    translation: [0.0, 150.0, 150.0]
-    rotation: [0.0, 1.57, 0.0]
-    scaling: [40.0, 40.0, 40.0] 
-    material: "silver"
-  - renderType: Basic
-    path: "content\\models\\mitsuba-sphere.obj"
-    translation: [0.0, 150.0, -150.0]
-    rotation: [0.0, 1.57, 0.0]
-    scaling: [40.0, 40.0, 40.0] 
-    material: "titanium"
+    displacementScale: 1.0

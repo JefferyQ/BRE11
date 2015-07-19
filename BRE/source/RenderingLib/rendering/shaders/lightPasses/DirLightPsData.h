@@ -31,7 +31,7 @@ namespace BRE {
 
 		struct CBufferPerFrameData {
 			DirectionalLightData mLight;
-			float mProjectionConstants[2]; // 0 -> Far clip distance / (Far clip distance / near clip distance)
+			float mProjectionConstants[2]; // 0 -> Far clip distance / (Far clip distance - near clip distance)
 										   // 1 -> (- Far clip distance * Near clip distance) / (Far clip distance - near clip distance)
 		};
 		Buffer<CBufferPerFrameData> mCBuffer;
