@@ -14,7 +14,7 @@ namespace BRE {
 		void PreDraw(ID3D11Device1& device, ID3D11DeviceContext1& context);
 		void PostDraw(ID3D11DeviceContext1& context);
 
-		float* TessellationFactors() { return mCBuffer.mData.mTessellationFactors; }
+		float& TessellationFactor() { return mCBuffer.mData.mTessellationFactor; }
 
 	private:
 		void InitializeCBuffers();
@@ -22,8 +22,7 @@ namespace BRE {
 		ID3D11HullShader* mShader;
 
 		struct CBufferPerFrameData {
-			// 3 Tessellation edge & 1 inside factors
-			float mTessellationFactors[4];
+			float mTessellationFactor;
 		};
 		Buffer<CBufferPerFrameData> mCBuffer;
 	};

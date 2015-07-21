@@ -53,7 +53,7 @@ void Scene::InitDirectionalLights() {
 	dirLightDataVec.resize(1); 
 	BRE::DirLightPixelShaderData& dirLightPsData = dirLightDataVec[0].mPixelShaderData;          
 	 
-	mDirectionalLight.SetColor(0.5f, 0.5f, 0.5f);
+	mDirectionalLight.SetColor(1.0f, 1.0f, 1.0f);
 	BRE::DirectionalLightData& dirLightData = dirLightPsData.Light();        
 	dirLightData.mColor = mDirectionalLight.Color();  
 	dirLightData.mDirection = mDirectionalLight.Direction();      

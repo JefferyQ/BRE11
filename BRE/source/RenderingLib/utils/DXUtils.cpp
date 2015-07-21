@@ -71,7 +71,7 @@ namespace BRE {
 			ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 			swapChainDesc.Width = screenWidth;
 			swapChainDesc.Height = screenHeight;
-			swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+			swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			swapChainDesc.SampleDesc.Count = sampleCount;
 			swapChainDesc.SampleDesc.Quality = qualityLevels - 1;
 

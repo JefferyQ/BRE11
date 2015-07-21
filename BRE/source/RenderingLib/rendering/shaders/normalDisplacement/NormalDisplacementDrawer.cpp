@@ -30,9 +30,7 @@ namespace BRE {
 		const XMMATRIX scalingMatrix = XMMatrixScaling(scaling[0], scaling[1], scaling[2]);
 		const XMMATRIX worldMatrix = scalingMatrix * rotationMatrix * translationMatrix;
 		const float textureScaleFactor = YamlUtils::GetScalar<float>(node, "textureScaleFactor");
-		float edgeTesselationFactors[3];
-		YamlUtils::GetSequence<float>(node, "edgeTessellationFactors", edgeTesselationFactors, ARRAYSIZE(edgeTesselationFactors));
-		const float insideTessellationFactor = YamlUtils::GetScalar<float>(node, "insideTessellationFactors");
+		const float tessellationFactor = YamlUtils::GetScalar<float>(node, "tessellationFactor");
 		const float displacementScale = YamlUtils::GetScalar<float>(node, "displacementScale");
 		ID3D11ShaderResourceView* displacementSRV;
 		{
@@ -69,10 +67,7 @@ namespace BRE {
 			XMStoreFloat4x4(&drawer.mWorld, worldMatrix);
 
 			// Initialize hull shader data
-			for (size_t iTessFactor = 0; iTessFactor < ARRAYSIZE(edgeTesselationFactors); ++iTessFactor) {
-				drawer.mHullShaderData.TessellationFactors()[iTessFactor] = edgeTesselationFactors[iTessFactor];
-			}
-			drawer.mHullShaderData.TessellationFactors()[3] = insideTessellationFactor;
+			drawer.mHullShaderData.TessellationFactor() = tessellationFactor;
 
 			// Initialize domain shader data
 			drawer.mDomainShaderData.DisplacementScale() = displacementScale;

@@ -1,7 +1,39 @@
 #ifndef LIGHTING_HEADER
 #define LIGHTING_HEADER
 
+//
+// Constants
+//
 #define PI 3.14159f
+
+//
+// sRGB <-> Linear 
+// 
+float3 approximationSRgbToLinear(in float3 sRGBCol) {
+	return pow(sRGBCol, 2.2);
+}
+
+float3 accurateSRGBToLinear(in float3 sRGBCol) {
+	float3 linearRGBLo = sRGBCol / 12.92;
+	float3 linearRGBHi = pow((sRGBCol + 0.055) / 1.055, 2.4);
+	float3 linearRGB = (sRGBCol <= 0.04045) ? linearRGBLo : linearRGBHi;
+	return linearRGB;
+}
+
+float3 approximationLinearToSRGB(in float3 linearCol) {
+	return pow(linearCol, 1 / 2.2);
+}
+
+float3 accurateLinearToSRGB(in float3 linearCol) {
+	const float3 sRGBLo = linearCol * 12.92;
+	const float3 sRGBHi = (pow(abs(linearCol), 1.0 / 2.4) * 1.055) - 0.055;
+	const float3 sRGB = (linearCol <= 0.0031308) ? sRGBLo : sRGBHi;
+	return sRGB;
+}
+
+//
+// Lighting
+//
 
 struct DirectionalLight {
 	float3 Color;
@@ -59,8 +91,8 @@ float D_GGX_TR(const float dotNH, const float alpha) {
 }
 
 float3 brdf(const float3 N, const float3 V, const float3 L, const MaterialData data) {
-	const float roughness = 1.0f - data.Smoothness;
-	const float alpha = roughness * roughness;
+	const float linearRoughness = 1.0f - data.Smoothness;
+	const float roughness = linearRoughness * linearRoughness;
 
 	const float dotNV = abs(dot(N, V)) + 1e-5f; // avoid artifact
 	const float3 H = normalize(V + L);
@@ -69,14 +101,15 @@ float3 brdf(const float3 N, const float3 V, const float3 L, const MaterialData d
 	const float dotNL = saturate(dot(N, L));
 
 	// Specular BRDF
-	const float3 f0 = (1.0f - data.MetalMask) * data.Reflectance + data.BaseColor * data.MetalMask;
-	const float3 F = F_Schlick(f0, 1.0f, dotLH); 
-	const float G = G_SmithGGXCorrelated(dotNV, dotNL, alpha);
-	const float D = D_GGX_TR(dotNH, alpha);
+	const float3 f0 = (1.0f - data.MetalMask) * 0.16f * data.Reflectance * data.Reflectance + data.BaseColor * data.MetalMask;
+	const float f90 = saturate(50.0 * dot(f0, 0.33));
+	const float3 F = F_Schlick(f0, f90, dotLH);
+	const float G = G_SmithGGXCorrelated(dotNV, dotNL, roughness);
+	const float D = D_GGX_TR(dotNH, roughness);
 	const float3 Fr = F * G * D;
 
 	// Diffuse BRDF
-	const float Fd = Fd_Disney(dotNV, dotNL, dotLH, roughness);
+	const float Fd = Fd_Disney(dotNV, dotNL, dotLH, linearRoughness);
 
 	// Put all the parts together to generate the final color
 	const float3 diffuseColor = (1.0f - data.MetalMask) * data.BaseColor;

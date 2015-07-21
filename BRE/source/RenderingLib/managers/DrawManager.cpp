@@ -129,7 +129,7 @@ namespace BRE {
 		textureDesc[1].Height = screenHeight;
 		textureDesc[1].MipLevels = 1;
 		textureDesc[1].ArraySize = 1;
-		textureDesc[1].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		textureDesc[1].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		textureDesc[1].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[1].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[1].SampleDesc.Count = 1;
@@ -153,7 +153,7 @@ namespace BRE {
 		textureDesc[3].Height = screenHeight;
 		textureDesc[3].MipLevels = 1;
 		textureDesc[3].ArraySize = 1;
-		textureDesc[3].Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		textureDesc[3].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		textureDesc[3].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc[3].Usage = D3D11_USAGE_DEFAULT;
 		textureDesc[3].SampleDesc.Count = 1;

@@ -22,9 +22,9 @@ cbuffer CBufferPerFrame : register (b0) {
 Output main(const Input input) {
 	Output output = (Output)0;
 	output.PosCS = mul(input.PosOS, WorldViewProj);
-	output.NormalVS = normalize(mul(float4(input.NormalOS, 0.0f), WorldView).xyz);
+	output.NormalVS = normalize(mul(float4(normalize(input.NormalOS), 0.0f), WorldView).xyz);
 	output.TexCoord = input.TexCoord * TextureScaleFactor;
-	output.TangentVS = normalize(mul(float4(input.TangentOS, 0.0f), WorldView).xyz);
+	output.TangentVS = normalize(mul(float4(normalize(input.TangentOS), 0.0f), WorldView).xyz);
 	output.BinormalVS = normalize(cross(output.NormalVS, output.TangentVS));
 	return output;
 }

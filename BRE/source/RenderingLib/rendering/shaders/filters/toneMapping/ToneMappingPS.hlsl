@@ -1,3 +1,5 @@
+#include <rendering/shaders/Lighting.hlsli>
+
 struct Input {
 	float4 PositionH : SV_Position;
 	float2 TexCoord : TEXCOORD0;
@@ -16,11 +18,11 @@ float3 HableToneMap(float3 color) {
 	float F = 0.30;//Toe Denominator
 
 	color = max(0, color - 0.004f);
-	color = ((color * (A*color + C*B) + D*E) / (color*(A*color + B) + D*F)) - (E / F);
+	color = ((color * (A * color + C * B) + D * E) / (color * (A * color + B) + D * F)) - (E / F);
 	return color;
 }
 
 float4 main(const in Input input) : SV_TARGET{
 	const float3 color = Texture.Sample(TexSampler, input.TexCoord).rgb;
-	return float4(HableToneMap(color), 1.0f);
+	return float4(accurateLinearToSRGB(HableToneMap(color)), 1.0f);
 }
