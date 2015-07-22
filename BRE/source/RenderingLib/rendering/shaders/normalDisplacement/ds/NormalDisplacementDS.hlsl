@@ -44,7 +44,7 @@ Output main(const HullShaderConstantOutput IN, const float3 uvw : SV_DomainLocat
 	// Choose the mipmap level based on distance to the eye; specifically, choose the next miplevel every MipInterval units, and clamp the miplevel in [0,6].
 	const float MipInterval = 20.0f;
 	const float mipLevel = clamp((length(posVS) - MipInterval) / MipInterval, 0.0f, 6.0f);
-	const float displacement = DisplacementMap.SampleLevel(TexSampler, output.TexCoord, mipLevel).x * DisplacementScale;
+	const float displacement = (DisplacementMap.SampleLevel(TexSampler, output.TexCoord, mipLevel).x - 1.0f) * DisplacementScale;
 	// Offset vertex along normal
 	posVS += float4(output.NormalVS * displacement, 0.0f);
 	output.PosCS = mul(posVS, Proj);

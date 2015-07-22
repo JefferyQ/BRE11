@@ -12,7 +12,7 @@ models:
     scaling: [40.0, 40.0, 40.0] 
     material: "gold"
   - renderType: Basic
-    path: "content\\models\\mitsuba.obj"
+    path: "content\\models\\mitsuba.obj" 
     translation: [1000.0, 0.0, 0.0] 
     rotation: [0.0, 0.0, 0.0]
     scaling: [40.0, 40.0, 40.0]  
@@ -57,19 +57,19 @@ models:
     rotation: [0.0, 0.0, 0.0]
     scaling: [40.0, 40.0, 40.0] 
     textureScaleFactor: 1.0
-    material: "rock2"  
-    normalMapTexture: "content\\materials\\rock2\\rock2_normal.dds"
-    displacementMapTexture: "content\\materials\\rock2\\rock2_height.dds"
+    material: "stone1"  
+    normalMapTexture: "content\\materials\\stone1\\stone1_normal.dds"
+    displacementMapTexture: "content\\materials\\stone1\\stone1_height.dds"
     tessellationFactor: 5.0
     displacementScale: 5.0
-  - renderType: Normal_Displacement
+  - renderType: Normal
     path: "content\\models\\mitsuba.obj"
     translation: [-2000.0, 0.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
     scaling: [40.0, 40.0, 40.0] 
     textureScaleFactor: 1.0
-    material: "stone1"  
-    normalMapTexture: "content\\materials\\stone1\\stone1_normal.dds"
-    displacementMapTexture: "content\\materials\\stone1\\stone1_height.dds"
+    material: "concrete1"  
+    normalMapTexture: "content\\materials\\concrete1\\concrete1_normal.dds"
+    displacementMapTexture: "content\\materials\\concrete1\\concrete1_height.dds"
     tessellationFactor: 5.0
     displacementScale: 5.0

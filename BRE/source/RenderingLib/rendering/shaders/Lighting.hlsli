@@ -49,7 +49,7 @@ struct PointLight {
 struct MaterialData {
 	float3 BaseColor;
 	float Smoothness;
-	float3 Reflectance;
+	float Curvature;
 	float MetalMask;
 };
 
@@ -86,13 +86,13 @@ float Fd_Disney(const float dotVN, const float dotLN, const float dotLH, float l
 float D_GGX_TR(const float dotNH, const float alpha) {
 	// Divide by PI is applied later
 	const float alphaSqr = alpha * alpha;
-	const float f = (dotNH * alphaSqr - dotNH) * dotNH + 1.0f;
+	const float f = (dotNH * alphaSqr - dotNH) * dotNH + 1.0f; 
 	return alphaSqr / (f * f);
 }
 
 float3 brdf(const float3 N, const float3 V, const float3 L, const MaterialData data) {
-	const float linearRoughness = 1.0f - data.Smoothness;
-	const float roughness = linearRoughness * linearRoughness;
+	const float roughness = 1.0f - data.Smoothness;
+	const float linearRoughness = roughness * roughness;
 
 	const float dotNV = abs(dot(N, V)) + 1e-5f; // avoid artifact
 	const float3 H = normalize(V + L);
@@ -101,19 +101,20 @@ float3 brdf(const float3 N, const float3 V, const float3 L, const MaterialData d
 	const float dotNL = saturate(dot(N, L));
 
 	// Specular BRDF
-	const float3 f0 = (1.0f - data.MetalMask) * 0.16f * data.Reflectance * data.Reflectance + data.BaseColor * data.MetalMask;
+	const float3 f0 = (1.0f - data.MetalMask) * 0.04f + data.BaseColor * data.MetalMask;
 	const float f90 = saturate(50.0 * dot(f0, 0.33));
-	const float3 F = F_Schlick(f0, f90, dotLH);
-	const float G = G_SmithGGXCorrelated(dotNV, dotNL, roughness);
-	const float D = D_GGX_TR(dotNH, roughness);
+	const float3 F = F_Schlick(f0, 1.0f, dotLH);
+	const float G = G_SmithGGXCorrelated(dotNV, dotNL, linearRoughness);
+	const float D = D_GGX_TR(dotNH, linearRoughness);
 	const float3 Fr = F * G * D;
+	const float specularColor = 0.5f * data.Curvature;
 
 	// Diffuse BRDF
 	const float Fd = Fd_Disney(dotNV, dotNL, dotLH, linearRoughness);
+	const float3 diffuseColor = (1.0f - data.MetalMask) * data.BaseColor * data.Curvature;
 
-	// Put all the parts together to generate the final color
-	const float3 diffuseColor = (1.0f - data.MetalMask) * data.BaseColor;
-	return dotNL * (Fr + diffuseColor * Fd) / PI;
+	// Put all the parts together to generate the final color	
+	return dotNL * (specularColor * Fr + diffuseColor * Fd) / PI;
 }
 
 #endif

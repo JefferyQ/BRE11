@@ -16,9 +16,8 @@ SamplerState TexSampler : register (s0);
 
 Texture2D NormalTexture : register (t0);
 Texture2D BaseColorTexture : register (t1);
-Texture2D Smoothness_MetalMask_Texture : register (t2); 
-Texture2D Reflectance_Texture : register (t3);
-Texture2D DepthTexture : register (t4);
+Texture2D Smoothness_MetalMask_Curvature_Texture : register (t2);
+Texture2D DepthTexture : register (t3);
 
 float4 main(const in Input input) : SV_TARGET { 
 	// Determine our indices for sampling the texture based on the current screen position
@@ -30,10 +29,10 @@ float4 main(const in Input input) : SV_TARGET {
 	 
 	MaterialData data;
 	data.BaseColor = accurateSRGBToLinear(BaseColorTexture.Load(sampleIndices).xyz);
-	const float2 smoothness_metalMask = Smoothness_MetalMask_Texture.Load(sampleIndices).xy;
-	data.MetalMask = smoothness_metalMask.y;
-	data.Smoothness = smoothness_metalMask.x;
-	data.Reflectance = accurateSRGBToLinear(Reflectance_Texture.Load(sampleIndices).rgb);
+	const float3 smoothness_metalMask_curvature = Smoothness_MetalMask_Curvature_Texture.Load(sampleIndices).xyz;
+	data.Smoothness = smoothness_metalMask_curvature.x;
+	data.MetalMask = smoothness_metalMask_curvature.y;
+	data.Curvature = smoothness_metalMask_curvature.z;
 	const float3 final = data.BaseColor * 0.01f + brdf(normalVS, normalize(-posVS), -normalize(Light.Direction), data) * Light.Color;
 	return float4(final, 1.0f);
 }

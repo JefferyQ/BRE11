@@ -9,7 +9,7 @@
 
 namespace {
 	const char* shader = "content\\shaders\\normalMapping\\NormalMappingPS.cso";
-	const size_t sNumGBuffers = 4;
+	const size_t sNumGBuffers = 3;
 }
 
 namespace BRE {
@@ -29,8 +29,8 @@ namespace BRE {
 		BRE_ASSERT(mSmoothnessSRV);
 		mMetalMaskSRV = matData.mMetalMaskSRV;
 		BRE_ASSERT(mMetalMaskSRV);
-		mReflectanceSRV = matData.mReflectanceSRV;
-		BRE_ASSERT(mReflectanceSRV);
+		mCurvatureSRV = matData.mCurvatureSRV;
+		BRE_ASSERT(mCurvatureSRV);
 	}
 
 	void NormalMappingPixelShaderData::PreDraw(ID3D11Device1& /*device*/, ID3D11DeviceContext1& context, ID3D11RenderTargetView* *geometryBuffersRTVs) {
@@ -41,8 +41,8 @@ namespace BRE {
 		BRE_ASSERT(mBaseColorSRV);
 		BRE_ASSERT(mSmoothnessSRV);
 		BRE_ASSERT(mMetalMaskSRV);
-		BRE_ASSERT(mReflectanceSRV);
-		ID3D11ShaderResourceView* const srvs[] = { mNormalSRV, mBaseColorSRV, mSmoothnessSRV, mMetalMaskSRV, mReflectanceSRV };
+		BRE_ASSERT(mCurvatureSRV);
+		ID3D11ShaderResourceView* const srvs[] = { mNormalSRV, mBaseColorSRV, mSmoothnessSRV, mMetalMaskSRV, mCurvatureSRV };
 		context.PSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
 
 		ID3D11SamplerState* const samplerStates[] = { mSampler };

@@ -28,7 +28,7 @@ namespace BRE {
 		ID3D11ShaderResourceView* mBaseColorSRV;
 		ID3D11ShaderResourceView* mSmoothnessSRV;
 		ID3D11ShaderResourceView* mMetalMaskSRV;
-		ID3D11ShaderResourceView* mReflectanceSRV;
+		ID3D11ShaderResourceView* mCurvatureSRV;
 
 		ID3D11DepthStencilView* mDefaultDSV;
 		ID3D11RenderTargetView* mDefaultRTV;

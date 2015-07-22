@@ -16,7 +16,7 @@ namespace BRE {
 			std::string mBaseColorTexturePath;
 			std::string mSmoothnessTexturePath;
 			std::string mMetalMaskTexturePath;
-			std::string mReflectanceTexturePath;
+			std::string mCurvatureTexturePath;
 		};
 
 		struct MaterialData {
@@ -24,7 +24,7 @@ namespace BRE {
 			ID3D11ShaderResourceView* mBaseColorSRV;			
 			ID3D11ShaderResourceView* mSmoothnessSRV;
 			ID3D11ShaderResourceView* mMetalMaskSRV;
-			ID3D11ShaderResourceView* mReflectanceSRV;
+			ID3D11ShaderResourceView* mCurvatureSRV;
 		};
 
 		void LoadMaterials(const char* materialFile);
@@ -37,7 +37,7 @@ namespace BRE {
 			size_t mBaseColor;
 			size_t mSmoothness;
 			size_t mMetalMask;
-			size_t mReflectance;
+			size_t mCurvature;
 		};
 		
 		typedef std::unordered_map<size_t, MaterialDataId> MaterialDataIdById;

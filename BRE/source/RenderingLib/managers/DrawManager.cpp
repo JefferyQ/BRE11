@@ -135,7 +135,7 @@ namespace BRE {
 		textureDesc[1].SampleDesc.Count = 1;
 		textureDesc[1].SampleDesc.Quality = 0;
 
-		// Smoothness_MetalMask texture desc
+		// Smoothness_MetalMask_Curvature texture desc
 		ZeroMemory(&textureDesc[2], sizeof(textureDesc[2]));
 		textureDesc[2].Width = screenWidth;
 		textureDesc[2].Height = screenHeight;
@@ -147,26 +147,13 @@ namespace BRE {
 		textureDesc[2].SampleDesc.Count = 1;
 		textureDesc[2].SampleDesc.Quality = 0;
 
-		// Reflectance texture desc
-		ZeroMemory(&textureDesc[3], sizeof(textureDesc[3]));
-		textureDesc[3].Width = screenWidth;
-		textureDesc[3].Height = screenHeight;
-		textureDesc[3].MipLevels = 1;
-		textureDesc[3].ArraySize = 1;
-		textureDesc[3].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		textureDesc[3].BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		textureDesc[3].Usage = D3D11_USAGE_DEFAULT;
-		textureDesc[3].SampleDesc.Count = 1;
-		textureDesc[3].SampleDesc.Quality = 0;
-
 		//
 		// Texture id's
 		//
 		const char* textureIds[numTextures] = {
 			"gbuffers_normal",
 			"gbuffers_base_color",
-			"gbuffers_smoothness_metalmask",
-			"gbuffers_reflectance",
+			"gbuffers_smoothness_metalmask_curvature",
 		};
 
 		//

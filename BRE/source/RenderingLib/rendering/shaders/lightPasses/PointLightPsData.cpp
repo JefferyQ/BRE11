@@ -10,7 +10,7 @@ using namespace DirectX;
 
 namespace {
 	const char* sShaderFile = "content\\shaders\\lightPasses\\PointLightPS.cso";
-	const size_t sNumGBuffers = 5;
+	const size_t sNumGBuffers = 4;
 }
 
 namespace BRE {
@@ -45,7 +45,7 @@ namespace BRE {
 		context.PSSetConstantBuffers(0, ARRAYSIZE(cBuffers), cBuffers);
 
 		BRE_ASSERT(geometryBuffersSRVs);
-		ID3D11ShaderResourceView* views[sNumGBuffers] = { geometryBuffersSRVs[0], geometryBuffersSRVs[1], geometryBuffersSRVs[2], geometryBuffersSRVs[3], &depthStencilSRV };
+		ID3D11ShaderResourceView* views[sNumGBuffers] = { geometryBuffersSRVs[0], geometryBuffersSRVs[1], geometryBuffersSRVs[2], &depthStencilSRV };
 		context.PSSetShaderResources(0, ARRAYSIZE(views), views);
 
 		ID3D11SamplerState* const samplerStates[] = { mSampler };

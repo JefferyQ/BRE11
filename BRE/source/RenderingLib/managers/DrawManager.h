@@ -43,10 +43,9 @@ namespace BRE {
 		// for fully deferred rendering purposes
 		// [0] -> Normal
 		// [1] -> Base Color
-		// [2] -> Smoothness_MetalMask
-		// [3] -> Reflectance 
-		ID3D11RenderTargetView* mGBuffersRTVs[4];
-		ID3D11ShaderResourceView* mGBuffersSRVs[4];
+		// [2] -> Smoothness_MetalMask_Curvature
+		ID3D11RenderTargetView* mGBuffersRTVs[3];
+		ID3D11ShaderResourceView* mGBuffersSRVs[3];
 
 		// Render target views and shader resource views of
 		// textures used for postprocessing purposes

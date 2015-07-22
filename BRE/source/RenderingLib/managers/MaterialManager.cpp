@@ -25,7 +25,7 @@ namespace BRE {
 			data.mBaseColorTexturePath = YamlUtils::GetScalar<std::string>(node, "baseColor");
 			data.mSmoothnessTexturePath = YamlUtils::GetScalar<std::string>(node, "smoothness");
 			data.mMetalMaskTexturePath = YamlUtils::GetScalar<std::string>(node, "metalMask");
-			data.mReflectanceTexturePath = YamlUtils::GetScalar<std::string>(node, "reflectance");
+			data.mCurvatureTexturePath = YamlUtils::GetScalar<std::string>(node, "curvature");
 			AddMaterial(data);
 		}
 	}
@@ -38,7 +38,7 @@ namespace BRE {
 		newMaterialId.mBaseColor = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mBaseColorTexturePath.c_str(), (material) ? &material->mBaseColorSRV : nullptr);
 		newMaterialId.mSmoothness = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mSmoothnessTexturePath.c_str(), (material) ? &material->mSmoothnessSRV : nullptr);
 		newMaterialId.mMetalMask = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mMetalMaskTexturePath.c_str(), (material) ? &material->mMetalMaskSRV : nullptr);
-		newMaterialId.mReflectance = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mReflectanceTexturePath.c_str(), (material) ? &material->mReflectanceSRV : nullptr);
+		newMaterialId.mCurvature = ShaderResourcesManager::gInstance->AddTextureFromFileSRV(data.mCurvatureTexturePath.c_str(), (material) ? &material->mCurvatureSRV : nullptr);
 		return id;
 	}
 
@@ -53,7 +53,7 @@ namespace BRE {
 		BRE_ASSERT(material.mSmoothnessSRV);
 		material.mMetalMaskSRV = ShaderResourcesManager::gInstance->ShaderResourceView(findIt->second.mMetalMask);
 		BRE_ASSERT(material.mMetalMaskSRV);
-		material.mReflectanceSRV = ShaderResourcesManager::gInstance->ShaderResourceView(findIt->second.mReflectance);
-		BRE_ASSERT(material.mReflectanceSRV);
+		material.mCurvatureSRV = ShaderResourcesManager::gInstance->ShaderResourceView(findIt->second.mCurvature);
+		BRE_ASSERT(material.mCurvatureSRV);
 	}
 }
