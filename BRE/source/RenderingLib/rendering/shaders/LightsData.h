@@ -11,6 +11,8 @@ namespace BRE {
 	};
 
 	struct PointLightData {
+		DirectX::XMFLOAT3 mLuminousPower;
+
 		// Packed into 4D vector: (Color, Pad)
 		DirectX::XMFLOAT3 mColor;
 		float mPad1;

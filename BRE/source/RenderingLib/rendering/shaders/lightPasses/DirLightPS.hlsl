@@ -25,7 +25,7 @@ float4 main(const in Input input) : SV_TARGET {
 	const float depth = DepthTexture.Load(sampleIndices).x;
 	const float linearDepth = ProjectionB / (depth - ProjectionA);
 	const float3 posVS = input.ViewRay * linearDepth;
-	const float3 normalVS = OctDecode(NormalTexture.Load(sampleIndices).xy);
+	const float3 normalVS = NormalTexture.Load(sampleIndices).xyz;
 	 
 	MaterialData data;
 	data.BaseColor = accurateSRGBToLinear(BaseColorTexture.Load(sampleIndices).xyz);

@@ -24,9 +24,9 @@ namespace BRE {
 		return mCBuffer.mData.mLightPosAndRadius[index];
 	}
 
-	DirectX::XMFLOAT4& PointLightVertexShaderData::LightColor(const unsigned int index) {
+	DirectX::XMFLOAT4& PointLightVertexShaderData::LightColorAndPower(const unsigned int index) {
 		BRE_ASSERT(index < sMaxLights);
-		return mCBuffer.mData.mLightColor[index];
+		return mCBuffer.mData.mLightColorAndPower[index];
 	}
 
 	void PointLightVertexShaderData::InitializeCBuffers() {

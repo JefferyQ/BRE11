@@ -5,7 +5,7 @@ struct Input {
 };
 
 struct Output {
-	float2 NormalVS : SV_Target0;
+	float3 NormalVS : SV_Target0;
 	float3 BaseColor : SV_Target1;
 	float3 Smoothness_MetalMask_Curvature : SV_Target2;
 };
@@ -19,7 +19,7 @@ Texture2D CurvatureTexture : register (t3);
 
 Output main(Input input) {
 	Output output = (Output)0;
-	output.NormalVS = OctEncode(normalize(input.NormalVS));
+	output.NormalVS = normalize(input.NormalVS);
 	const float2 texCoord = float2(0.0f, 0.0f);
 	output.BaseColor = BaseColorTexture.Sample(TexSampler, texCoord).rgb;
 	output.Smoothness_MetalMask_Curvature.x = SmoothnessTexture.Sample(TexSampler, texCoord).x;

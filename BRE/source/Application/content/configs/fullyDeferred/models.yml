@@ -44,7 +44,7 @@ models:
     path: "content\\models\\mitsuba.obj"
     translation: [-1000.0, 0.0, 0.0]
     rotation: [0.0, 0.0, 0.0]
-    scaling: [40.0, 40.0, 40.0] 
+    scaling: [1.0, 1.0, 1.0] 
     textureScaleFactor: 1.0
     material: "rock1" 
     normalMapTexture: "content\\materials\\rock1\\rock1_normal.dds"

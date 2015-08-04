@@ -21,7 +21,7 @@ namespace BRE {
 		void Draw(ID3D11DeviceContext1& context);
 
 		DirectX::XMFLOAT4& LightPosAndRadius(const unsigned int index);
-		DirectX::XMFLOAT4& LightColor(const unsigned int index);
+		DirectX::XMFLOAT4& LightColorAndPower(const unsigned int index);
 		DirectX::XMFLOAT4X4& ViewMatrix() { return mCBuffer.mData.mView; }
 
 	private:
@@ -32,7 +32,7 @@ namespace BRE {
 		struct CBufferPerFrameData {
 			DirectX::XMFLOAT4X4 mView;
 			DirectX::XMFLOAT4 mLightPosAndRadius[sMaxLights];
-			DirectX::XMFLOAT4 mLightColor[sMaxLights];
+			DirectX::XMFLOAT4 mLightColorAndPower[sMaxLights];
 		};
 		Buffer<CBufferPerFrameData> mCBuffer;
 	};

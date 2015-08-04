@@ -9,7 +9,7 @@ struct Input {
 };
 
 struct Output {
-	float2 NormalVS : SV_Target0;
+	float3 NormalVS : SV_Target0;
 	float3 BaseColor : SV_Target1;
 	float3 Smoothness_MetalMask_Curvature : SV_Target2;
 };
@@ -26,7 +26,7 @@ Output main(Input input) {
 	Output output = (Output)0;
 	const float3 sampledNormal = normalize(UnmapNormal(NormalTexture.Sample(TexSampler, input.TexCoord).xyz));
 	const float3x3 tbn = float3x3(normalize(input.TangentVS), normalize(input.BinormalVS), normalize(input.NormalVS));
-	output.NormalVS = OctEncode(mul(sampledNormal, tbn));
+	output.NormalVS = mul(sampledNormal, tbn);
 	output.BaseColor = BaseColorTexture.Sample(TexSampler, input.TexCoord).rgb;
 	output.Smoothness_MetalMask_Curvature.x = SmoothnessTexture.Sample(TexSampler, input.TexCoord).x;
 	output.Smoothness_MetalMask_Curvature.y = MetalMaskTexture.Sample(TexSampler, input.TexCoord).x;

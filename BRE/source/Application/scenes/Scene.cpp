@@ -63,7 +63,7 @@ void Scene::InitDirectionalLights() {
 
 void Scene::InitPointLights() {  
 	std::vector<BRE::LightsDrawer::PointLightData>& quadCulledPointLightDataVec = BRE::DrawManager::gInstance->PointLightDataVec();
-	quadCulledPointLightDataVec.resize(sNumPointLightShaders); 
+	/*quadCulledPointLightDataVec.resize(sNumPointLightShaders); 
 	unsigned int lightIndex = 0;
 	const float factor = 500.0f;
 	for (BRE::LightsDrawer::PointLightData& data : quadCulledPointLightDataVec) {
@@ -81,7 +81,17 @@ void Scene::InitPointLights() {
 			const float f7 = BRE::Utils::RandomFloat(25.0f, 30.0f ) * ((rand() % 2) ? 1.0f : -1.0f);
 			mPosUpdater.Add(BRE::PositionUpdater::Params(&data.mPointLightVsData.LightPosAndRadius(iLight), XMFLOAT3(-factor, -factor, -factor), XMFLOAT3(factor, factor, factor), XMFLOAT3(f5, f6, f7)));
 		}
-	}
+	}*/
+
+	BRE::LightsDrawer::PointLightData data;
+	data.mPointLightVsData.LightPosAndRadius(0).x = -500.0f;
+	data.mPointLightVsData.LightPosAndRadius(0).y = 200.0f;
+	data.mPointLightVsData.LightPosAndRadius(0).z = 0.0f;
+	data.mPointLightVsData.LightPosAndRadius(0).w = 1000.0f;
+	const DirectX::XMFLOAT4 colorAndPower = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1000000.0f);
+	data.mPointLightVsData.LightColorAndPower(0) = colorAndPower;
+	quadCulledPointLightDataVec.push_back(data);
+
 }
 
 void Scene::UpdateDirectionalLight(const float elapsedTime) {    
@@ -115,8 +125,8 @@ void Scene::UpdateDirectionalLight(const float elapsedTime) {
 	}
 }
 
-void Scene::UpdatePointLights(const float elapsedTime) {
-	const float radiusFactor = 30.0f;
+void Scene::UpdatePointLights(const float /*elapsedTime*/) {
+	/*const float radiusFactor = 30.0f;
 	if (BRE::Keyboard::gInstance->IsKeyDown(DIK_I)) {
 		std::vector<BRE::LightsDrawer::PointLightData>& quadCulledPointLightDataVec = BRE::DrawManager::gInstance->PointLightDataVec();
 		unsigned int lightIndex = 0;
@@ -160,5 +170,5 @@ void Scene::UpdatePointLights(const float elapsedTime) {
 				data.mPointLightVsData.LightColor(iLight).z -= intensityFactor * elapsedTime;
 			}
 		}
-	}
+	}*/
 }
