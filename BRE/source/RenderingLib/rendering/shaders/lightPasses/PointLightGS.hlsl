@@ -22,31 +22,31 @@ void main(const in point Input input[1], inout TriangleStream<Output> triangleSt
 	// Then we can easily build a quad (two triangles) that face the camera.
 	const float4 lightCenterPosVS = float4(input[0].LightPosVSAndRadius.xyz, 1.0f);
 
-	const float quadHalfSize = input[0].LightPosVSAndRadius.w;
+	const float lightRadius = input[0].LightPosVSAndRadius.w;
 
 	// Compute vertices positions and texture coordinates based on
 	// a quad whose center position is lightCenterPosV
 	Output output = (Output)0;
 
-	output.VertexPosVS = lightCenterPosVS.xyz + float3(-quadHalfSize, quadHalfSize, 0.0f);
+	output.VertexPosVS = lightCenterPosVS.xyz + float3(-lightRadius, lightRadius, 0.0f);
 	output.VertexPosCS = mul(float4(output.VertexPosVS, 1.0f), Proj);
 	output.LightPosVSAndRadius = input[0].LightPosVSAndRadius;
 	output.LightColorAndPower = input[0].LightColorAndPower;
 	triangleStream.Append(output);
 
-	output.VertexPosVS = lightCenterPosVS.xyz + float3(quadHalfSize, quadHalfSize, 0.0f);
+	output.VertexPosVS = lightCenterPosVS.xyz + float3(lightRadius, lightRadius, 0.0f);
 	output.VertexPosCS = mul(float4(output.VertexPosVS, 1.0f), Proj);
 	output.LightPosVSAndRadius = input[0].LightPosVSAndRadius;
 	output.LightColorAndPower = input[0].LightColorAndPower;
 	triangleStream.Append(output);
 
-	output.VertexPosVS = lightCenterPosVS.xyz + float3(-quadHalfSize, -quadHalfSize, 0.0f);
+	output.VertexPosVS = lightCenterPosVS.xyz + float3(-lightRadius, -lightRadius, 0.0f);
 	output.VertexPosCS = mul(float4(output.VertexPosVS, 1.0f), Proj);
 	output.LightPosVSAndRadius = input[0].LightPosVSAndRadius;
 	output.LightColorAndPower = input[0].LightColorAndPower;
 	triangleStream.Append(output);
 
-	output.VertexPosVS = lightCenterPosVS.xyz + float3(quadHalfSize, -quadHalfSize, 0.0f);
+	output.VertexPosVS = lightCenterPosVS.xyz + float3(lightRadius, -lightRadius, 0.0f);
 	output.VertexPosCS = mul(float4(output.VertexPosVS, 1.0f), Proj);
 	output.LightPosVSAndRadius = input[0].LightPosVSAndRadius;
 	output.LightColorAndPower = input[0].LightColorAndPower;

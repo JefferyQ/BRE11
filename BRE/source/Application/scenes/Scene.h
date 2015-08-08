@@ -11,7 +11,6 @@
 
 #include <general/Component.h> 
 #include <rendering/lights/DirectionalLight.h>
-#include <utils/updaters/PositionUpdater.h>  
 
 struct ID3D11Device1;
 struct ID3D11DeviceContext1;
@@ -26,8 +25,6 @@ private:
 	void InitPointLights();
 
 	void UpdateDirectionalLight(const float elapsedTime);
-	void UpdatePointLights(const float elapsedTime);
 
 	BRE::DirectionalLight mDirectionalLight;
-	BRE::PositionUpdater mPosUpdater;
 };

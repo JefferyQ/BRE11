@@ -13,7 +13,9 @@ namespace {
 }
 
 namespace BRE {
-	PointLightVertexShaderData::PointLightVertexShaderData() {
+	PointLightVertexShaderData::PointLightVertexShaderData() 
+		: mNumLights(0)
+	{
 		ShadersManager::gInstance->LoadVertexShader(sShaderFile, nullptr, nullptr, &mShader);
 		BRE_ASSERT(mShader);
 		InitializeCBuffers();
@@ -27,6 +29,11 @@ namespace BRE {
 	DirectX::XMFLOAT4& PointLightVertexShaderData::LightColorAndPower(const unsigned int index) {
 		BRE_ASSERT(index < sMaxLights);
 		return mCBuffer.mData.mLightColorAndPower[index];
+	}
+
+	void PointLightVertexShaderData::SetNumLights(const unsigned int numLights) {
+		BRE_ASSERT(numLights <= sMaxLights);
+		mNumLights = numLights;
 	}
 
 	void PointLightVertexShaderData::InitializeCBuffers() {
@@ -61,7 +68,7 @@ namespace BRE {
 	}
 
 	void PointLightVertexShaderData::Draw(ID3D11DeviceContext1& context) {
-		context.Draw(sMaxLights, 0);
+		context.Draw(mNumLights, 0);
 	}
 
 	void PointLightVertexShaderData::PostDraw(ID3D11DeviceContext1& context) {

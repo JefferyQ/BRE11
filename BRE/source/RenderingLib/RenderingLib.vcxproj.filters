@@ -13,9 +13,6 @@
     <Filter Include="utils">
       <UniqueIdentifier>{6c3ced32-8883-444c-a268-90830731c949}</UniqueIdentifier>
     </Filter>
-    <Filter Include="utils\updaters">
-      <UniqueIdentifier>{4abed524-80d8-4046-a8db-f28e1332b252}</UniqueIdentifier>
-    </Filter>
     <Filter Include="rendering\lights">
       <UniqueIdentifier>{b0fdba59-28cb-4aca-bba4-4627492f3c4c}</UniqueIdentifier>
     </Filter>
@@ -89,9 +86,6 @@
     </ClCompile>
     <ClCompile Include="managers\ShadersManager.cpp">
       <Filter>managers</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\updaters\PositionUpdater.cpp">
-      <Filter>utils\updaters</Filter>
     </ClCompile>
     <ClCompile Include="rendering\lights\DirectionalLight.cpp">
       <Filter>rendering\lights</Filter>
@@ -241,9 +235,6 @@
     </ClInclude>
     <ClInclude Include="utils\Assert.h">
       <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\updaters\PositionUpdater.h">
-      <Filter>utils\updaters</Filter>
     </ClInclude>
     <ClInclude Include="rendering\RenderStateHelper.h">
       <Filter>rendering</Filter>

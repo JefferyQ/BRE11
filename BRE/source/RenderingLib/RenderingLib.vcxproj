@@ -203,7 +203,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClCompile Include="utils\Hash.cpp" />
     <ClCompile Include="utils\MathUtils.cpp" />
     <ClCompile Include="utils\StringUtils.cpp" />
-    <ClCompile Include="utils\updaters\PositionUpdater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="general\Application.h" />
@@ -257,7 +256,6 @@ IF EXIST "$(TargetDir)content"  xcopy "$(TargetDir)content" "$(SolutionDir)\cont
     <ClInclude Include="utils\Hash.h" />
     <ClInclude Include="utils\MathUtils.h" />
     <ClInclude Include="utils\StringUtils.h" />
-    <ClInclude Include="utils\updaters\PositionUpdater.h" />
     <ClInclude Include="utils\YamlUtils.h" />
   </ItemGroup>
   <ItemGroup>

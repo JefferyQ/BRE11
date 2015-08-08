@@ -24,6 +24,9 @@ namespace BRE {
 		DirectX::XMFLOAT4& LightColorAndPower(const unsigned int index);
 		DirectX::XMFLOAT4X4& ViewMatrix() { return mCBuffer.mData.mView; }
 
+		void SetNumLights(const unsigned int numLights);
+		unsigned int NumLights() const { return mNumLights; }
+
 	private:
 		void InitializeCBuffers();
 
@@ -35,5 +38,7 @@ namespace BRE {
 			DirectX::XMFLOAT4 mLightColorAndPower[sMaxLights];
 		};
 		Buffer<CBufferPerFrameData> mCBuffer;
+
+		unsigned int mNumLights;
 	};
 }

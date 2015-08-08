@@ -39,7 +39,7 @@ namespace BRE {
 		void InitStates();
 
 		ID3D11BlendState* mDefaultBS;
-		ID3D11DepthStencilState* mDisableDepthTestDSS;
+		ID3D11DepthStencilState* mLessEqualDSS;
 
 		std::vector<DirLightData> mDirLightDataVec;
 		std::vector<PointLightData> mPointLightDataVec;
